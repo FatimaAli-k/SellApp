@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">طباعة</string>
+    <string name="app_title">إجراء اختبار طابعة بلوتوث</string>
+
+    <!--main_activity-->
+    <string name="connect">توصيل بلوتوث</string>
+    <string name="txt_content">&quot;&quot;</string>
+    <string name="choose_paper_width">عرض ورقة:</string>
+    <string name="width1">58mm</string>
+    <string name="width2">80mm</string>
+    <string name="printhex">HEX</string>
+    <string name="btnSend">إرسال البيانات</string>
+    <string name="btn_test">طباعة صفحة اختبار</string>
+    <string name="btn_prtbmp">طباعة صورة</string>
+    <string name="printpicture">الطباعة الرسومية</string>
+    <string name="chosecommand">تعليمات الاختبار</string>
+    <string name="btnClose">قريب</string>
+    <string name="contentdescription"></string>
+    <string name="btn_prttable">طباعة شراء علامة واحدة</string>
+    <string name="Smallticketprinting">علامة طباعة طلبين اثنين</string>
+    <string name="btn_prtcode">طباعة الرمز الشريطي ثنائي الأبعاد</string>
+    <string name="btn_scqr">توليد وطباعة رمز الاستجابة السريعة</string>
+    <string name="btn_dyca">تشغيل الكاميرا</string>
+    <string name="input">الرجاء إدخال الطباعة!</string>
+    <string name="big5">BIG5</string>
+    <string name="thai">Thai</string>
+    <string name="kor">Korean</string>
+    <string name="gbk12">Simplified</string>
+
+    <!--  DeviceListActivity -->
+    <string name="scanning">جهاز المسح الضوئي…</string>
+    <string name="select_device">اختر جهاز</string>
+
+    <string name="none_paired">لا توجد أجهزة مطابقة</string>
+    <string name="none_found">لم يتم العثور على جهاز</string>
+    <string name="title_paired_devices">الاجهزة المتاحة</string>
+    <string name="title_other_devices">معدات أخرى مفيدة</string>
+    <string name="button_scan">جهاز المسح الضوئي</string>
+
+    <!--  Message -->
+    <string name="msg_state">خطأ في إدخال البيانات!</string>
+    <string name="empty">إدخال فارغ</string>
+    <string name="empty1">إدخال فارغ، في مربع النص لإدخال المحتوى المراد تحويله ..</string>
+    <string name="not_connected">يرجى توصيل طابعة بلوتوث</string>
+    <string name="bt_not_enabled_leaving">بلوتوث لا يبدأ، إنهاء البرنامج</string>
+    <string name="title_connecting">ربط ..</string>
+    <string name="title_connected_to">إتصال: </string>
+    <string name="title_not_connected">غير متصل</string>
+    <string name="Connecting">كان متصلا إلى طابعة بلوتوث</string>
+    <string name="msg_statev1">Without a picture</string>
+    <string name="strLang">ar</string>
+    <string name="camer">لا صور</string>
+    <string name="msg_error">أخطاء الإدخال، يرجى مراجعة!</string>
+    <string name="title_activity_main_new">MainNewActivity</string>
+
+    <!--    <string name="app_name">POSPrinter-BT</string>-->
+    <!--    <string name="app_title">BlueTooth Demo</string>-->
+    <!--    &lt;!&ndash;main_activity&ndash;&gt;-->
+    <!--    <string name="connect">Search for and connect a Bluetooth printer</string>-->
+    <!--    <string name="txt_content">&quot;&quot;</string>-->
+    <!--    <string name="choose_paper_width">Paper width:</string>-->
+    <!--    <string name="width1">58mm</string>-->
+    <!--    <string name="width2">80mm</string>-->
+    <!--    <string name="printhex">HEX</string>-->
+    <!--    <string name="btnSend">Send Data</string>-->
+    <!--    <string name="btn_test">Print Test</string>-->
+    <!--    <string name="btn_prtbmp">Print Picture</string>-->
+    <!--    <string name="printpicture">Graphical Print</string>-->
+    <!--    <string name="chosecommand">Please select instruction</string>-->
+    <!--    <string name="btnClose">Close</string>-->
+    <!--    <string name="contentdescription"></string>-->
+    <!--    <string name="btn_prttable">Print Form</string>-->
+    <!--    <string name="Smallticketprinting">Small Ticket Printing</string>-->
+    <!--    <string name="btn_prtcode">Print 1D/2D Codebar</string>-->
+    <!--    <string name="btn_scqr">Generate QR Code Print</string>-->
+    <!--    <string name="btn_dyca">Turn on the camera</string>-->
+    <!--    <string name="input">Please enter a print!</string>-->
+    <!--    <string name="choose_printcoding"></string>-->
+    <!--    <string name="big5">BIG5</string>-->
+    <!--    <string name="thai">Thai</string>-->
+    <!--    <string name="kor">Korean</string>-->
+    <!--    <string name="gbk12">Simplified</string>-->
+
+    <!--    &lt;!&ndash;  DeviceListActivity &ndash;&gt;-->
+    <!--    <string name="scanning">Scanning Device&#8230;</string>-->
+    <!--    <string name="select_device">Select the connected device</string>-->
+    <!--    <string name="none_paired">No matching devices</string>-->
+    <!--    <string name="none_found">No device found</string>-->
+    <!--    <string name="title_paired_devices">Match equipment</string>-->
+    <!--    <string name="title_other_devices">Other useful equipment</string>-->
+    <!--    <string name="button_scan">Scanning device</string>-->
+
+    <!--    &lt;!&ndash;  Message &ndash;&gt;-->
+    <!--    <string name="msg_state">Input Error!</string>-->
+    <!--    <string name="empty1">Input is empty, in the text box to enter the content to be converted &#8230;</string>-->
+    <!--    <string name="empty">Input is empty</string>-->
+    <!--    <string name="not_connected">Please connect a Bluetooth printer</string>-->
+    <!--    <string name="bt_not_enabled_leaving">Bluetooth does not start, quit the program</string>-->
+    <!--    <string name="title_connecting">connecting…</string>-->
+    <!--    <string name="title_connected_to">connected: </string>-->
+    <!--    <string name="title_not_connected">Is not connected</string>-->
+    <!--    <string name="Connecting">It is connected to a Bluetooth printer</string>-->
+    <!--    <string name="msg_statev1">Without a picture</string>-->
+    <!--    <string name="strLang">en</string>-->
+    <!--    <string name="camer">No pictures</string>-->
+    <!--    <string name="msg_error">Input errors, please check!</string>-->
+
+</resources>
