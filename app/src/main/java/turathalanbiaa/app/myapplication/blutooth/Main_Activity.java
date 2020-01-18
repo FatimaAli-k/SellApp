@@ -5,24 +5,35 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
+import turathalanbiaa.app.myapplication.RecyclerItemTouchHelper;
 import turathalanbiaa.app.myapplication.command.Command;
 import turathalanbiaa.app.myapplication.command.PrintPicture;
 import turathalanbiaa.app.myapplication.command.PrinterCommand;
 
+
+import turathalanbiaa.app.myapplication.volley.AppController;
 import zj.com.customize.sdk.Other;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
@@ -31,6 +42,7 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,16 +53,29 @@ import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class Main_Activity extends Activity implements OnClickListener {
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Main_Activity extends Activity implements OnClickListener, MyRecyclerViewAdapter.ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     /******************************************************************************************************/
     // Debugging
     private static final String TAG = "Main_Activity";
@@ -172,6 +197,18 @@ public class Main_Activity extends Activity implements OnClickListener {
     };
 
     /******************************************************************************************************/
+
+    //
+
+    LinearLayout Layout;
+    MyRecyclerViewAdapter adapter;
+    ArrayList<SellMenuItem> menuItems = new ArrayList<>();
+    SellMenuItem item=new SellMenuItem();
+//    private ProgressDialog pDialog;
+
+
+    //
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,40 +220,171 @@ public class Main_Activity extends Activity implements OnClickListener {
         setContentView(R.layout.main_activity);
         //	getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
         //		R.layout.custom_title);
+//
+
+//        loadFragment(new test());
+        //
 
         // Set up the custom title
         //	mTitle = (TextView) findViewById(R.id.title_left_text);
 //		mTitle.setText(R.string.app_title);
         //	mTitle = (TextView) findViewById(R.id.title_right_text);
 
-        // Get local Bluetooth adapter
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        // If the adapter is null, then Bluetooth is not supported
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available",
-                    Toast.LENGTH_LONG).show();
-            finish();
-        }
+
+
+        String url="https://jsonblob.com/api/b3efca9c-398d-11ea-a91b-41682e589a1a";
+        makeJsonArrayRequest(url);
+
+        RecyclerView recyclerView = findViewById(R.id.items_recycler_view);
+        Layout =findViewById(R.id.liner_layout);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter= new MyRecyclerViewAdapter( getApplicationContext(), menuItems);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
+
+        // Get local Bluetooth adapter
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//
+//        // If the adapter is null, then Bluetooth is not supported
+//        if (mBluetoothAdapter == null) {
+//            Toast.makeText(this, "Bluetooth is not available",
+//                    Toast.LENGTH_LONG).show();
+//            finish();
+//        }
+
     }
+
+//    private boolean loadFragment(Fragment fragment) {
+//        //switching fragment
+//        if (fragment != null) {
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.fragment_container, fragment)
+//                    .commit();
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//    @Override
+//    public void onStart() {
+////        super.onStart();
+//
+//        // If Bluetooth is not on, request that it be enabled.
+////        // setupChat() will then be called during onActivityResult
+////        if (!mBluetoothAdapter.isEnabled()) {
+////            Intent enableIntent = new Intent(
+////                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+////            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+////            // Otherwise, setup the session
+////        } else {
+////            if (mService == null)
+////                KeyListenerInit();//监听
+////        }
+//    }
+
+    private void makeJsonArrayRequest(String url) {
+//        showpDialog();
+
+        JsonArrayRequest req = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+
+                        try {
+                            // Parsing json array response
+                            // loop through each json object
+
+                            for (int i = 0; i < response.length(); i++) {
+
+                                JSONObject person = (JSONObject) response
+                                        .get(i);
+
+                                String name = person.getString("name");
+                                int price = person.getInt("price");
+
+
+                                item=new SellMenuItem();
+                                item.setItem_count(1);
+                                item.setItem_name(name);
+                                item.setItem_price(price);
+                                menuItems.add(item);
+
+
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+//                        hidepDialog();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+//                hidepDialog();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+    }
+//    private void showpDialog() {
+//        if (!pDialog.isShowing())
+//            pDialog.show();
+//    }
+//
+//    private void hidepDialog() {
+//        if (pDialog.isShowing())
+//            pDialog.dismiss();
+//    }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        // If Bluetooth is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the session
-        } else {
-            if (mService == null)
-                KeyListenerInit();//监听
-        }
+    public void onItemClick(View view, int position) {
+        Toast.makeText(getApplicationContext(), "You clicked row number " + position, Toast.LENGTH_SHORT).show();
     }
 
+        @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof MyRecyclerViewAdapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = menuItems.get(viewHolder.getAdapterPosition()).getItem_name();
+
+            // backup of removed item for undo purpose
+            final SellMenuItem deletedItem = menuItems.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            adapter.removeItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+//            Snackbar snackbar = Snackbar
+//                    .make(Layout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+//            snackbar.setAction("UNDO", new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    // undo is selected, restore the deleted item
+//                    adapter.restoreItem(deletedItem, deletedIndex);
+//                }
+//            });
+//            snackbar.setActionTextColor(Color.YELLOW);
+//            snackbar.show();
+        }
+    }
     @Override
     public synchronized void onResume() {
         super.onResume();

@@ -1,116 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_gravity="center"
-    android:layout_width="match_parent">
-<LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical">
 
-    android:layout_height="wrap_content">
-    <Button
-        android:id="@+id/button_scan"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_margin="40dp"
-        android:gravity="center"
-        android:layout_gravity="top|center"
-        android:fontFamily="@font/myfont"
-        android:background="@drawable/button_style"
         android:layout_height="wrap_content"
-        android:text="@string/connect"
-        />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/button_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_margin="20dp"
+            android:background="@drawable/button_style"
+            android:fontFamily="@font/myfont"
+            android:gravity="center"
+            android:text="@string/connect" />
 
-    <Button
-        android:id="@+id/Send_Button"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_margin="40dp"
-        android:background="@drawable/back_gradient"
-        android:fontFamily="@font/myfont"
-        android:text="@string/btnSend"
-        android:textColor="#ffff"
-        android:textSize="17sp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <Button
 
-    </Button>
+            android:id="@+id/button_clear"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/button_style"
+            android:fontFamily="@font/myfont"
+            android:gravity="center"
+            android:text="clear" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:layout_marginHorizontal="20dp"
 
+                    android:gravity="center"
+                    android:text="menu id"></TextView>
+            <TextView
 
-</LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="bottom|center"
-        android:layout_height="match_parent">
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:layout_marginHorizontal="20dp"
 
+                android:gravity="center"
+                android:text="99999999" />
+            </LinearLayout>
+            <Button
+
+                android:id="@+id/button_logout"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/button_style"
+                android:fontFamily="@font/myfont"
+                android:gravity="center"
+                android:text="log out" />
+
+        </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/Send_Button"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+           android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/back_gradient"
+            android:fontFamily="@font/myfont"
+            android:text="@string/btnSend"
+            android:textColor="#ffff"
+            android:textSize="17sp">
+
+        </Button>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center"
+        android:orientation="vertical">
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fillViewport="true"
+
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/items_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </androidx.core.widget.NestedScrollView>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/button_style"
+            android:text="add item">
+
+        </Button>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
             android:gravity="center"
             android:orientation="horizontal">
+
+
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/back_gradient"
-                android:text="حديد">
+                android:text="جديد">
 
             </Button>
-           <Button
+
+            <Button
                 android:layout_width="wrap_content"
-               android:layout_margin="10dp"
-               android:background="@drawable/button_style"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_style"
                 android:text="سابق">
 
             </Button>
         </LinearLayout>
+
     </LinearLayout>
     <!--    ignore-->
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
-        >
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/edit_text_out"
             android:layout_width="match_parent"
             android:layout_height="135dp"
-            android:visibility="gone"
             android:gravity="center_vertical|top"
+            android:hint="@string/input"
             android:text="@string/txt_content"
             android:textSize="18sp"
-            android:hint="@string/input">
-        </EditText>
+            android:visibility="gone"></EditText>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:orientation="horizontal"
 
-            android:orientation="horizontal">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:text="@string/choose_paper_width">
-            </TextView>
+                android:text="@string/choose_paper_width"></TextView>
 
             <RadioButton
                 android:id="@+id/width_58mm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.3"
                 android:checked="true"
-                android:text="@string/width1"
-                android:layout_weight="0.3"/>
+                android:text="@string/width1" />
 
             <RadioButton
                 android:id="@+id/width_80mm"
@@ -129,15 +211,14 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:orientation="horizontal"
 
-            android:orientation="horizontal">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
-                android:text="choose_printcoding">
-            </TextView>
+                android:text="choose_printcoding"></TextView>
 
             <RadioGroup
                 android:id="@+id/radioGroupPaperSize"
@@ -149,31 +230,31 @@
                     android:id="@+id/gbk12"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/gbk12"
+                    android:layout_marginTop="-8dip"
                     android:layout_weight="0.3"
-                    android:layout_marginTop="-8dip"/>
+                    android:checked="true"
+                    android:text="@string/gbk12" />
 
                 <RadioButton
                     android:id="@+id/big5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/big5"
-                    android:layout_marginTop="-8dip"/>
+                    android:layout_marginTop="-8dip"
+                    android:text="@string/big5" />
 
                 <RadioButton
                     android:id="@+id/thai"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/thai"
-                    android:layout_marginTop="-8dip"/>
+                    android:layout_marginTop="-8dip"
+                    android:text="@string/thai" />
 
                 <RadioButton
                     android:id="@+id/kor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/kor"
-                    android:layout_marginTop="-8dip"/>
+                    android:layout_marginTop="-8dip"
+                    android:text="@string/kor" />
 
             </RadioGroup>
         </LinearLayout>
@@ -181,153 +262,147 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
 
             <Button
                 android:id="@+id/btn_test"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="@string/btn_test"
                 android:layout_weight="1.0"
-                android:gravity="center">
-            </Button>
+                android:gravity="center"
+                android:text="@string/btn_test"
+                android:visibility="gone"></Button>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/btn_printpicture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_weight="1.0"
                 android:text="@string/printpicture"
-                android:visibility="gone"
 
-                android:layout_weight="1.0">
-            </Button>
+                android:visibility="gone"></Button>
 
             <Button
                 android:id="@+id/btn_prtbmp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/btn_prtbmp"
-                android:visibility="gone"
 
-                android:layout_weight="1">
-            </Button>
+                android:visibility="gone"></Button>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:gravity="center"
 
             android:orientation="horizontal"
-            android:gravity="center">
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/btn_prtcommand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/chosecommand"
                 android:layout_weight="1.0"
-                android:gravity="center">
-            </Button>
+                android:gravity="center"
+                android:text="@string/chosecommand"></Button>
 
             <Button
                 android:id="@+id/btn_prttable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_prttable"
                 android:layout_weight="1.0"
-                android:gravity="center">
-            </Button>
+                android:gravity="center"
+                android:text="@string/btn_prttable"></Button>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:gravity="center"
 
             android:orientation="horizontal"
-            android:gravity="center">
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/btn_prtsma"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/Smallticketprinting"
                 android:layout_weight="1.0"
-                android:gravity="center">
-            </Button>
+                android:gravity="center"
+                android:text="@string/Smallticketprinting"></Button>
 
             <Button
                 android:id="@+id/btn_prtbarcode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_prtcode"
                 android:layout_weight="1.0"
-                android:gravity="center">
-            </Button>
+                android:gravity="center"
+                android:text="@string/btn_prtcode"></Button>
 
         </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:gravity="center"
 
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/btn_scqr"
                     android:layout_width="match_parent"
 
                     android:layout_height="wrap_content"
-                    android:text="@string/btn_scqr"
                     android:layout_weight="1.0"
-                    android:gravity="center">
-                </Button>
+                    android:gravity="center"
+                    android:text="@string/btn_scqr"></Button>
 
                 <Button
                     android:id="@+id/btn_dyca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/btn_dyca"
                     android:layout_weight="1.0"
-                    android:gravity="center">
-                </Button>
+                    android:gravity="center"
+                    android:text="@string/btn_dyca"></Button>
 
             </LinearLayout>
         </ScrollView>
+
         <Button
             android:id="@+id/btn_close"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:text="@string/btnClose"
 
-            android:text="@string/btnClose"/>
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imageViewPictureUSB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="1920dp"
+            android:contentDescription="@string/contentdescription"
             android:maxWidth="1080dp"
-            android:contentDescription="@string/contentdescription" />
+            android:maxHeight="1920dp" />
     </RelativeLayout>
 </LinearLayout>
