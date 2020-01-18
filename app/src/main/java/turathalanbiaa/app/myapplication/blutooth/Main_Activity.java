@@ -279,25 +279,26 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                session.createBarcode("");
 
 //                //add to sell item
-//                String url="http://192.168.9.110:8000/api/sellmenuitem";
+                String url="http://192.168.9.110:8000/api/sellmenuitem";
+
+                for (int i=0;i<menuItems.size();i++){
+                Map<String, String> params = new HashMap<>();
+                params.put("user_sell_it_id", session.getshared("id"));
+                params.put("sell_menu_id", sellMenuId);
+                params.put("item_name", menuItems.get(i).getItem_name());
+                params.put("item_price", menuItems.get(i).getItem_price().toString());
+                params.put("item_count",  menuItems.get(i).getItem_count().toString());
+                params.put("item_id",  menuItems.get(i).getId().toString());
+                params.put("item_cost", "0");
+
+                params.put("datetime","2020-01-15 00:00:00" );
+
 //
-//                for (int i=0;i<menuItems.size();i++){
-//                Map<String, String> params = new HashMap<>();
-//                params.put("user_sell_it_id", session.getshared("id"));
-//                params.put("sell_menu_id", sellMenuId);
-//                params.put("item_name", menuItems.get(i).getItem_name());
-//                params.put("item_price", menuItems.get(i).getItem_price().toString());
-//                params.put("item_count",  menuItems.get(i).getItem_count().toString());
-//                params.put("item_id",  menuItems.get(i).getId().toString());
-//                params.put("item_cost", "0");
-//
-//                params.put("datetime","2020-01-15 00:00:00" );
-//
-////
-//                    sendItems(url,params);
-//                }
+                    sendItems(url,params);
+                }
 
 
+                clearItemData();
             }
         });
 
@@ -439,6 +440,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     }
 
     void clearItemData(){
+        TextView txtview=findViewById(R.id.textView_sellMenuId);
+        txtview.setText("");
         menuItems.clear();
         sellMenuId="";
         session.createBarcode("");
@@ -478,8 +481,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
 //                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
 //                            }
-                            Toast.makeText(getApplicationContext(),
-                                    " "+ response.getString("message"), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getApplicationContext(),
+//                                    " "+ response.getString("message"), Toast.LENGTH_LONG).show();
 //                    adapter.notifyDataSetChanged();
 
 //                            txtResponse.setText(jsonResponse);
@@ -557,9 +560,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
     }
-    private void getSellMenuItemsArray(String url) {
+    private void getSellMenuItemsArray() {
 
-
+        String url="http://192.168.9.110:8000/api/oldmenu";
         //if everything is fine
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
                 new Response.Listener<String>() {
@@ -576,6 +579,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                 JSONObject jsonItem = (JSONObject) obj
                                         .get(i);
 
+                                int id=jsonItem.getInt("id");
                                 String name = jsonItem.getString("item_name");
                                 int price= jsonItem.getInt("item_price");
                                 int count= jsonItem.getInt("item_count");
@@ -586,6 +590,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                                 item=new SellMenuItem();
                                  item.setItem_count(count);
+                                 item.setId(id);
                                 item.setItem_name(name);
                                 item.setItem_price(price);
                                 menuItems.add(item);
@@ -803,10 +808,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         val=session.getshared("scanfor");
         if(val=="1"){
             //barcode is for menu
+            sellMenuId=barcode;
             menuIdTextView=findViewById(R.id.textView_sellMenuId);
             menuIdTextView.setText(barcode);
-            String url="http://192.168.9.110:8000/api/oldmenu";
-            getSellMenuItemsArray(url);
+
+            getSellMenuItemsArray();
             session.setScanfor("0");
         }
         else if(val=="2"){
