@@ -119,11 +119,7 @@ public class SessionManager {
 
         return  pref.getString(barcode, null);
     }
-    public String getUserName(){
-        // user name
 
-        return  pref.getString("name", null);
-    }
 
     /**
      * Clear session details

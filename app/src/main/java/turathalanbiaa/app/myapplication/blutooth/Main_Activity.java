@@ -26,6 +26,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
 import turathalanbiaa.app.myapplication.RecyclerItemTouchHelper;
+import turathalanbiaa.app.myapplication.ScanActivity;
 import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 import turathalanbiaa.app.myapplication.command.Command;
 import turathalanbiaa.app.myapplication.command.PrintPicture;
@@ -66,6 +67,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -211,9 +213,12 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     SellMenuItem item=new SellMenuItem();
     ProgressDialog pDialog;
     SessionManager session;
-    String code="99999999";
+    String code="";
+    String sellMenuId="";
     //buttons
-    Button additem,logout;
+    Button additem,logout,newCustomer,oldCustomer,clearData;
+
+    TextView menuIdTextView;
 
     //
 
@@ -244,16 +249,32 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
         if(session.isLoggedIn()) {
-            String name = session.getUserName();
+            String name = session.getshared("name");
             Toast.makeText(getApplicationContext(),
                     "Signed in as : " + name,
                     Toast.LENGTH_LONG).show();
+            session.createBarcode("");
         }
 
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
+
+
+        menuIdTextView=findViewById(R.id.textView_sellMenuId);
+
+
+        //clear btn
+        clearData=findViewById(R.id.button_clear);
+        clearData.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sellMenuId="";
+                menuIdTextView.setText(sellMenuId);
+                session.createBarcode("");
+            }
+        });
 
         //add item
         additem=findViewById(R.id.button_add_item);
@@ -276,8 +297,38 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             }
         });
 
+        //new customer
+        newCustomer=findViewById(R.id.button_newCustomer);
+        newCustomer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               //send get request retreive sell menu id
+//                sellMenuId="12345678";
+               getSellMenuId();
 
-        String url="https://jsonblob.com/api/b3efca9c-398d-11ea-a91b-41682e589a1a";
+
+            }
+        });
+
+        //old customer
+        oldCustomer=findViewById(R.id.button_oldCustomer);
+        oldCustomer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //scan for sell menu
+                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+
+                startActivity(intent);
+                //send post request with barcode, loop through sell menu items
+
+            }
+        });
+
+
+
+
+        String url="https://jsonblob.com/api/c343b7e4-34c8-11ea-ad35-d729c7db8fd8";
         makeJsonArrayRequest(url);
 
         RecyclerView recyclerView = findViewById(R.id.items_recycler_view);
@@ -333,6 +384,54 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //        }
 //    }
 
+   void getSellMenuId(){
+        String url="http://192.168.9.110:8000/api/newsellmenu";
+
+        showpDialog();
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                url, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    // Parsing json object response
+                    // response will be a json object
+                    sellMenuId = response.getString("id");
+
+                    menuIdTextView.setText(sellMenuId);
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+                hidepDialog();
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                // hide the progress dialog
+                hidepDialog();
+
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
+
+
+    }
     private void makeJsonArrayRequest(String url) {
         showpDialog();
 
@@ -495,9 +594,16 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //            snackbar.show();
         }
     }
+    String barcode;
     @Override
     public synchronized void onResume() {
         super.onResume();
+
+        barcode = session.getshared("Barcode");
+        Toast.makeText(this,"/"+barcode,Toast.LENGTH_SHORT).show();
+
+        menuIdTextView=findViewById(R.id.textView_sellMenuId);
+        menuIdTextView.setText(barcode);
 
         if (mService != null) {
 
