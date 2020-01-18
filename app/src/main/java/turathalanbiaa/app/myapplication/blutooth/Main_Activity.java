@@ -6,12 +6,16 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -22,6 +26,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
 import turathalanbiaa.app.myapplication.RecyclerItemTouchHelper;
+import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 import turathalanbiaa.app.myapplication.command.Command;
 import turathalanbiaa.app.myapplication.command.PrintPicture;
 import turathalanbiaa.app.myapplication.command.PrinterCommand;
@@ -204,8 +209,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     MyRecyclerViewAdapter adapter;
     ArrayList<SellMenuItem> menuItems = new ArrayList<>();
     SellMenuItem item=new SellMenuItem();
-//    private ProgressDialog pDialog;
-
+    ProgressDialog pDialog;
+    SessionManager session;
+    String code="99999999";
+    //buttons
+    Button additem,logout;
 
     //
 
@@ -230,7 +238,43 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //		mTitle.setText(R.string.app_title);
         //	mTitle = (TextView) findViewById(R.id.title_right_text);
 
+        //session
+        session = new SessionManager(getApplicationContext());
+        session.checkLogin();
 
+
+        if(session.isLoggedIn()) {
+            String name = session.getUserName();
+            Toast.makeText(getApplicationContext(),
+                    "Signed in as : " + name,
+                    Toast.LENGTH_LONG).show();
+        }
+
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+
+        //add item
+        additem=findViewById(R.id.button_add_item);
+        additem.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url="http://192.168.9.110:8000/api/item";
+                getItemObj(url);
+
+            }
+        });
+
+        //logout
+        logout=findViewById(R.id.button_logout);
+        logout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                session.logoutUser();
+
+            }
+        });
 
 
         String url="https://jsonblob.com/api/b3efca9c-398d-11ea-a91b-41682e589a1a";
@@ -271,25 +315,26 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //
 //        return false;
 //    }
+
 //    @Override
 //    public void onStart() {
-////        super.onStart();
+//        super.onStart();
 //
-//        // If Bluetooth is not on, request that it be enabled.
-////        // setupChat() will then be called during onActivityResult
-////        if (!mBluetoothAdapter.isEnabled()) {
-////            Intent enableIntent = new Intent(
-////                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-////            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-////            // Otherwise, setup the session
-////        } else {
-////            if (mService == null)
-////                KeyListenerInit();//监听
-////        }
+////         If Bluetooth is not on, request that it be enabled.
+//        // setupChat() will then be called during onActivityResult
+//        if (!mBluetoothAdapter.isEnabled()) {
+//            Intent enableIntent = new Intent(
+//                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//            // Otherwise, setup the session
+//        } else {
+//            if (mService == null)
+//                KeyListenerInit();//监听
+//        }
 //    }
 
     private void makeJsonArrayRequest(String url) {
-//        showpDialog();
+        showpDialog();
 
         JsonArrayRequest req = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
@@ -327,7 +372,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                     Toast.LENGTH_LONG).show();
                         }
 
-//                        hidepDialog();
+                        hidepDialog();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -335,22 +380,87 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
-//                hidepDialog();
+                hidepDialog();
             }
         });
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
     }
-//    private void showpDialog() {
-//        if (!pDialog.isShowing())
-//            pDialog.show();
-//    }
+
+    private void getItemObj(String url){
+        Map<String, String> params = new HashMap<>();
+        params.put("barcode", code);
+
+        showpDialog();
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
+                url, new JSONObject(params), new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                   JSONObject jsonItem = (JSONObject) response;
+                   int id=jsonItem.getInt("id");
+                    String name = jsonItem.getString("name");
+                    int price= jsonItem.getInt("price");
+
+
+                    item=new SellMenuItem();
+                    item.setItem_count(1);
+                    item.setItem_name(name);
+                    item.setItem_price(price);
+                    item.setId(id);
+                    menuItems.add(item);
+
+                    String str="";
 //
-//    private void hidepDialog() {
-//        if (pDialog.isShowing())
-//            pDialog.dismiss();
-//    }
+//                            for(int i=0;i<menuItems.size();i++){
+//
+//                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
+//                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
+//                            }
+//                            Toast.makeText(getApplicationContext(),
+//                                    " "+str, Toast.LENGTH_LONG).show();
+                    adapter.notifyDataSetChanged();
+
+//                            txtResponse.setText(jsonResponse);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+                hidepDialog();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                hidepDialog();
+            }
+
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+    }
+
+    private void showpDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hidepDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
 
     @Override
     public void onItemClick(View view, int position) {

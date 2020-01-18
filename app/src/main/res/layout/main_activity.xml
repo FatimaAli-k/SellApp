@@ -25,48 +25,42 @@
             android:text="@string/connect" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
         <Button
 
             android:id="@+id/button_clear"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
-            android:layout_marginHorizontal="20dp"
+
+            android:layout_marginHorizontal="30dp"
             android:background="@drawable/button_style"
             android:fontFamily="@font/myfont"
             android:gravity="center"
             android:text="clear" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+
+
+
+
                 <TextView
-                    android:layout_width="100dp"
+
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center"
                     android:layout_marginHorizontal="20dp"
 
                     android:gravity="center"
-                    android:text="menu id"></TextView>
-            <TextView
+                    android:text="99999999" />
 
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|center"
-                android:layout_marginHorizontal="20dp"
-
-                android:gravity="center"
-                android:text="99999999" />
-            </LinearLayout>
             <Button
 
                 android:id="@+id/button_logout"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top|center"
-                android:layout_marginHorizontal="20dp"
+
+                android:layout_marginHorizontal="30dp"
                 android:background="@drawable/button_style"
                 android:fontFamily="@font/myfont"
                 android:gravity="center"
@@ -74,12 +68,6 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </LinearLayout>
 
         <Button
             android:id="@+id/Send_Button"
@@ -119,6 +107,7 @@
                 android:layout_height="wrap_content" />
         </androidx.core.widget.NestedScrollView>
         <Button
+            android:id="@+id/button_add_item"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_gravity="center"

@@ -112,10 +112,17 @@ public class SessionManager {
         // return user
         return user;
     }
+
+
     public String getshared(String barcode){
         // user name
 
         return  pref.getString(barcode, null);
+    }
+    public String getUserName(){
+        // user name
+
+        return  pref.getString("name", null);
     }
 
     /**

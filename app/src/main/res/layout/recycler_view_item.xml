@@ -89,6 +89,8 @@
           android:text="قميص رجالي لون اخضر قياس xxxL قطن "
           android:textAlignment="center"
           android:textAllCaps="true"
+          android:layout_gravity="center"
+          android:gravity="center"
           android:textSize="16dp"
           android:textStyle="bold" />
 

@@ -1,5 +1,6 @@
 package turathalanbiaa.app.myapplication;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +30,7 @@ import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 import turathalanbiaa.app.myapplication.blutooth.Main_Activity;
 import turathalanbiaa.app.myapplication.volley.AppController;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
 
     // Email, password edittext
     EditText txtUsername, txtPassword;
