@@ -8,14 +8,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -34,6 +37,7 @@ import turathalanbiaa.app.myapplication.command.PrinterCommand;
 
 
 import turathalanbiaa.app.myapplication.volley.AppController;
+import turathalanbiaa.app.myapplication.volley.VolleySingleton;
 import zj.com.customize.sdk.Other;
 
 import android.annotation.SuppressLint;
@@ -270,9 +274,30 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         clearData.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                sellMenuId="";
-                menuIdTextView.setText(sellMenuId);
-                session.createBarcode("");
+//                sellMenuId="";
+//                menuIdTextView.setText(sellMenuId);
+//                session.createBarcode("");
+
+//                //add to sell item
+//                String url="http://192.168.9.110:8000/api/sellmenuitem";
+//
+//                for (int i=0;i<menuItems.size();i++){
+//                Map<String, String> params = new HashMap<>();
+//                params.put("user_sell_it_id", session.getshared("id"));
+//                params.put("sell_menu_id", sellMenuId);
+//                params.put("item_name", menuItems.get(i).getItem_name());
+//                params.put("item_price", menuItems.get(i).getItem_price().toString());
+//                params.put("item_count",  menuItems.get(i).getItem_count().toString());
+//                params.put("item_id",  menuItems.get(i).getId().toString());
+//                params.put("item_cost", "0");
+//
+//                params.put("datetime","2020-01-15 00:00:00" );
+//
+////
+//                    sendItems(url,params);
+//                }
+
+
             }
         });
 
@@ -281,8 +306,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         additem.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url="http://192.168.9.110:8000/api/item";
-                getItemObj(url);
+//                String url="http://192.168.9.110:8000/api/item";
+//                getItemObj(url);
+
+                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -317,10 +345,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             public void onClick(View view) {
 
                 //scan for sell menu
-                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
 
+                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+                intent.putExtra("ScanFor",1);
                 startActivity(intent);
                 //send post request with barcode, loop through sell menu items
+//                String url="http://192.168.9.110:8000/api/oldmenu";
+//                getSellMenuItemsArray(url);
 
             }
         });
@@ -328,8 +359,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
 
-        String url="https://jsonblob.com/api/c343b7e4-34c8-11ea-ad35-d729c7db8fd8";
-        makeJsonArrayRequest(url);
+//        String url="https://jsonblob.com/api/c343b7e4-34c8-11ea-ad35-d729c7db8fd8";
+//        makeJsonArrayRequest(url);
 
         RecyclerView recyclerView = findViewById(R.id.items_recycler_view);
         Layout =findViewById(R.id.liner_layout);
@@ -342,15 +373,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
 
-        // Get local Bluetooth adapter
-//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//
-//        // If the adapter is null, then Bluetooth is not supported
-//        if (mBluetoothAdapter == null) {
-//            Toast.makeText(this, "Bluetooth is not available",
-//                    Toast.LENGTH_LONG).show();
-//            finish();
-//        }
+        //// Get local Bluetooth adapter
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // If the adapter is null, then Bluetooth is not supported
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available",
+                    Toast.LENGTH_LONG).show();
+            finish();
+        }
 
     }
 
@@ -367,22 +398,116 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //        return false;
 //    }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
+    @Override
+    public void onStart() {
+        super.onStart();
+
+//         If Bluetooth is not on, request that it be enabled.
+        // setupChat() will then be called during onActivityResult
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // Otherwise, setup the session
+        } else {
+            if (mService == null)
+                KeyListenerInit();//监听
+        }
+    }
+
+    void sendToDB(){
+        //add to sell item
+        String url="http://192.168.9.110:8000/api/sellmenuitem";
+
+        for (int i=0;i<menuItems.size();i++){
+            Map<String, String> params = new HashMap<>();
+            params.put("user_sell_it_id", session.getshared("id"));
+            params.put("sell_menu_id", sellMenuId);
+            params.put("item_name", menuItems.get(i).getItem_name());
+            params.put("item_price", menuItems.get(i).getItem_price().toString());
+            params.put("item_count",  menuItems.get(i).getItem_count().toString());
+            params.put("item_id",  menuItems.get(i).getId().toString());
+            params.put("item_cost", "0");
+
+            params.put("datetime","2020-01-15 00:00:00" );
+
 //
-////         If Bluetooth is not on, request that it be enabled.
-//        // setupChat() will then be called during onActivityResult
-//        if (!mBluetoothAdapter.isEnabled()) {
-//            Intent enableIntent = new Intent(
-//                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-//            // Otherwise, setup the session
-//        } else {
-//            if (mService == null)
-//                KeyListenerInit();//监听
-//        }
-//    }
+            sendItems(url,params);
+        }
+
+
+    }
+
+    void clearItemData(){
+        menuItems.clear();
+        sellMenuId="";
+        session.createBarcode("");
+        adapter.notifyDataSetChanged();
+    }
+    void sendItems(String url, Map<String, String> params){
+
+
+        showpDialog();
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
+                url, new JSONObject(params), new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    JSONObject jsonItem = (JSONObject) response;
+//                    int id=jsonItem.getInt("id");
+//                    String name = jsonItem.getString("name");
+//                    int price= jsonItem.getInt("price");
+//
+////
+////
+//                    item=new SellMenuItem();
+//                    item.setItem_count(1);
+//                    item.setItem_name(name);
+//                    item.setItem_price(price);
+//                    item.setId(id);
+//                    menuItems.add(item);
+
+
+//
+//                            for(int i=0;i<menuItems.size();i++){
+//
+//                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
+//                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
+//                            }
+                            Toast.makeText(getApplicationContext(),
+                                    " "+ response.getString("message"), Toast.LENGTH_LONG).show();
+//                    adapter.notifyDataSetChanged();
+
+//                            txtResponse.setText(jsonResponse);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+                hidepDialog();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                hidepDialog();
+            }
+
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+
+    }
 
    void getSellMenuId(){
         String url="http://192.168.9.110:8000/api/newsellmenu";
@@ -432,6 +557,74 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
     }
+    private void getSellMenuItemsArray(String url) {
+
+
+        //if everything is fine
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            //converting response to json object
+                            JSONArray obj = new JSONArray(response);
+
+
+                            for (int i = 0; i < obj.length(); i++) {
+
+                                JSONObject jsonItem = (JSONObject) obj
+                                        .get(i);
+
+                                String name = jsonItem.getString("item_name");
+                                int price= jsonItem.getInt("item_price");
+                                int count= jsonItem.getInt("item_count");
+
+                                // String sellerId= jsonItem.getString("user_sell_it_id");
+
+
+
+                                item=new SellMenuItem();
+                                 item.setItem_count(count);
+                                item.setItem_name(name);
+                                item.setItem_price(price);
+                                menuItems.add(item);
+
+                            }
+
+//                            String str="";
+//
+//                            for(int i=0;i<menuItems.size();i++){
+//
+//                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
+//                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
+//                            }
+//                            Toast.makeText(getApplicationContext(),
+//                                    " // "+response, Toast.LENGTH_LONG).show();
+                            adapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            Toast.makeText(getApplicationContext(),
+                                    " // "+e, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", sellMenuId);
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
     private void makeJsonArrayRequest(String url) {
         showpDialog();
 
@@ -489,7 +682,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     private void getItemObj(String url){
         Map<String, String> params = new HashMap<>();
-        params.put("barcode", code);
+        params.put("barcode", itemCode);
 
         showpDialog();
 
@@ -505,6 +698,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                    int id=jsonItem.getInt("id");
                     String name = jsonItem.getString("name");
                     int price= jsonItem.getInt("price");
+
 
 
                     item=new SellMenuItem();
@@ -594,16 +788,35 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //            snackbar.show();
         }
     }
+    //
     String barcode;
+    String val;
+    String itemCode;
     @Override
     public synchronized void onResume() {
         super.onResume();
 
         barcode = session.getshared("Barcode");
         Toast.makeText(this,"/"+barcode,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"/"+session.getshared("scanfor"),Toast.LENGTH_SHORT).show();
 
-        menuIdTextView=findViewById(R.id.textView_sellMenuId);
-        menuIdTextView.setText(barcode);
+        val=session.getshared("scanfor");
+        if(val=="1"){
+            //barcode is for menu
+            menuIdTextView=findViewById(R.id.textView_sellMenuId);
+            menuIdTextView.setText(barcode);
+            String url="http://192.168.9.110:8000/api/oldmenu";
+            getSellMenuItemsArray(url);
+            session.setScanfor("0");
+        }
+        else if(val=="2"){
+            //barcode is for item
+            itemCode=barcode;
+            String url="http://192.168.9.110:8000/api/item";
+            getItemObj(url);
+            session.setScanfor("0");
+        }
+
 
         if (mService != null) {
 
@@ -789,10 +1002,21 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     }
                 } else {
                     //String msg = editText.getText().toString();
-                    String msg = "كرار حساني" +
-                            "\n بنطلون قماش = 12.000 عدد 2 " +
-                            "\n قميص = 15.000 عدد 1 " +
-                            "\n حذاء تركي = 20.000 عدد 2 ";
+//                    String msg = "كرار حساني" +
+//                            "\n بنطلون قماش = 12.000 عدد 2 " +
+//                            "\n قميص = 15.000 عدد 1 " +
+//                            "\n حذاء تركي = 20.000 عدد 2 ";
+
+                    sendToDB();
+
+                    String msg=session.getshared("name");
+                    int len=menuItems.size();
+                    for (int i=0;i<len;i++){
+                        msg+="\n...............................\n "+" =عدد "+menuItems.get(i).getItem_count()+
+                                menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
+
+
+                    }
 
                     if (msg.length() > 0) {
                         if (thai.isChecked()) {
@@ -808,7 +1032,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                             SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n", ARBIC, 22, 0, 0, 0));
                             SendDataByte(Command.ESC_Align);
 
-                            byte[] code = PrinterCommand.getCodeBarCommand("99999999", 73, 3, 168, 1, 2);
+                            byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 168, 1, 2);
                             SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                             SendDataByte(code);
                             SendDataByte(Command.ESC_Align);
@@ -827,6 +1051,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                         Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
                     }
                 }
+                clearItemData();
                 break;
             }
             case R.id.width_58mm:

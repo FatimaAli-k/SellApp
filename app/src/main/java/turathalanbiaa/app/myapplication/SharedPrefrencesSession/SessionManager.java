@@ -32,6 +32,7 @@ public class SessionManager {
     public static final String KEY_NAME = "name";
     public static final String KEY_ID = "id";
     public static final String KEY_BARCODE = "Barcode";
+    public static final String KEY_SCANFOR = "scanfor";
 
 //    // Email address (make variable public to access from outside)
 //    public static final String KEY_EMAIL = "email";
@@ -63,6 +64,14 @@ public class SessionManager {
     public void createBarcode(String code){
         // Storing login value as TRUE
         editor.putString(KEY_BARCODE,code);
+
+
+        // commit changes
+        editor.commit();
+    }
+    public void setScanfor(String str){
+        // Storing login value as TRUE
+        editor.putString(KEY_SCANFOR,str);
 
 
         // commit changes

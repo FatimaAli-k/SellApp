@@ -45,7 +45,17 @@ public class ScanActivity extends AppCompatActivity implements BarcodeReader.Bar
 
         SessionManager session = new SessionManager(getApplicationContext());
 
-        session.createBarcode(barcode.displayValue);
+
+
+            session.createBarcode(barcode.displayValue);
+        //if scanning fo menu id
+        if(scanFor==1) {
+            session.setScanfor("1");}
+        //for item
+        else
+            session.setScanfor("2");
+
+
         finish();
 
 

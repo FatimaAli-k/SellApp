@@ -96,6 +96,7 @@ public class LoginActivity extends Activity {
 
                     userLogin();
 
+//                    session.createLoginSession("temp","1");
                         Intent i = new Intent(getApplicationContext(), Main_Activity.class);
 
                         startActivity(i);
