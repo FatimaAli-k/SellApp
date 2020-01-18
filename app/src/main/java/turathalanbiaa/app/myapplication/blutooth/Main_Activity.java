@@ -802,8 +802,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         super.onResume();
 
         barcode = session.getshared("Barcode");
-        Toast.makeText(this,"/"+barcode,Toast.LENGTH_SHORT).show();
-        Toast.makeText(this,"/"+session.getshared("scanfor"),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,"/"+barcode,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,"/"+session.getshared("scanfor"),Toast.LENGTH_SHORT).show();
 
         val=session.getshared("scanfor");
         if(val=="1"){
