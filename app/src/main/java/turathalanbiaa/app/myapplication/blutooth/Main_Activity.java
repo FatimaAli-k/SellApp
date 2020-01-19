@@ -564,14 +564,18 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         String url="http://192.168.9.110:8000/api/oldmenu";
         //if everything is fine
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
                         try {
                             //converting response to json object
+
                             JSONArray obj = new JSONArray(response);
+
+
+
 
 
                             for (int i = 0; i < obj.length(); i++) {
@@ -579,12 +583,38 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                 JSONObject jsonItem = (JSONObject) obj
                                         .get(i);
 
-                                int id=jsonItem.getInt("id");
-                                String name = jsonItem.getString("item_name");
-                                int price= jsonItem.getInt("item_price");
-                                int count= jsonItem.getInt("item_count");
+                                String t=jsonItem.getString("sell_menu_item");
+
+                                JSONArray obj2 = new JSONArray(t);
+
+                                for (int j = 0; j < obj2.length(); j++) {
+                                    JSONObject jsonItem2 = (JSONObject) obj2
+                                            .get(j);
+
+//                                int id=jsonItem.getInt("id");
+//                                String name = jsonItem.getString("item_name");
+//                                int price= jsonItem.getInt("item_price");
+//                                int count= jsonItem.getInt("item_count");
+//
+//                                // String sellerId= jsonItem.getString("user_sell_it_id");
+//
+
+//
+//
+//                                item=new SellMenuItem();
+//                                 item.setItem_count(count);
+//                                 item.setId(id);
+//                                item.setItem_name(name);
+//                                item.setItem_price(price);
+//                                menuItems.add(item);
+
+                                    int id=jsonItem2.getInt("id");
+                                String name = jsonItem2.getString("item_name");
+                                int price= jsonItem2.getInt("item_price");
+                                int count= jsonItem2.getInt("item_count");
 
                                 // String sellerId= jsonItem.getString("user_sell_it_id");
+
 
 
 
@@ -594,10 +624,10 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                 item.setItem_name(name);
                                 item.setItem_price(price);
                                 menuItems.add(item);
+                                }
 
                             }
 
-//                            String str="";
 //
 //                            for(int i=0;i<menuItems.size();i++){
 //
