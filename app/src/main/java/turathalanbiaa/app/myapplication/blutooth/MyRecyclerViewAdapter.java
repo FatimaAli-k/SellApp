@@ -59,7 +59,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
 //        holder.itemId.setText(SellItem.getId());
         holder.itemName.setText(item.getItem_name());
-        holder.itemPrice.setText(item.getItem_price().toString());
+        holder.itemPrice.setText( String.format("%,d", Long.parseLong(item.getItem_price().toString())));
         holder.itemQuantity.setText(item.getItem_count().toString());
 //        holder.textView.setText(SellItem.getItem_name());
 

@@ -3,11 +3,12 @@ package turathalanbiaa.app.myapplication.blutooth;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.sql.Date;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 
 import com.android.volley.AuthFailureError;
@@ -77,6 +78,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Date;
 
 public class Main_Activity extends Activity implements OnClickListener, MyRecyclerViewAdapter.ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     /******************************************************************************************************/
@@ -271,11 +274,17 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                menuIdTextView.setText(sellMenuId);
 //                session.createBarcode("");
 
+
+
 //
 
-                sendToDB();
+               String m= msgPrintFormat();
+                Toast.makeText(getApplicationContext(),
+                        ""+ m, Toast.LENGTH_LONG).show();
 
-                clearItemData();
+
+
+
             }
         });
 
@@ -395,6 +404,21 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }
     }
 
+    String msgPrintFormat(){
+        String msg=session.getshared("name");
+        int len=menuItems.size();
+        for (int i=0;i<len;i++){
+//
+            String s;
+            s = String.format("%,d", Long.parseLong(menuItems.get(i).getItem_price().toString()));
+            msg+="\n...............................\n"+menuItems.get(i).getItem_name()+" "+s+" "+" عدد "
+                    +menuItems.get(i).getItem_count();
+
+
+        }
+        return msg;
+    }
+
     void sendToDB(){
         //add to sell SellItem
         String url="http://192.168.9.110:8000/api/sellmenuitem";
@@ -408,8 +432,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             params.put("item_count",  menuItems.get(i).getItem_count().toString());
             params.put("item_id",  menuItems.get(i).getItem_id().toString());
             params.put("item_cost", "0");
-
-            params.put("datetime","2020-01-15 00:00:00" );
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            String dt = sdf.format(new Date());
+            params.put("datetime",dt );
 
 //
             if(menuItems.get(i).getId()==null){
@@ -1105,14 +1130,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                     sendToDB();
 
-                    String msg=session.getshared("name");
-                    int len=menuItems.size();
-                    for (int i=0;i<len;i++){
-                        msg+="\n...............................\n "+" =عدد "+menuItems.get(i).getItem_count()+
-                                menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
-
-
-                    }
+                    String msg=msgPrintFormat();
 
                     if (msg.length() > 0) {
                         if (thai.isChecked()) {
@@ -1125,10 +1143,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                             SendDataByte(PrinterCommand.POS_Print_Text(msg, KOREAN, 0, 0, 0, 0));
                             SendDataByte(Command.LF);
                         } else if (Simplified.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n", ARBIC, 22, 0, 0, 0));
+                            SendDataByte(PrinterCommand.POS_Print_Text(" ", ARBIC, 22, 0, 0, 0));
                             SendDataByte(Command.ESC_Align);
+//                            byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 168, 1, 2);
 
-                            byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 168, 1, 2);
+                            byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 84, 1, 2);
                             SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                             SendDataByte(code);
                             SendDataByte(Command.ESC_Align);
@@ -1138,7 +1157,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                             SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
                             SendDataByte(Command.ESC_Align);
-                            SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n", ARBIC, 22, 0, 0, 0));
+                            SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
                             SendDataByte(Command.ESC_Align);
 
 
