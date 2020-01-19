@@ -3,13 +3,14 @@ package turathalanbiaa.app.myapplication.Model;
 import java.io.Serializable;
 
 public class SellMenuItem implements Serializable {
-    private Integer id,sell_menu_id,item_price,item_type,item_count,user_sell_it_id;
+    private Integer id,sell_menu_id,item_price,item_id,item_type,item_count,user_sell_it_id;
     private String item_name,f1,f2,f3,f4;
 
     public  SellMenuItem(){}
-    public SellMenuItem(Integer id,Integer sell_menu_id, String item_name,Integer item_price, Integer item_type,
+    public SellMenuItem(Integer id,Integer sell_menu_id, String item_name,Integer item_price, Integer item_type,Integer item_id,
                         Integer item_count, Integer user_sell_it_id,String f1,String f2, String f3, String f4){
 
+        this.item_id=id;
         this.id=id;
         this.sell_menu_id=sell_menu_id;
         this.item_name=item_name;
@@ -49,6 +50,14 @@ public class SellMenuItem implements Serializable {
 
     public void setSell_menu_id(Integer sell_menu_id) {
         this.sell_menu_id = sell_menu_id;
+    }
+
+    public Integer getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(Integer item_id) {
+        this.item_id = item_id;
     }
 
     public Integer getItem_price() {

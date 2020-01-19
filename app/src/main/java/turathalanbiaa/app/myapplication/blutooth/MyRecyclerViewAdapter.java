@@ -57,11 +57,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public void onBindViewHolder(ViewHolder holder, int position) {
        SellMenuItem item=itemList.get(position);
 
-//        holder.itemId.setText(item.getId());
+//        holder.itemId.setText(SellItem.getId());
         holder.itemName.setText(item.getItem_name());
         holder.itemPrice.setText(item.getItem_price().toString());
         holder.itemQuantity.setText(item.getItem_count().toString());
-//        holder.textView.setText(item.getItem_name());
+//        holder.textView.setText(SellItem.getItem_name());
 
     }
 
@@ -163,7 +163,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public void removeItem(int position) {
         itemList.remove(position);
-        // notify the item removed by position
+        // notify the SellItem removed by position
         // to perform recycler view delete animations
         // NOTE: don't call notifyDataSetChanged()
         notifyItemRemoved(position);
@@ -171,7 +171,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public void restoreItem(SellMenuItem item, int position) {
         itemList.add(position, item);
-        // notify item added by position
+        // notify SellItem added by position
         notifyItemInserted(position);
     }
 }

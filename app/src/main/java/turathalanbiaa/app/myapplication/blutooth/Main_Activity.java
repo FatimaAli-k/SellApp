@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Locale;
 import java.util.Map;
 
 import com.android.volley.AuthFailureError;
@@ -19,13 +18,13 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import turathalanbiaa.app.myapplication.Model.Item;
 import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
 import turathalanbiaa.app.myapplication.RecyclerItemTouchHelper;
@@ -52,7 +51,6 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,21 +61,15 @@ import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -214,7 +206,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     LinearLayout Layout;
     MyRecyclerViewAdapter adapter;
     ArrayList<SellMenuItem> menuItems = new ArrayList<>();
-    SellMenuItem item=new SellMenuItem();
+    SellMenuItem SellItem =new SellMenuItem();
+    Item item=new Item();
     ProgressDialog pDialog;
     SessionManager session;
     String code="";
@@ -278,31 +271,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                menuIdTextView.setText(sellMenuId);
 //                session.createBarcode("");
 
-//                //add to sell item
-                String url="http://192.168.9.110:8000/api/sellmenuitem";
-
-                for (int i=0;i<menuItems.size();i++){
-                Map<String, String> params = new HashMap<>();
-                params.put("user_sell_it_id", session.getshared("id"));
-                params.put("sell_menu_id", sellMenuId);
-                params.put("item_name", menuItems.get(i).getItem_name());
-                params.put("item_price", menuItems.get(i).getItem_price().toString());
-                params.put("item_count",  menuItems.get(i).getItem_count().toString());
-                params.put("item_id",  menuItems.get(i).getId().toString());
-                params.put("item_cost", "0");
-
-                params.put("datetime","2020-01-15 00:00:00" );
-
 //
-                    sendItems(url,params);
-                }
 
+                sendToDB();
 
                 clearItemData();
             }
         });
 
-        //add item
+        //add SellItem
         additem=findViewById(R.id.button_add_item);
         additem.setOnClickListener(new OnClickListener() {
             @Override
@@ -333,6 +310,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             public void onClick(View view) {
                //send get request retreive sell menu id
 //                sellMenuId="12345678";
+                clearItemData();
                getSellMenuId();
 
 
@@ -346,6 +324,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             public void onClick(View view) {
 
                 //scan for sell menu
+                clearItemData();
 
                 Intent intent = new Intent(getBaseContext(), ScanActivity.class);
                 intent.putExtra("ScanFor",1);
@@ -417,7 +396,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     }
 
     void sendToDB(){
-        //add to sell item
+        //add to sell SellItem
         String url="http://192.168.9.110:8000/api/sellmenuitem";
 
         for (int i=0;i<menuItems.size();i++){
@@ -427,14 +406,20 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             params.put("item_name", menuItems.get(i).getItem_name());
             params.put("item_price", menuItems.get(i).getItem_price().toString());
             params.put("item_count",  menuItems.get(i).getItem_count().toString());
-            params.put("item_id",  menuItems.get(i).getId().toString());
+            params.put("item_id",  menuItems.get(i).getItem_id().toString());
             params.put("item_cost", "0");
 
             params.put("datetime","2020-01-15 00:00:00" );
 
 //
-            sendItems(url,params);
+            if(menuItems.get(i).getId()==null){
+            sendItems(url,params);}
+
+            else{
+                //updateitems using the id and count
+            }
         }
+
 
 
     }
@@ -467,12 +452,12 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //
 ////
 ////
-//                    item=new SellMenuItem();
-//                    item.setItem_count(1);
-//                    item.setItem_name(name);
-//                    item.setItem_price(price);
-//                    item.setId(id);
-//                    menuItems.add(item);
+//                    SellItem=new SellMenuItem();
+//                    SellItem.setItem_count(1);
+//                    SellItem.setItem_name(name);
+//                    SellItem.setItem_price(price);
+//                    SellItem.setId(id);
+//                    menuItems.add(SellItem);
 
 
 //
@@ -601,29 +586,31 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 //
 //
-//                                item=new SellMenuItem();
-//                                 item.setItem_count(count);
-//                                 item.setId(id);
-//                                item.setItem_name(name);
-//                                item.setItem_price(price);
-//                                menuItems.add(item);
+//                                SellItem=new SellMenuItem();
+//                                 SellItem.setItem_count(count);
+//                                 SellItem.setId(id);
+//                                SellItem.setItem_name(name);
+//                                SellItem.setItem_price(price);
+//                                menuItems.add(SellItem);
 
                                     int id=jsonItem2.getInt("id");
                                 String name = jsonItem2.getString("item_name");
                                 int price= jsonItem2.getInt("item_price");
                                 int count= jsonItem2.getInt("item_count");
+                                int itemid=jsonItem2.getInt("item_id");
 
                                 // String sellerId= jsonItem.getString("user_sell_it_id");
 
 
 
 
-                                item=new SellMenuItem();
-                                 item.setItem_count(count);
-                                 item.setId(id);
-                                item.setItem_name(name);
-                                item.setItem_price(price);
-                                menuItems.add(item);
+                                SellItem =new SellMenuItem();
+                                 SellItem.setItem_count(count);
+                                 SellItem.setId(id);
+                                SellItem.setItem_name(name);
+                                SellItem.setItem_price(price);
+                                    SellItem.setItem_id(itemid);
+                                menuItems.add(SellItem);
                                 }
 
                             }
@@ -682,11 +669,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                 int price = person.getInt("price");
 
 
-                                item=new SellMenuItem();
-                                item.setItem_count(1);
-                                item.setItem_name(name);
-                                item.setItem_price(price);
-                                menuItems.add(item);
+                                SellItem =new SellMenuItem();
+                                SellItem.setItem_count(1);
+                                SellItem.setItem_name(name);
+                                SellItem.setItem_price(price);
+                                menuItems.add(SellItem);
 
 
                             }
@@ -715,6 +702,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         AppController.getInstance().addToRequestQueue(req);
     }
 
+
+
     private void getItemObj(String url){
         Map<String, String> params = new HashMap<>();
         params.put("barcode", itemCode);
@@ -736,12 +725,12 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
 
-                    item=new SellMenuItem();
-                    item.setItem_count(1);
-                    item.setItem_name(name);
-                    item.setItem_price(price);
-                    item.setId(id);
-                    menuItems.add(item);
+                    SellItem =new SellMenuItem();
+                    SellItem.setItem_count(1);
+                    SellItem.setItem_name(name);
+                    SellItem.setItem_price(price);
+                    SellItem.setItem_id(id);
+                    menuItems.add(SellItem);
 
                     String str="";
 //
@@ -780,6 +769,61 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         AppController.getInstance().addToRequestQueue(req);
     }
 
+    void deleteSellMenuItem(int id){
+        String url="http://192.168.9.110:8000/api/delete";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("id", String.valueOf(id));
+
+
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
+                url, new JSONObject(params), new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+
+
+//                            for(int i=0;i<menuItems.size();i++){
+//
+//                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
+//                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
+//                            }
+//                            Toast.makeText(getApplicationContext(),
+//                                    " "+str, Toast.LENGTH_LONG).show();
+
+//                            txtResponse.setText(jsonResponse);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+    }
+
+
+
+
     private void showpDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
@@ -792,21 +836,37 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getApplicationContext(), "You clicked row number " + position, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "You clicked row number " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "item id " +  menuItems.get(position).getItem_id()+" ,sellmenuitemid = "+menuItems.get(position).getId(), Toast.LENGTH_SHORT).show();
+
+
     }
 
         @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof MyRecyclerViewAdapter.ViewHolder) {
-            // get the removed item name to display it in snack bar
+            // get the removed SellItem name to display it in snack bar
             String name = menuItems.get(viewHolder.getAdapterPosition()).getItem_name();
 
-            // backup of removed item for undo purpose
+            //delete selll menu item from db
+            if(menuItems.get(viewHolder.getAdapterPosition()).getId() != null){
+
+                deleteSellMenuItem(menuItems.get(viewHolder.getAdapterPosition()).getId());
+            }
+
+
+
+            // backup of removed SellItem for undo purpose
             final SellMenuItem deletedItem = menuItems.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
-            // remove the item from recycler view
+            // remove the SellItem from recycler view
             adapter.removeItem(viewHolder.getAdapterPosition());
+
+            //delete selll menu item from db
+
+
+
 
             // showing snack bar with Undo option
 //            Snackbar snackbar = Snackbar
@@ -815,7 +875,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                @Override
 //                public void onClick(View view) {
 //
-//                    // undo is selected, restore the deleted item
+//                    // undo is selected, restore the deleted SellItem
 //                    adapter.restoreItem(deletedItem, deletedIndex);
 //                }
 //            });
@@ -846,7 +906,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             session.setScanfor("0");
         }
         else if(val=="2"){
-            //barcode is for item
+            //barcode is for SellItem
             itemCode=barcode;
             String url="http://192.168.9.110:8000/api/item";
             getItemObj(url);

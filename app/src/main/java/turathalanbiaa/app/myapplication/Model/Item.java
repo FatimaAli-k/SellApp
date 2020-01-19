@@ -3,13 +3,13 @@ package turathalanbiaa.app.myapplication.Model;
 import java.sql.Date;
 
 public class Item {
-    private Integer id,type,cost,price,store_id;
+    private Integer id,type,cost,price,store_id,count;
     private String barcode,name,f1,f2,f3,f4,place;
     private Date detail,last_update;
 
     public Item(){};
     public Item(Integer id,String barcode,String name,Integer type,Integer cost,Integer price,String f1,String f2,
-                String f3,String f4,Date detail,Integer store_id,String place,Date last_update){
+                String f3,String f4,Date detail,Integer store_id,String place,Date last_update,Integer count){
         this.id=id;
         this.barcode=barcode;
         this.name=name;
@@ -24,6 +24,7 @@ public class Item {
         this.store_id=store_id;
         this.place=place;
         this.last_update=last_update;
+        this.count=count;
 
     }
     public Item(Integer id,String barcode,String name,Integer type,Integer cost,Integer price,
@@ -95,6 +96,14 @@ public class Item {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public String getF1() {
