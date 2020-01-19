@@ -46,6 +46,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -53,6 +54,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -372,6 +375,14 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             finish();
         }
 
+        //check internet connection
+       boolean connectedToWifi= haveNetworkConnection();
+        if(!connectedToWifi){
+            Toast.makeText(this, "WiFi is not available",
+                    Toast.LENGTH_LONG).show();
+
+        }
+
     }
 
 //    private boolean loadFragment(Fragment fragment) {
@@ -457,6 +468,22 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         session.createBarcode("");
         adapter.notifyDataSetChanged();
     }
+
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+
+        }
+        return haveConnectedWifi ;
+    }
+
     void sendItems(String url, Map<String, String> params){
 
 
