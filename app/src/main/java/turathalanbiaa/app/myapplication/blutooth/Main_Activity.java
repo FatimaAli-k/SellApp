@@ -223,6 +223,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     TextView menuIdTextView;
 
+    //urls
+
+    String addSellMenuItemURL="http://192.168.9.110:8000/api/sellmenuitem";
+    String updatURL="http://192.168.9.110:8000/api/update";
+    String createNewMenuURL="http://192.168.9.110:8000/api/newsellmenu";
+    String getOldMenuURL="http://192.168.9.110:8000/api/oldmenu";
+    String deleteItemURL="http://192.168.9.110:8000/api/delete";
+    String getItemURL="http://192.168.9.110:8000/api/item";
+
     //
 
     @Override
@@ -285,6 +294,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                Toast.makeText(getApplicationContext(),
 //                        ""+ m, Toast.LENGTH_LONG).show();
 //
+
 
                 clearItemData();
 
@@ -433,8 +443,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     void sendToDB(){
         //add to sell SellItem
-        String url="http://192.168.9.110:8000/api/sellmenuitem";
-        String upUrl="http://192.168.9.110:8000/api/update";
+//        String url="http://192.168.9.110:8000/api/sellmenuitem";
+//        String upUrl="http://192.168.9.110:8000/api/update";
 
         for (int i=0;i<menuItems.size();i++){
             Map<String, String> params = new HashMap<>();
@@ -451,7 +461,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 //
             if(menuItems.get(i).getId()==null){
-            sendItems(url,params);}
+            sendItems(addSellMenuItemURL,params);}
 
             else{
                 //updateitems using the id and count
@@ -459,7 +469,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 upParams.put("id",  menuItems.get(i).getId().toString());
                 upParams.put("item_count",  menuItems.get(i).getItem_count().toString());
                 upParams.put("datetime",dt );
-               sendItems(upUrl,upParams);
+               sendItems(updatURL,upParams);
             }
         }
 
@@ -558,11 +568,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
    void getSellMenuId(){
-        String url="http://192.168.9.110:8000/api/newsellmenu";
+//        String url="http://192.168.9.110:8000/api/newsellmenu";
 
         showpDialog();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, null, new Response.Listener<JSONObject>() {
+                createNewMenuURL, null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -607,10 +617,14 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     }
     private void getSellMenuItemsArray() {
 
-        String url="http://192.168.9.110:8000/api/oldmenu";
+//        String url="http://192.168.9.110:8000/api/oldmenu";
         //if everything is fine
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
+        showpDialog();
+
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST,getOldMenuURL,
                 new Response.Listener<String>() {
+
+
                     @Override
                     public void onResponse(String response) {
 
@@ -688,12 +702,14 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                             Toast.makeText(getApplicationContext(),
                                     " // "+e, Toast.LENGTH_LONG).show();
                         }
+                        hidepDialog();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        hidepDialog();
                     }
                 }) {
             @Override
@@ -708,60 +724,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
-    private void makeJsonArrayRequest(String url) {
-        showpDialog();
 
-        JsonArrayRequest req = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, response.toString());
-
-                        try {
-                            // Parsing json array response
-                            // loop through each json object
-
-                            for (int i = 0; i < response.length(); i++) {
-
-                                JSONObject person = (JSONObject) response
-                                        .get(i);
-
-                                String name = person.getString("name");
-                                int price = person.getInt("price");
-
-
-                                SellItem =new SellMenuItem();
-                                SellItem.setItem_count(1);
-                                SellItem.setItem_name(name);
-                                SellItem.setItem_price(price);
-                                menuItems.add(SellItem);
-
-
-                            }
-
-                            adapter.notifyDataSetChanged();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-
-                        hidepDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-                hidepDialog();
-            }
-        });
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(req);
-    }
 
 
 
@@ -830,9 +793,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         AppController.getInstance().addToRequestQueue(req);
     }
 
-
+boolean deleted=false;
     void deleteSellMenuItem(int id){
-        String url="http://192.168.9.110:8000/api/delete";
+//        String url="http://192.168.9.110:8000/api/delete";
 
 
         Map<String, String> params = new HashMap<>();
@@ -841,7 +804,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
-                url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                deleteItemURL, new JSONObject(params), new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -859,7 +822,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                             Toast.makeText(getApplicationContext(),
                                     " "+  response.getString("message"), Toast.LENGTH_LONG).show();
 
-                    adapter.notifyDataSetChanged();
+
+                            if(!response.getString("message").equalsIgnoreCase("DONE"))
+                                deleted=true;
 
 //                            txtResponse.setText(jsonResponse);
 
@@ -868,6 +833,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     Toast.makeText(getApplicationContext(),
                             "Error: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
+                    deleted=true;
                 }
 
 
@@ -879,6 +845,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
 
+                deleted=true;
             }
 
         });
@@ -916,7 +883,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             String name = menuItems.get(viewHolder.getAdapterPosition()).getItem_name();
 
             //delete selll menu item from db
-            if(menuItems.get(viewHolder.getAdapterPosition()).getId() != null){
+            boolean bool=menuItems.get(viewHolder.getAdapterPosition()).getId() != null;
+            if(bool){
 
                 deleteSellMenuItem(menuItems.get(viewHolder.getAdapterPosition()).getId());
             }
@@ -931,9 +899,10 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             adapter.removeItem(viewHolder.getAdapterPosition());
 
             //delete selll menu item from db
-
-
-
+            if((bool)&&(deleted)) {
+                adapter.restoreItem(deletedItem, deletedIndex);
+                deleted=false;
+            }
 
             // showing snack bar with Undo option
 //            Snackbar snackbar = Snackbar
@@ -943,6 +912,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                public void onClick(View view) {
 //
 //                    // undo is selected, restore the deleted SellItem
+
 //                    adapter.restoreItem(deletedItem, deletedIndex);
 //                }
 //            });
@@ -975,8 +945,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         else if(val=="2"){
             //barcode is for SellItem
             itemCode=barcode;
-            String url="http://192.168.9.110:8000/api/item";
-            getItemObj(url);
+//            String url="http://192.168.9.110:8000/api/item";
+            getItemObj(getItemURL);
             session.setScanfor("0");
         }
 
