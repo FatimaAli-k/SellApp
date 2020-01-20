@@ -280,12 +280,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
 //
-                sendToDB();
+//                sendToDB();
 //               String m= msgPrintFormat();
 //                Toast.makeText(getApplicationContext(),
 //                        ""+ m, Toast.LENGTH_LONG).show();
 //
 
+                clearItemData();
 
 
             }
