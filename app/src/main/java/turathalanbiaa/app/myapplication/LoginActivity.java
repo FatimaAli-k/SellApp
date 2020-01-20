@@ -46,7 +46,7 @@ public class LoginActivity extends Activity {
     private TextView txtResponse;
     private static String TAG = LoginActivity.class.getSimpleName();
     // Progress dialog
-    private ProgressDialog pDialog;
+//    private ProgressDialog pDialog;
 
     // login button
     Button btnLogin;
@@ -60,9 +60,9 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Please wait...");
-        pDialog.setCancelable(false);
+//        pDialog = new ProgressDialog(this);
+//        pDialog.setMessage("Please wait...");
+//        pDialog.setCancelable(false);
 
         // Session Manager
         session = new SessionManager(getApplicationContext());
@@ -116,7 +116,7 @@ public class LoginActivity extends Activity {
     private void userLogin() {
         Map<String, String> params = new HashMap<>();
         params.put("secret_word", txtUsername.getText().toString());
-        showpDialog();
+//        showpDialog();
 
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
@@ -131,10 +131,7 @@ public class LoginActivity extends Activity {
                     // response will be a json object
                     String name = response.getString("name");
                     String id=response.getString("id");
-//                    String email = response.getString("email");
-//                    JSONObject phone = response.getJSONObject("phone");
-//                    String home = phone.getString("home");
-//                    String mobile = phone.getString("mobile");
+//
 
                     jsonResponseName = "";
                     jsonResponseName += name;
@@ -147,13 +144,15 @@ public class LoginActivity extends Activity {
 
                     session.createLoginSession(jsonResponseName,jsonResponseId);
 
+//                    Toast.makeText(getApplicationContext(),
+//                            " "+ response.getString("message"), Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
                             "Error: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
                 }
-                hidepDialog();
+//                hidepDialog();
             }
 
         }, new Response.ErrorListener() {
@@ -164,7 +163,7 @@ public class LoginActivity extends Activity {
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
                 // hide the progress dialog
-                hidepDialog();
+//                hidepDialog();
 
 
 
@@ -178,13 +177,13 @@ public class LoginActivity extends Activity {
 
     }
 
-    private void showpDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hidepDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
+//    private void showpDialog() {
+//        if (!pDialog.isShowing())
+//            pDialog.show();
+//    }
+//
+//    private void hidepDialog() {
+//        if (pDialog.isShowing())
+//            pDialog.dismiss();
+//    }
 }

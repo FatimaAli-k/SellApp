@@ -280,11 +280,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
 //
-
-               String m= msgPrintFormat();
-                Toast.makeText(getApplicationContext(),
-                        ""+ m, Toast.LENGTH_LONG).show();
-
+                sendToDB();
+//               String m= msgPrintFormat();
+//                Toast.makeText(getApplicationContext(),
+//                        ""+ m, Toast.LENGTH_LONG).show();
+//
 
 
 
@@ -433,6 +433,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     void sendToDB(){
         //add to sell SellItem
         String url="http://192.168.9.110:8000/api/sellmenuitem";
+        String upUrl="http://192.168.9.110:8000/api/update";
 
         for (int i=0;i<menuItems.size();i++){
             Map<String, String> params = new HashMap<>();
@@ -453,6 +454,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
             else{
                 //updateitems using the id and count
+                Map<String, String> upParams = new HashMap<>();
+                upParams.put("id",  menuItems.get(i).getId().toString());
+                upParams.put("item_count",  menuItems.get(i).getItem_count().toString());
+                upParams.put("datetime",dt );
+               sendItems(upUrl,upParams);
             }
         }
 
@@ -548,6 +554,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         AppController.getInstance().addToRequestQueue(req);
 
     }
+
 
    void getSellMenuId(){
         String url="http://192.168.9.110:8000/api/newsellmenu";
@@ -692,6 +699,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("id", sellMenuId);
+                params.put("user_sell_it_id", session.getshared("id"));
                 return params;
             }
         };
@@ -821,8 +829,10 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         AppController.getInstance().addToRequestQueue(req);
     }
 
+
     void deleteSellMenuItem(int id){
         String url="http://192.168.9.110:8000/api/delete";
+
 
         Map<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(id));
@@ -838,14 +848,17 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                 try {
 
+                 ;
 
 //                            for(int i=0;i<menuItems.size();i++){
 //
 //                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
 //                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
 //                            }
-//                            Toast.makeText(getApplicationContext(),
-//                                    " "+str, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),
+                                    " "+  response.getString("message"), Toast.LENGTH_LONG).show();
+
+                    adapter.notifyDataSetChanged();
 
 //                            txtResponse.setText(jsonResponse);
 
@@ -871,6 +884,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
+
     }
 
 
