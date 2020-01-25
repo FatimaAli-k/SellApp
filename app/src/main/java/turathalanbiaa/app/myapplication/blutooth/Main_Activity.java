@@ -25,6 +25,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import turathalanbiaa.app.myapplication.LoginActivity;
 import turathalanbiaa.app.myapplication.Model.Item;
 import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
@@ -225,12 +226,12 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     //urls
 
-    String addSellMenuItemURL="http://192.168.9.110:8000/api/sellmenuitem";
-    String updatURL="http://192.168.9.110:8000/api/update";
-    String createNewMenuURL="http://192.168.9.110:8000/api/newsellmenu";
-    String getOldMenuURL="http://192.168.9.110:8000/api/oldmenu";
-    String deleteItemURL="http://192.168.9.110:8000/api/delete";
-    String getItemURL="http://192.168.9.110:8000/api/item";
+    String addSellMenuItemURL="http://192.168.9.107:8000/api/sellmenuitem";
+    String updatURL="http://192.168.9.107:8000/api/update";
+    String createNewMenuURL="http://192.168.9.107:8000/api/newsellmenu";
+    String getOldMenuURL="http://192.168.9.107:8000/api/oldmenu";
+    String deleteItemURL="http://192.168.9.107:8000/api/delete";
+    String getItemURL="http://192.168.9.107:8000/api/item";
 
     //
 
@@ -268,7 +269,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             session.createBarcode("");
         }
 
-
+        else
+        {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        }
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
