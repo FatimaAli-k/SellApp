@@ -415,6 +415,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //    }
 
     @Override
+    public void onBackPressed() {
+
+
+
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 
