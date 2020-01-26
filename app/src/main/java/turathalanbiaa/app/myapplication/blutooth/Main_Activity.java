@@ -226,12 +226,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     //urls
 
-    String addSellMenuItemURL="http://192.168.9.107:8000/api/sellmenuitem";
-    String updatURL="http://192.168.9.107:8000/api/update";
-    String createNewMenuURL="http://192.168.9.107:8000/api/newsellmenu";
-    String getOldMenuURL="http://192.168.9.107:8000/api/oldmenu";
-    String deleteItemURL="http://192.168.9.107:8000/api/delete";
-    String getItemURL="http://192.168.9.107:8000/api/item";
+    String MainUrl="http://192.168.9.104:8000/api";
+    String addSellMenuItemURL=MainUrl+"/sellmenuitem";
+    String updatURL=MainUrl+ "/update";
+    String createNewMenuURL=MainUrl+"/newsellmenu";
+    String getOldMenuURL=MainUrl+"/oldmenu";
+    String deleteItemURL=MainUrl+"/delete";
+    String getItemURL=MainUrl+"/item";
 
     //
 
@@ -269,11 +270,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             session.createBarcode("");
         }
 
-        else
-        {
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }
+//        else
+//        {
+//            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//            startActivity(intent);
+//        }
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
