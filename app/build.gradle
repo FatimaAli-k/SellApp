@@ -48,8 +48,8 @@ dependencies {
 //    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
 
 
-//    // Firebase ML Kit dependencies
-    implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
+////    // Firebase ML Kit dependencies
+//    implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
 
 
 
