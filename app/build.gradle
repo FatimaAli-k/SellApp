@@ -48,9 +48,9 @@ dependencies {
 //    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
 
 
-////    // Firebase ML Kit dependencies
+//    // Firebase ML Kit dependencies
 //    implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
-
+//
 
 
     // barcode reader library
@@ -58,6 +58,10 @@ dependencies {
 
     // google vision library
     implementation 'com.google.android.gms:play-services-vision:11.0.2'
+
+//
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.1'
+    implementation 'com.google.firebase:firebase-ml-vision-barcode-model:16.0.2'
 
 
 }

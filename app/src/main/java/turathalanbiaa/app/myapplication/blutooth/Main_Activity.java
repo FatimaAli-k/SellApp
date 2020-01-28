@@ -37,6 +37,7 @@ import turathalanbiaa.app.myapplication.command.PrintPicture;
 import turathalanbiaa.app.myapplication.command.PrinterCommand;
 
 
+import turathalanbiaa.app.myapplication.mlkittext.ScanMainActivity;
 import turathalanbiaa.app.myapplication.volley.AppController;
 import turathalanbiaa.app.myapplication.volley.VolleySingleton;
 import zj.com.customize.sdk.Other;
@@ -229,7 +230,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String MainUrl="http://192.168.9.104:8000/api";
     String addSellMenuItemURL=MainUrl+"/sellmenuitem";
     String updatURL=MainUrl+ "/update";
-    String createNewMenuURL=MainUrl+"/newsellmenu";
+    String createNewMenuURL="newsellmenu";
     String getOldMenuURL=MainUrl+"/oldmenu";
     String deleteItemURL=MainUrl+"/delete";
     String getItemURL=MainUrl+"/item";
@@ -316,7 +317,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                String url="http://192.168.9.110:8000/api/item";
 //                getItemObj(url);
 
-                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+//                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
                 startActivity(intent);
 
             }
@@ -355,7 +357,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 //scan for sell menu
                 clearItemData();
 
-                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+//                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
+                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
                 intent.putExtra("ScanFor",1);
                 startActivity(intent);
                 //send post request with barcode, loop through sell menu items

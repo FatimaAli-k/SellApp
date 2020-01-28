@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "205109050328",
+    "firebase_url": "https://my-application-43fa9.firebaseio.com",
+    "project_id": "my-application-43fa9",
+    "storage_bucket": "my-application-43fa9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:205109050328:android:7dd17fb398fd0a950210ad",
+        "android_client_info": {
+          "package_name": "turathalanbiaa.app.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "205109050328-d5mdsm960oocq2jrj9i1srb2ejmmmrk0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "turathalanbiaa.app.myapplication",
+            "certificate_hash": "9fe0a7d081551ea0ea4e234d0c46dff49679ece0"
+          }
+        },
+        {
+          "client_id": "205109050328-cr222q7vvp87hhc6cfcjn65c2auva208.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-JzXDt8Xc1ss5NvyG1qT4e2_Wec6lDhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "205109050328-cr222q7vvp87hhc6cfcjn65c2auva208.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
