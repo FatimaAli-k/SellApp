@@ -121,49 +121,94 @@ public class CameraSourcePreview extends ViewGroup {
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int width = 320;
-        int height = 240;
-        if (cameraSource != null) {
-            Size size = cameraSource.getPreviewSize();
-            if (size != null) {
-                width = size.getWidth();
-                height = size.getHeight();
-            }
-        }
+//    @Override
+//    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+//        int width = 320;
+//        int height = 240;
+//        if (cameraSource != null) {
+//            Size size = cameraSource.getPreviewSize();
+//            if (size != null) {
+//                width = size.getWidth();
+//                height = size.getHeight();
+//            }
+//        }
+//
+//        // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
+//        if (isPortraitMode()) {
+//            int tmp = width;
+//            width = height;
+//            height = tmp;
+//        }
+//
+//        final int layoutWidth = right - left;
+//        final int layoutHeight = bottom - top;
+//
+//        // Computes height and width for potentially doing fit width.
+//        int childWidth = layoutWidth;
+//        int childHeight = (int) (((float) layoutWidth / (float) width) * height);
+//
+//        // If height is too tall using fit width, does fit height instead.
+//        if (childHeight > layoutHeight) {
+//            childHeight = layoutHeight;
+//            childWidth = (int) (((float) layoutHeight / (float) height) * width);
+//        }
+//
+//        for (int i = 0; i < getChildCount(); ++i) {
+//            getChildAt(i).layout(0, 0, childWidth, childHeight);
+//            Log.d(TAG, "Assigned view: " + i);
+//        }
+//
+//        try {
+//            startIfReady();
+//        } catch (IOException e) {
+//            Log.e(TAG, "Could not start camera source.", e);
+//        }
+//    }
+@Override
+protected void onLayout (boolean changed, int left, int top, int right, int bottom)
+{
+    int width = getWidth();
+    int height = getHeight();
 
-        // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
-        if (isPortraitMode()) {
-            int tmp = width;
-            width = height;
-            height = tmp;
-        }
-
-        final int layoutWidth = right - left;
-        final int layoutHeight = bottom - top;
-
-        // Computes height and width for potentially doing fit width.
-        int childWidth = layoutWidth;
-        int childHeight = (int) (((float) layoutWidth / (float) width) * height);
-
-        // If height is too tall using fit width, does fit height instead.
-        if (childHeight > layoutHeight) {
-            childHeight = layoutHeight;
-            childWidth = (int) (((float) layoutHeight / (float) height) * width);
-        }
-
-        for (int i = 0; i < getChildCount(); ++i) {
-            getChildAt(i).layout(0, 0, childWidth, childHeight);
-            Log.d(TAG, "Assigned view: " + i);
-        }
-
-        try {
-            startIfReady();
-        } catch (IOException e) {
-            Log.e(TAG, "Could not start camera source.", e);
+    if (cameraSource != null) {
+        Size size = cameraSource.getPreviewSize();
+        if (size != null) {
+            width = size.getWidth();
+            height = size.getHeight();
         }
     }
+
+    int layoutWidth = right - left;
+    int layoutHeight = bottom - top;
+
+    // Swap width and height sizes when in portrait, since it will be rotated 90 degrees
+    if (isPortraitMode()) {
+        int tmp = width;
+        //noinspection SuspiciousNameCombination
+        width = height;
+        height = tmp;
+    }
+
+    int childWidth = layoutWidth;
+    int childHeight = (int) (((float) layoutWidth / (float) width) * height);
+
+    if (isPortraitMode()) {
+        childHeight = layoutHeight;
+        childWidth = (int) (((float) layoutHeight / (float) height) * width);
+    }
+
+    for (int i = 0; i < getChildCount(); ++i) {
+        getChildAt(i).layout(0, 0, childWidth, childHeight);
+    }
+
+    try {
+        startIfReady();
+    } catch (SecurityException se) {
+        Log.e(TAG, "Do not have permission to start the camera", se);
+    } catch (IOException e) {
+        Log.e(TAG, "Could not start camera source.", e);
+    }
+}
 
     private boolean isPortraitMode() {
         int orientation = context.getResources().getConfiguration().orientation;
