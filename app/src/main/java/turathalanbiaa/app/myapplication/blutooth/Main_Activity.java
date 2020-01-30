@@ -16,7 +16,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
@@ -27,13 +26,12 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 
-import turathalanbiaa.app.myapplication.Global;
-import turathalanbiaa.app.myapplication.LoginActivity;
 import turathalanbiaa.app.myapplication.Model.Item;
 import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
 import turathalanbiaa.app.myapplication.RecyclerItemTouchHelper;
 import turathalanbiaa.app.myapplication.ScanActivity;
+import turathalanbiaa.app.myapplication.ServerInfo;
 import turathalanbiaa.app.myapplication.SettingsActivity;
 import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 
@@ -52,7 +50,6 @@ import zj.com.customize.sdk.Other;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -65,6 +62,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -96,7 +94,6 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
-import static turathalanbiaa.app.myapplication.Global.MainUrl;
 
 public class Main_Activity extends Activity implements OnClickListener, MyRecyclerViewAdapter.ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     /******************************************************************************************************/
@@ -239,14 +236,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     TextView menuIdTextView;
 
     //urls
+    String addSellMenuItemURL;
+    String updatURL;
+    String createNewMenuURL;
+    String getOldMenuURL;
+    String deleteItemURL;
+    String getItemURL;
 
 
-    String addSellMenuItemURL= MainUrl+"sellmenuitem";
-    String updatURL=MainUrl+ "update";
-    String createNewMenuURL="newsellmenu";
-    String getOldMenuURL=MainUrl+"oldmenu";
-    String deleteItemURL=MainUrl+"delete";
-    String getItemURL=MainUrl+"item";
+
 
     //
 
@@ -263,6 +261,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        get_URLs();
+
         if (DEBUG)
             Log.e(TAG, "+++ ON CREATE +++");
 
@@ -343,7 +343,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                getItemObj(url);
                 Intent intent;
                 SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(getBaseContext() );
+                PreferenceManager.getDefaultSharedPreferences(getBaseContext() );
                 String setting_barcode = sharedPreferences.getString("setting_barcode", "1");
 
                 if(setting_barcode.equals("1"))
@@ -455,6 +455,19 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }
 
     }
+
+    private void get_URLs() {
+        turathalanbiaa.app.myapplication.ServerInfo ServerInfo = new ServerInfo(this);
+        addSellMenuItemURL = ServerInfo.getUrl("sellmenuitem");
+        updatURL = ServerInfo.getUrl("update");
+        createNewMenuURL = ServerInfo.getUrl("newsellmenu");
+        getOldMenuURL = ServerInfo.getUrl("oldmenu");
+
+        deleteItemURL = ServerInfo.getUrl("delete");
+        getItemURL = ServerInfo.getUrl("item");
+
+    }
+
     private void _declaration() {
         btn_sitting = (Button) findViewById(R.id.btn_sitting);
 
@@ -1367,6 +1380,7 @@ boolean deleted=false;
 //					mTitle.setText(R.string.title_connected_to);
 //					mTitle.append(mConnectedDeviceName);
                             btnScanButton.setText(getText(R.string.Connecting));
+                            btnScanButton.setBackground(null);
                             Print_Test();//
                             btnScanButton.setEnabled(false);
                             editText.setEnabled(true);

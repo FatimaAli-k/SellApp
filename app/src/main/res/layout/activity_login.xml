@@ -4,9 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dip">
 
-    <!-- Email Label -->
+
+    android:padding="10dip">
+    <Button
+        android:id="@+id/btn_sitting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        android:background="@drawable/button_style"
+        android:fontFamily="@font/myfont"
+        android:gravity="center"
+        android:text="@string/s_sitting" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:orientation="vertical"
+    android:layout_marginTop="100dp"
+    android:background="@drawable/button_style"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="30dip">
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -19,23 +38,24 @@
     <!-- Email input text -->
     <EditText android:id="@+id/txtUsername"
         android:layout_width="fill_parent"
+        android:fontFamily="@font/myfont"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dip"/>
 
     <!-- Password Label -->
     TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Password (Enter 'test')"
-        android:layout_marginBottom="5dip"/>
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="Password (Enter 'test')"
+    android:layout_marginBottom="5dip"/>
 
     <!-- Password input text -->
     EditText android:id="@+id/txtPassword"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dip"
-       android:inputType="textPassword"
-        android:singleLine="true"/>
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="20dip"
+    android:inputType="textPassword"
+    android:singleLine="true"/>
 
     <!-- Login button -->
     <Button android:id="@+id/btnLogin"
@@ -43,8 +63,14 @@
         android:background="@drawable/back_gradient"
         android:layout_margin="10dp"
         android:layout_width="fill_parent"
+        android:textColor="#ffff"
+        android:fontFamily="@font/myfont"
         android:layout_height="wrap_content"
-        android:text="Login"/>
+        android:text="دخول"/>
+
+
+</LinearLayout>
+    <!-- Email Label -->
 
 </LinearLayout>
 

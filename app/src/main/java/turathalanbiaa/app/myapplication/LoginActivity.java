@@ -30,19 +30,15 @@ import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 import turathalanbiaa.app.myapplication.blutooth.Main_Activity;
 import turathalanbiaa.app.myapplication.volley.AppController;
 
-import static turathalanbiaa.app.myapplication.Global.MainUrl;
 
 public class LoginActivity extends Activity {
 
     // Email, password edittext
     EditText txtUsername, txtPassword;
-
+Button btn_setting ;
     // json object response url
     //private String urlJsonObj = "https://jsonblob.com/api/48637412-34ba-11ea-ad35-07e513ecf69d";
     //real device
-    private String urlJsonObj =MainUrl + "user";
-    //emu
-//    private String urlJsonObj = "http://10.0.2.2:8000/api/user";
 
     private String jsonResponseName,jsonResponseId;
     private TextView txtResponse;
@@ -62,6 +58,8 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        _decleration();
+
 //        pDialog = new ProgressDialog(this);
 //        pDialog.setMessage("Please wait...");
 //        pDialog.setCancelable(false);
@@ -115,6 +113,17 @@ public class LoginActivity extends Activity {
         });
     }
 
+    private void _decleration() {
+        btn_setting = (Button) findViewById(R.id.btn_sitting);
+        btn_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(),SettingsActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
 
@@ -126,10 +135,11 @@ public class LoginActivity extends Activity {
         Map<String, String> params = new HashMap<>();
         params.put("secret_word", txtUsername.getText().toString());
 //        showpDialog();
-
+        ServerInfo ServerInfo = new ServerInfo(this);
+        String url = ServerInfo.getUrl("user");
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                urlJsonObj, new JSONObject(params), new Response.Listener<JSONObject>() {
+                url, new JSONObject(params), new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
