@@ -38,7 +38,7 @@ public class LoginActivity extends Activity {
     // json object response url
     //private String urlJsonObj = "https://jsonblob.com/api/48637412-34ba-11ea-ad35-07e513ecf69d";
     //real device
-    private String urlJsonObj = "http://192.168.9.104:8000/api/user";
+    private String urlJsonObj = "http://192.168.9.105:8000/api/user";
     //emu
 //    private String urlJsonObj = "http://10.0.2.2:8000/api/user";
 

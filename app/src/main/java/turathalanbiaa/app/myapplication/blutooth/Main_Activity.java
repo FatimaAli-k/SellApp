@@ -19,11 +19,15 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+
+
+
 
 import turathalanbiaa.app.myapplication.LoginActivity;
 import turathalanbiaa.app.myapplication.Model.Item;
@@ -32,6 +36,9 @@ import turathalanbiaa.app.myapplication.R;
 import turathalanbiaa.app.myapplication.RecyclerItemTouchHelper;
 import turathalanbiaa.app.myapplication.ScanActivity;
 import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
+
+
+import turathalanbiaa.app.myapplication.ZxingScan;
 import turathalanbiaa.app.myapplication.command.Command;
 import turathalanbiaa.app.myapplication.command.PrintPicture;
 import turathalanbiaa.app.myapplication.command.PrinterCommand;
@@ -227,7 +234,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     //urls
 
-    String MainUrl="http://192.168.9.104:8000/api";
+    String MainUrl="http://192.168.9.105:8000/api";
     String addSellMenuItemURL=MainUrl+"/sellmenuitem";
     String updatURL=MainUrl+ "/update";
     String createNewMenuURL="newsellmenu";
@@ -236,6 +243,16 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String getItemURL=MainUrl+"/item";
 
     //
+
+    //google vision
+    String ScannerActivityName="";
+
+    //firebase ml kit
+
+    //zxing
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -318,7 +335,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                getItemObj(url);
 
 //                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
+//                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
+                Intent intent = new Intent(getBaseContext(), ZxingScan.class);
+
                 startActivity(intent);
 
             }
@@ -357,8 +376,10 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 //scan for sell menu
                 clearItemData();
 
+
 //                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
+//                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
+                Intent intent = new Intent(getBaseContext(), ZxingScan.class);
                 intent.putExtra("ScanFor",1);
                 startActivity(intent);
                 //send post request with barcode, loop through sell menu items
@@ -420,6 +441,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     @Override
     public void onBackPressed() {
+
 
 
 

@@ -55,6 +55,8 @@
     <string name="msg_error">أخطاء الإدخال، يرجى مراجعة!</string>
     <string name="title_activity_main_new">MainNewActivity</string>
 
+
+
     <!--    <string name="app_name">POSPrinter-BT</string>-->
     <!--    <string name="app_title">BlueTooth Demo</string>-->
     <!--    &lt;!&ndash;main_activity&ndash;&gt;-->
