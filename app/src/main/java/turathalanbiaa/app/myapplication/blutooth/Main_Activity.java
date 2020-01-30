@@ -335,8 +335,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 //                getItemObj(url);
 
 //                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-//                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
-                Intent intent = new Intent(getBaseContext(), ZxingScan.class);
+                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
+//                Intent intent = new Intent(getBaseContext(), ZxingScan.class);
 
                 startActivity(intent);
 
@@ -378,8 +378,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
 //                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-//                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
-                Intent intent = new Intent(getBaseContext(), ZxingScan.class);
+                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
+//                Intent intent = new Intent(getBaseContext(), ZxingScan.class);
                 intent.putExtra("ScanFor",1);
                 startActivity(intent);
                 //send post request with barcode, loop through sell menu items

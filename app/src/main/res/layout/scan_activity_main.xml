@@ -14,6 +14,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true">
+
+<!--        <include layout="@layout/camera_preview_overlay"/>-->
         <turathalanbiaa.app.myapplication.mlkittext.utility.GraphicOverlay
             android:id="@+id/fireFaceOverlay"
             android:layout_width="match_parent"
@@ -22,5 +24,16 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true" />
+
     </turathalanbiaa.app.myapplication.mlkittext.utility.CameraSourcePreview>
+
+    <Button
+        android:id="@+id/flashBtn"
+        android:layout_width="42dp"
+        android:layout_height="wrap_content"
+
+
+        android:layout_alignBottom="@id/firePreview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="1dp" />
 </RelativeLayout>

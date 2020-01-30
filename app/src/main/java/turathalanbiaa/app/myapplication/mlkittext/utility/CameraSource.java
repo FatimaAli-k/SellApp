@@ -140,6 +140,12 @@ public class CameraSource {
             }
         }
     }
+    public void updateFlashMode(String flashMode) {
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.setFlashMode(flashMode);
+        camera.setParameters(parameters);
+    }
+
 
     /**
      * Opens the camera and starts sending preview frames to the underlying detector. The preview

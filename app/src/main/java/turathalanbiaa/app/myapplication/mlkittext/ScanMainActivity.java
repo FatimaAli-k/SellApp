@@ -3,24 +3,24 @@ package turathalanbiaa.app.myapplication.mlkittext;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import turathalanbiaa.app.myapplication.R;
-import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 import turathalanbiaa.app.myapplication.mlkittext.utility.CameraSource;
 import turathalanbiaa.app.myapplication.mlkittext.utility.CameraSourcePreview;
 import turathalanbiaa.app.myapplication.mlkittext.utility.GraphicOverlay;
@@ -32,14 +32,38 @@ public class ScanMainActivity extends AppCompatActivity implements
     private CameraSourcePreview preview;
     private GraphicOverlay graphicOverlay;
     private static final String TAG = "Barcode Scanning";
-
+    Boolean flashState=false;
     Integer scanFor;
+    Button flash;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scan_activity_main);
         preview = findViewById(R.id.firePreview);
         graphicOverlay = findViewById(R.id.fireFaceOverlay);
+
+        final Drawable flashOff = getResources().getDrawable(R.drawable.ic_flash_off_black_24dp);
+        final Drawable flashOn= getResources().getDrawable(R.drawable.ic_flash_on_black_24dp);
+        flash=findViewById(R.id.flashBtn);
+        flash.setBackground(flashOn);
+        flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(flashState==false) {
+                    cameraSource.updateFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    flashState=true;
+                    flash.setBackground(flashOff);
+                }
+                else{
+                    cameraSource.updateFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                    flashState=false;
+                    flash.setBackground(flashOn);
+                }
+
+
+            }
+        });
 
         scanFor=getIntent().getIntExtra("ScanFor",0);
 
