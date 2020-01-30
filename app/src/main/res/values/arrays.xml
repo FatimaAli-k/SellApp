@@ -1,0 +1,15 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>الاول</item>
+        <item>الثاني</item>
+        <item>الثالث</item>
+
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>

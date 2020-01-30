@@ -27,14 +27,14 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 
-
-
+import turathalanbiaa.app.myapplication.Global;
 import turathalanbiaa.app.myapplication.LoginActivity;
 import turathalanbiaa.app.myapplication.Model.Item;
 import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
 import turathalanbiaa.app.myapplication.RecyclerItemTouchHelper;
 import turathalanbiaa.app.myapplication.ScanActivity;
+import turathalanbiaa.app.myapplication.SettingsActivity;
 import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 
 
@@ -52,12 +52,14 @@ import zj.com.customize.sdk.Other;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -83,6 +85,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -92,6 +95,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+
+import static turathalanbiaa.app.myapplication.Global.MainUrl;
 
 public class Main_Activity extends Activity implements OnClickListener, MyRecyclerViewAdapter.ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     /******************************************************************************************************/
@@ -140,6 +145,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     private Button testButton = null;
     private Button printbmpButton = null;
     private Button btnScanButton = null;
+    private Button btn_sitting = null;
     private Button btnClose = null;
     private Button btn_BMP = null;
     private Button btn_ChoseCommand = null;
@@ -234,13 +240,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     //urls
 
-    String MainUrl="http://192.168.9.105:8000/api";
-    String addSellMenuItemURL=MainUrl+"/sellmenuitem";
-    String updatURL=MainUrl+ "/update";
+
+    String addSellMenuItemURL= MainUrl+"sellmenuitem";
+    String updatURL=MainUrl+ "update";
     String createNewMenuURL="newsellmenu";
-    String getOldMenuURL=MainUrl+"/oldmenu";
-    String deleteItemURL=MainUrl+"/delete";
-    String getItemURL=MainUrl+"/item";
+    String getOldMenuURL=MainUrl+"oldmenu";
+    String deleteItemURL=MainUrl+"delete";
+    String getItemURL=MainUrl+"item";
 
     //
 
@@ -298,6 +304,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         pDialog.setCancelable(false);
 
 
+        _declaration();
+          _click_listener();
         menuIdTextView=findViewById(R.id.textView_sellMenuId);
 
 
@@ -333,11 +341,21 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             public void onClick(View view) {
 //                String url="http://192.168.9.110:8000/api/item";
 //                getItemObj(url);
+                Intent intent;
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(getBaseContext() );
+                String setting_barcode = sharedPreferences.getString("setting_barcode", "1");
 
-//                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
-//                Intent intent = new Intent(getBaseContext(), ZxingScan.class);
-
+                if(setting_barcode.equals("1"))
+                {
+                    intent = new Intent(getBaseContext(), ScanActivity.class);
+                }else if (setting_barcode.equals("2"))
+                {
+                    intent = new Intent(getBaseContext(), ScanMainActivity.class);
+                }else
+                {
+                    intent = new Intent(getBaseContext(), ZxingScan.class);
+                }
                 startActivity(intent);
 
             }
@@ -376,10 +394,22 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 //scan for sell menu
                 clearItemData();
 
+                Intent intent;
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(getBaseContext() );
+                String setting_barcode = sharedPreferences.getString("setting_barcode", "1");
 
-//                Intent intent = new Intent(getBaseContext(), ScanActivity.class);
-                Intent intent = new Intent(getBaseContext(), ScanMainActivity.class);
-//                Intent intent = new Intent(getBaseContext(), ZxingScan.class);
+                if(setting_barcode.equals("1"))
+                {
+                    intent = new Intent(getBaseContext(), ScanActivity.class);
+                }else if (setting_barcode.equals("2"))
+                {
+                    intent = new Intent(getBaseContext(), ScanMainActivity.class);
+                }else
+                {
+                    intent = new Intent(getBaseContext(), ZxingScan.class);
+                }
+
                 intent.putExtra("ScanFor",1);
                 startActivity(intent);
                 //send post request with barcode, loop through sell menu items
@@ -425,6 +455,21 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }
 
     }
+    private void _declaration() {
+        btn_sitting = (Button) findViewById(R.id.btn_sitting);
+
+    }
+    private void _click_listener() {
+        btn_sitting.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
+
 
 //    private boolean loadFragment(Fragment fragment) {
 //        //switching fragment

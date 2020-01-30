@@ -4,10 +4,9 @@
     package="turathalanbiaa.app.myapplication">
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-<!--    <uses-permission-->
-<!--        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"-->
-<!--        tools:ignore="ProtectedPermissions" />-->
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- <uses-permission -->
+    <!-- android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" -->
+    <!-- tools:ignore="ProtectedPermissions" /> -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,8 +14,6 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
-
 
     <application
         android:name=".volley.AppController"
@@ -27,6 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"

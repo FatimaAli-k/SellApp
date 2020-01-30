@@ -12,17 +12,31 @@
         android:layout_height="wrap_content"
 
         android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <Button
+        android:id="@+id/button_scan"
+        android:layout_width="311dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+android:layout_margin="5dp"
+        android:background="@drawable/button_style"
+        android:fontFamily="@font/myfont"
+        android:gravity="center"
+        android:text="@string/connect" />
+    <Button
+        android:id="@+id/btn_sitting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/button_style"
+        android:fontFamily="@font/myfont"
+        android:gravity="center"
+        android:text="@string/s_sitting" />
 
-        <Button
-            android:id="@+id/button_scan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
-            android:layout_margin="20dp"
-            android:background="@drawable/button_style"
-            android:fontFamily="@font/myfont"
-            android:gravity="center"
-            android:text="@string/connect" />
+</LinearLayout>
 
 
         <LinearLayout

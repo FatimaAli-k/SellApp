@@ -30,6 +30,8 @@ import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 import turathalanbiaa.app.myapplication.blutooth.Main_Activity;
 import turathalanbiaa.app.myapplication.volley.AppController;
 
+import static turathalanbiaa.app.myapplication.Global.MainUrl;
+
 public class LoginActivity extends Activity {
 
     // Email, password edittext
@@ -38,7 +40,7 @@ public class LoginActivity extends Activity {
     // json object response url
     //private String urlJsonObj = "https://jsonblob.com/api/48637412-34ba-11ea-ad35-07e513ecf69d";
     //real device
-    private String urlJsonObj = "http://192.168.9.105:8000/api/user";
+    private String urlJsonObj =MainUrl + "user";
     //emu
 //    private String urlJsonObj = "http://10.0.2.2:8000/api/user";
 
