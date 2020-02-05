@@ -61,6 +61,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.itemName.setText(item.getItem_name());
         holder.itemPrice.setText( String.format("%,d", Long.parseLong(item.getItem_price().toString())));
         holder.itemQuantity.setText(item.getItem_count().toString());
+        if(item.getF2()!=null){
+            if(!item.getF2().equalsIgnoreCase("null"))
+            holder.itemDetail.setText(item.getF2());
+        }
 //        holder.textView.setText(SellItem.getItem_name());
 
     }
@@ -74,7 +78,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView itemId,itemName,itemPrice,itemQuantity;
+        TextView itemId,itemName,itemPrice,itemQuantity,itemDetail;
         Button increaseQuantity,decreaseQuantity;
         public RelativeLayout viewBackground, viewForeground;
 
@@ -91,6 +95,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
             increaseQuantity=itemView.findViewById(R.id.increase_quantity);
             decreaseQuantity=itemView.findViewById(R.id.decrease_quantity);
+
+            itemDetail=itemView.findViewById(R.id.item_details);
 //
 //
             increaseQuantity.setOnClickListener(new View.OnClickListener() {

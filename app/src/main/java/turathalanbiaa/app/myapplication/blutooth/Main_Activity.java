@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -72,6 +73,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -79,6 +81,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -245,19 +248,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
 
-
-    //
-
-    //google vision
-    String ScannerActivityName="";
-
-    //firebase ml kit
-
-    //zxing
-
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -294,11 +284,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             session.createBarcode("");
         }
 
-//        else
-//        {
-//            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//            startActivity(intent);
-//        }
+//
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
@@ -314,17 +300,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         clearData.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//                sellMenuId="";
-//                menuIdTextView.setText(sellMenuId);
-//                session.createBarcode("");
-
-
-
-//
-//                sendToDB();
-//               String m= msgPrintFormat();
-//                Toast.makeText(getApplicationContext(),
-//                        ""+ m, Toast.LENGTH_LONG).show();
 //
 
 
@@ -339,8 +314,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         additem.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String url="http://192.168.9.110:8000/api/item";
-//                getItemObj(url);
+//
                 Intent intent;
                 SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext() );
@@ -412,9 +386,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                 intent.putExtra("ScanFor",1);
                 startActivity(intent);
-                //send post request with barcode, loop through sell menu items
-//                String url="http://192.168.9.110:8000/api/oldmenu";
-//                getSellMenuItemsArray(url);
+
 
             }
         });
@@ -422,9 +394,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
 
-//        String url="https://jsonblob.com/api/c343b7e4-34c8-11ea-ad35-d729c7db8fd8";
-//        makeJsonArrayRequest(url);
-
+//
         RecyclerView recyclerView = findViewById(R.id.items_recycler_view);
         Layout =findViewById(R.id.liner_layout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -483,24 +453,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     }
 
 
-
-//    private boolean loadFragment(Fragment fragment) {
-//        //switching fragment
-//        if (fragment != null) {
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container, fragment)
-//                    .commit();
-//            return true;
-//        }
-//
-//        return false;
-//    }
-
     @Override
     public void onBackPressed() {
-
-
 
 
     }
@@ -539,9 +493,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     void sendToDB(){
         //add to sell SellItem
-//        String url="http://192.168.9.110:8000/api/sellmenuitem";
-//        String upUrl="http://192.168.9.110:8000/api/update";
-
+//
         for (int i=0;i<menuItems.size();i++){
             Map<String, String> params = new HashMap<>();
             params.put("user_sell_it_id", session.getshared("id"));
@@ -550,6 +502,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             params.put("item_price", menuItems.get(i).getItem_price().toString());
             params.put("item_count",  menuItems.get(i).getItem_count().toString());
             params.put("item_id",  menuItems.get(i).getItem_id().toString());
+            params.put("f2",  menuItems.get(i).getF2());
             params.put("item_cost", "0");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             String dt = sdf.format(new Date());
@@ -611,31 +564,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                 try {
                     JSONObject jsonItem = (JSONObject) response;
-//                    int id=jsonItem.getInt("id");
-//                    String name = jsonItem.getString("name");
-//                    int price= jsonItem.getInt("price");
 //
-////
-////
-//                    SellItem=new SellMenuItem();
-//                    SellItem.setItem_count(1);
-//                    SellItem.setItem_name(name);
-//                    SellItem.setItem_price(price);
-//                    SellItem.setId(id);
-//                    menuItems.add(SellItem);
-
-
-//
-//                            for(int i=0;i<menuItems.size();i++){
-//
-//                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
-//                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
-//                            }
-//                            Toast.makeText(getApplicationContext(),
-//                                    " "+ response.getString("message"), Toast.LENGTH_LONG).show();
-//                    adapter.notifyDataSetChanged();
-
-//                            txtResponse.setText(jsonResponse);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -664,7 +593,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
    void getSellMenuId(){
-//        String url="http://192.168.9.110:8000/api/newsellmenu";
 
         showpDialog();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -713,8 +641,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     }
     private void getSellMenuItemsArray() {
 
-//        String url="http://192.168.9.110:8000/api/oldmenu";
-        //if everything is fine
+//
         showpDialog();
 
         final StringRequest stringRequest = new StringRequest(Request.Method.POST,getOldMenuURL,
@@ -746,31 +673,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                     JSONObject jsonItem2 = (JSONObject) obj2
                                             .get(j);
 
-//                                int id=jsonItem.getInt("id");
-//                                String name = jsonItem.getString("item_name");
-//                                int price= jsonItem.getInt("item_price");
-//                                int count= jsonItem.getInt("item_count");
 //
-//                                // String sellerId= jsonItem.getString("user_sell_it_id");
-//
-
-//
-//
-//                                SellItem=new SellMenuItem();
-//                                 SellItem.setItem_count(count);
-//                                 SellItem.setId(id);
-//                                SellItem.setItem_name(name);
-//                                SellItem.setItem_price(price);
-//                                menuItems.add(SellItem);
 
                                     int id=jsonItem2.getInt("id");
                                 String name = jsonItem2.getString("item_name");
                                 int price= jsonItem2.getInt("item_price");
                                 int count= jsonItem2.getInt("item_count");
                                 int itemid=jsonItem2.getInt("item_id");
-
-                                // String sellerId= jsonItem.getString("user_sell_it_id");
-
+                                String f1=jsonItem2.getString("f1");
+                                String f2=jsonItem2.getString("f2");
 
 
 
@@ -779,20 +690,17 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                  SellItem.setId(id);
                                 SellItem.setItem_name(name);
                                 SellItem.setItem_price(price);
-                                    SellItem.setItem_id(itemid);
+                                SellItem.setItem_id(itemid);
+                                //details
+                                SellItem.setF1(f1);
+                                SellItem.setF2(f2);
                                 menuItems.add(SellItem);
                                 }
 
                             }
 
 //
-//                            for(int i=0;i<menuItems.size();i++){
 //
-//                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
-//                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
-//                            }
-//                            Toast.makeText(getApplicationContext(),
-//                                    " // "+response, Toast.LENGTH_LONG).show();
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             Toast.makeText(getApplicationContext(),
@@ -828,6 +736,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         Map<String, String> params = new HashMap<>();
         params.put("barcode", itemCode);
 
+        Log.d("getItemObj","befor try");
         showpDialog();
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
@@ -842,6 +751,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                    int id=jsonItem.getInt("id");
                     String name = jsonItem.getString("name");
                     int price= jsonItem.getInt("price");
+                    String details=jsonItem.getString("detail");
+
 
 
 
@@ -850,20 +761,12 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     SellItem.setItem_name(name);
                     SellItem.setItem_price(price);
                     SellItem.setItem_id(id);
+                    //detail
+                    SellItem.setF1(details);
                     menuItems.add(SellItem);
 
-                    String str="";
-//
-//                            for(int i=0;i<menuItems.size();i++){
-//
-//                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
-//                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
-//                            }
-//                            Toast.makeText(getApplicationContext(),
-//                                    " "+str, Toast.LENGTH_LONG).show();
-                    adapter.notifyDataSetChanged();
 
-//                            txtResponse.setText(jsonResponse);
+                    adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -891,7 +794,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 boolean deleted=false;
     void deleteSellMenuItem(int id){
-//        String url="http://192.168.9.110:8000/api/delete";
 
 
         Map<String, String> params = new HashMap<>();
@@ -908,13 +810,7 @@ boolean deleted=false;
 
                 try {
 
-                 ;
 
-//                            for(int i=0;i<menuItems.size();i++){
-//
-//                                str+= "\n....................................\n "+menuItems.get(i).getItem_count()+"X "+
-//                                        menuItems.get(i).getItem_name()+"\t"+menuItems.get(i).getItem_price()+"IQD ";
-//                            }
                             Toast.makeText(getApplicationContext(),
                                     " "+  response.getString("message"), Toast.LENGTH_LONG).show();
 
@@ -922,7 +818,7 @@ boolean deleted=false;
                             if(!response.getString("message").equalsIgnoreCase("DONE"))
                                 deleted=true;
 
-//                            txtResponse.setText(jsonResponse);
+//
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -967,12 +863,52 @@ boolean deleted=false;
     @Override
     public void onItemClick(View view, int position) {
 //        Toast.makeText(getApplicationContext(), "You clicked row number " + position, Toast.LENGTH_SHORT).show();
-        Toast.makeText(getApplicationContext(), "item id " +  menuItems.get(position).getItem_id()+" ,sellmenuitemid = "+menuItems.get(position).getId(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "item id " +  menuItems.get(position).getItem_id()+" ,sellmenuitemid = "+menuItems.get(position).getId(), Toast.LENGTH_SHORT).show();
+
+        String details=menuItems.get(position).getF1();
+        if(details!= null)
+        ItemsDetails(details,view,position);
 
 
     }
 
-        @Override
+    private void ItemsDetails(String details, View view,int position) {
+        if(!details.equalsIgnoreCase("null")) {
+            String[] options=details.split("\\|");
+            PopupMenu menu = new PopupMenu(this, view);
+            for(int i=0;i<options.length;i++) {
+
+                //groupid,item id, order, title
+                menu.getMenu().add(options[i]);
+
+            }
+
+            final int pos=position;
+            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem popupItem) {
+
+                    menuItems.get(pos).setF2(popupItem.getTitle().toString());
+                    adapter.notifyDataSetChanged();
+                    return true;
+                }
+            });
+
+            menu.show();
+
+
+        }
+        else if(menuItems.get(position).getF2() !=null) {
+            if (!menuItems.get(position).getF2().equals("null")) {
+                Toast.makeText(getApplicationContext(),
+                        menuItems.get(position).getF2(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof MyRecyclerViewAdapter.ViewHolder) {
             // get the removed SellItem name to display it in snack bar
@@ -1000,25 +936,10 @@ boolean deleted=false;
                 deleted=false;
             }
 
-            // showing snack bar with Undo option
-//            Snackbar snackbar = Snackbar
-//                    .make(Layout, name + " removed from cart!", Snackbar.LENGTH_LONG);
-//            snackbar.setAction("UNDO", new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    // undo is selected, restore the deleted SellItem
-
-//                    adapter.restoreItem(deletedItem, deletedIndex);
-//                }
-//            });
-//            snackbar.setActionTextColor(Color.YELLOW);
-//            snackbar.show();
         }
     }
     //
     String barcode;
-    String val;
     String itemCode;
     @Override
     public synchronized void onResume() {
@@ -1026,10 +947,10 @@ boolean deleted=false;
 
         barcode = session.getshared("Barcode");
 //        Toast.makeText(this,"/"+barcode,Toast.LENGTH_SHORT).show();
-//        Toast.makeText(this,"/"+session.getshared("scanfor"),Toast.LENGTH_SHORT).show();
 
-        val=session.getshared("scanfor");
-        if(val=="1"){
+        String val=session.getshared("scanfor");
+
+        if(val.equals("1")){
             //barcode is for menu
             sellMenuId=barcode;
             menuIdTextView=findViewById(R.id.textView_sellMenuId);
@@ -1037,14 +958,18 @@ boolean deleted=false;
 
             getSellMenuItemsArray();
             session.setScanfor("0");
+
         }
-        else if(val=="2"){
+        else if(val.equals("2")){
             //barcode is for SellItem
             itemCode=barcode;
-//            String url="http://192.168.9.110:8000/api/item";
+//
             getItemObj(getItemURL);
+
             session.setScanfor("0");
+
         }
+
 
 
         if (mService != null) {
