@@ -63,7 +63,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -300,8 +299,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         clearData.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//
-
 
                 clearItemData();
 
@@ -502,7 +499,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             params.put("item_price", menuItems.get(i).getItem_price().toString());
             params.put("item_count",  menuItems.get(i).getItem_count().toString());
             params.put("item_id",  menuItems.get(i).getItem_id().toString());
-            params.put("f2",  menuItems.get(i).getF2());
+            params.put("f4",  menuItems.get(i).getF4());
             params.put("item_cost", "0");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             String dt = sdf.format(new Date());
@@ -680,8 +677,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                 int price= jsonItem2.getInt("item_price");
                                 int count= jsonItem2.getInt("item_count");
                                 int itemid=jsonItem2.getInt("item_id");
-                                String f1=jsonItem2.getString("f1");
-                                String f2=jsonItem2.getString("f2");
+
+                                String f4=jsonItem2.getString("f4");
 
 
 
@@ -692,8 +689,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                 SellItem.setItem_price(price);
                                 SellItem.setItem_id(itemid);
                                 //details
-                                SellItem.setF1(f1);
-                                SellItem.setF2(f2);
+
+                                SellItem.setF4(f4);
                                 menuItems.add(SellItem);
                                 }
 
@@ -736,7 +733,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         Map<String, String> params = new HashMap<>();
         params.put("barcode", itemCode);
 
-        Log.d("getItemObj","befor try");
         showpDialog();
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
@@ -762,11 +758,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     SellItem.setItem_price(price);
                     SellItem.setItem_id(id);
                     //detail
+                    if(!details.equalsIgnoreCase("null")){
                     SellItem.setF1(details);
-                    menuItems.add(SellItem);
-
-
+                   getItemDetails(details,SellItem);
+                    }
+                    else {menuItems.add(SellItem);
                     adapter.notifyDataSetChanged();
+                    }
+
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -790,6 +790,31 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
+    }
+
+//as soon as item is added
+     void getItemDetails(String details,final SellMenuItem SellItem){
+        final String[] options=details.split("\\|");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("اختر تفاصيل القطعه");
+
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              SellItem.setF4(options[which]);
+
+                menuItems.add(SellItem);
+
+
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+        builder.show();
+
+
     }
 
 boolean deleted=false;
@@ -867,18 +892,17 @@ boolean deleted=false;
 
         String details=menuItems.get(position).getF1();
         if(details!= null)
-        ItemsDetails(details,view,position);
+        updateItemsDetails(details,view,position);
 
 
     }
-
-    private void ItemsDetails(String details, View view,int position) {
+//change item details
+    private void updateItemsDetails(String details, View view, int position) {
         if(!details.equalsIgnoreCase("null")) {
             String[] options=details.split("\\|");
             PopupMenu menu = new PopupMenu(this, view);
             for(int i=0;i<options.length;i++) {
 
-                //groupid,item id, order, title
                 menu.getMenu().add(options[i]);
 
             }
@@ -889,7 +913,7 @@ boolean deleted=false;
                 @Override
                 public boolean onMenuItemClick(MenuItem popupItem) {
 
-                    menuItems.get(pos).setF2(popupItem.getTitle().toString());
+                    menuItems.get(pos).setF4(popupItem.getTitle().toString());
                     adapter.notifyDataSetChanged();
                     return true;
                 }
@@ -899,8 +923,8 @@ boolean deleted=false;
 
 
         }
-        else if(menuItems.get(position).getF2() !=null) {
-            if (!menuItems.get(position).getF2().equals("null")) {
+        else if(menuItems.get(position).getF4() !=null) {
+            if (!menuItems.get(position).getF4().equals("null")) {
                 Toast.makeText(getApplicationContext(),
                         menuItems.get(position).getF2(), Toast.LENGTH_SHORT).show();
             }

@@ -61,9 +61,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.itemName.setText(item.getItem_name());
         holder.itemPrice.setText( String.format("%,d", Long.parseLong(item.getItem_price().toString())));
         holder.itemQuantity.setText(item.getItem_count().toString());
-        if(item.getF2()!=null){
-            if(!item.getF2().equalsIgnoreCase("null"))
-            holder.itemDetail.setText(item.getF2());
+        if(item.getF4()!=null){
+            if(!item.getF4().equalsIgnoreCase("null"))
+            holder.itemDetail.setText(item.getF4());
         }
 //        holder.textView.setText(SellItem.getItem_name());
 

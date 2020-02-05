@@ -33,18 +33,14 @@ import turathalanbiaa.app.myapplication.volley.AppController;
 
 public class LoginActivity extends Activity {
 
-    // Email, password edittext
+
     EditText txtUsername, txtPassword;
-Button btn_setting ;
-    // json object response url
-    //private String urlJsonObj = "https://jsonblob.com/api/48637412-34ba-11ea-ad35-07e513ecf69d";
-    //real device
+    Button btn_setting ;
+
 
     private String jsonResponseName,jsonResponseId;
     private TextView txtResponse;
     private static String TAG = LoginActivity.class.getSimpleName();
-    // Progress dialog
-//    private ProgressDialog pDialog;
 
     // login button
     Button btnLogin;
@@ -60,16 +56,12 @@ Button btn_setting ;
         setContentView(R.layout.activity_login);
         _decleration();
 
-//        pDialog = new ProgressDialog(this);
-//        pDialog.setMessage("Please wait...");
-//        pDialog.setCancelable(false);
 
         // Session Manager
         session = new SessionManager(getApplicationContext());
 
-        // Email, Password input text
+
         txtUsername = (EditText) findViewById(R.id.txtUsername);
-//        txtPassword = (EditText) findViewById(R.id.txtPassword);
 
         if(session.isLoggedIn()) {
             Intent intent = new Intent(getApplicationContext(), Main_Activity.class);
@@ -156,15 +148,11 @@ Button btn_setting ;
                     jsonResponseName += name;
                     jsonResponseId="";
                     jsonResponseId+= id;
-//                    jsonResponseName += "Email: " + email + "\n\n";
-//                    jsonResponseName += "Home: " + home + "\n\n";
-//                    jsonResponseName += "Mobile: " + mobile + "\n\n";
-
+//
 
                     session.createLoginSession(jsonResponseName,jsonResponseId);
 
-//                    Toast.makeText(getApplicationContext(),
-//                            " "+ response.getString("message"), Toast.LENGTH_LONG).show();
+//
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
