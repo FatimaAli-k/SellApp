@@ -919,7 +919,7 @@ boolean deleted=false;
                 public boolean onMenuItemClick(MenuItem popupItem) {
 
                     menuItems.get(pos).setF4(popupItem.getTitle().toString());
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemChanged(pos);
                     return true;
                 }
             });
@@ -928,12 +928,12 @@ boolean deleted=false;
 
 
         }
-        else if(menuItems.get(position).getF4() !=null) {
-            if (!menuItems.get(position).getF4().equals("null")) {
-                Toast.makeText(getApplicationContext(),
-                        menuItems.get(position).getF2(), Toast.LENGTH_SHORT).show();
-            }
-        }
+//        else if(menuItems.get(position).getF4() !=null) {
+//            if (!menuItems.get(position).getF4().equals("null")) {
+//                Toast.makeText(getApplicationContext(),
+//                        menuItems.get(position).getF2(), Toast.LENGTH_SHORT).show();
+//            }
+//        }
 
     }
 
