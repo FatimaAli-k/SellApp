@@ -278,7 +278,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         if(session.isLoggedIn()) {
             String name = session.getshared("name");
             Toast.makeText(getApplicationContext(),
-                    "Signed in as : " + name,
+                    "اهلا بك : " + name,
                     Toast.LENGTH_LONG).show();
             session.createBarcode("");
         }
@@ -302,7 +302,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
                 clearItemData();
-
+setAddVisibile();
 
             }
         });
@@ -520,7 +520,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             }
         }
 
-
+        setAddVisibile();
 
     }
 
@@ -531,6 +531,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         sellMenuId="";
         session.createBarcode("");
         adapter.notifyDataSetChanged();
+        setAddVisibile();
+
     }
 
     private boolean haveNetworkConnection() {
@@ -724,6 +726,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         };
 
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        setAddVisibile();
+
     }
 
 
@@ -793,6 +797,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
+        setAddVisibile();
+
     }
 
 //as soon as item is added
@@ -873,6 +879,7 @@ boolean deleted=false;
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
+        setAddVisibile();
 
     }
 
@@ -934,6 +941,7 @@ boolean deleted=false;
 //                        menuItems.get(position).getF2(), Toast.LENGTH_SHORT).show();
 //            }
 //        }
+        setAddVisibile();
 
     }
 
@@ -948,6 +956,8 @@ boolean deleted=false;
             if(bool){
 
                 deleteSellMenuItem(menuItems.get(viewHolder.getAdapterPosition()).getId());
+                setAddVisibile();
+
             }
 
 
@@ -964,9 +974,21 @@ boolean deleted=false;
                 adapter.restoreItem(deletedItem, deletedIndex);
                 deleted=false;
             }
+            setAddVisibile();
 
         }
     }
+
+    private void setAddVisibile() {
+        if(menuIdTextView.getText().toString().equals("0"))
+        {
+            additem.setVisibility(View.INVISIBLE);
+        }else
+        {
+            additem.setVisibility(View.VISIBLE);
+        }
+    }
+
     //
     String barcode;
     String itemCode;
@@ -1001,6 +1023,7 @@ boolean deleted=false;
             }
         }
 
+        setAddVisibile();
 
 
         if (mService != null) {
@@ -1307,6 +1330,8 @@ boolean deleted=false;
                 e.printStackTrace();
             }
         }
+        setAddVisibile();
+
     }
 
     /*
@@ -1320,6 +1345,8 @@ boolean deleted=false;
             return;
         }
         mService.write(data);
+        setAddVisibile();
+
     }
 
     /****************************************************************************************************/

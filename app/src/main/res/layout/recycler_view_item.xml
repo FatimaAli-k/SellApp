@@ -29,6 +29,7 @@
   <RelativeLayout
       android:id="@+id/view_foreground"
       android:layout_width="match_parent"
+
       android:layout_height="match_parent"
       android:background="#ffff"
 
@@ -38,20 +39,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:gravity="center|start"
+
         android:orientation="horizontal">
 
       <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_weight="1"
+          android:visibility="gone"
           android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
             android:orientation="horizontal">
 
           <Button
@@ -81,15 +84,44 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/item_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            />
+
 
       </LinearLayout>
+      <TextView
+          android:id="@+id/item_price"
+          android:layout_width="80dp"
+          android:layout_height="wrap_content"
+          android:padding="10dp"
+          android:text="15,000 IQD"
+          android:textColor="@color/white"
+          android:background="@drawable/back_gradient"
+          android:textAlignment="center"
+          android:textStyle="bold" />
+      <TextView
+          android:id="@+id/item_details"
+          android:layout_width="70dp"
+          android:layout_margin="5dp"
+          android:layout_height="wrap_content"
+android:text="XXL"
+          android:gravity="center"
+android:background="@drawable/button_style2"
+          android:layout_gravity="end|center"
+          />
+
+      <TextView
+          android:id="@+id/item_name"
+          android:layout_width="match_parent"
+          android:layout_height="70dp"
+          android:padding="5dp"
+          android:text="قميص  xxxL قطن "
+          android:textAlignment="center"
+          android:textAllCaps="true"
+          android:layout_gravity="center"
+          android:gravity="center"
+          android:textSize="20dp"
+          android:textStyle="bold"
+          android:textColor="#000000"
+          />
 
       <TextView
           android:id="@+id/item_id"
@@ -98,30 +130,6 @@
           android:text="TextView"
           android:visibility="gone" />
 
-      <TextView
-          android:id="@+id/item_name"
-          android:layout_width="224dp"
-          android:layout_height="wrap_content"
-          android:padding="5dp"
-          android:text="قميص رجالي لون اخضر قياس xxxL قطن "
-          android:textAlignment="center"
-          android:textAllCaps="true"
-          android:layout_gravity="center"
-          android:gravity="center"
-          android:textSize="16dp"
-          android:textStyle="bold"
-          android:textColor="#000000"
-          />
-
-      <TextView
-          android:id="@+id/item_price"
-          android:layout_width="110dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:padding="5dp"
-          android:text="15,000 IQD"
-          android:textAlignment="center"
-          android:textStyle="bold" />
 
     </LinearLayout>
 
