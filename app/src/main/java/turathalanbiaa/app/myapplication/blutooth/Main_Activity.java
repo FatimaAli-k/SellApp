@@ -300,6 +300,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             @Override
             public void onClick(View view) {
 
+
                 clearItemData();
 
 
@@ -761,9 +762,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     if(!details.equalsIgnoreCase("null")){
                     SellItem.setF1(details);
                    getItemDetails(details,SellItem);
+
                     }
                     else {menuItems.add(SellItem);
-                    adapter.notifyDataSetChanged();
+
+                        adapter.notifyDataSetChanged();
                     }
 
 
