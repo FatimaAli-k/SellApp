@@ -404,14 +404,14 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
         //// Get local Bluetooth adapter
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        // If the adapter is null, then Bluetooth is not supported
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available",
-                    Toast.LENGTH_LONG).show();
-            finish();
-        }
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//
+//        // If the adapter is null, then Bluetooth is not supported
+//        if (mBluetoothAdapter == null) {
+//            Toast.makeText(this, "Bluetooth is not available",
+//                    Toast.LENGTH_LONG).show();
+//            finish();
+//        }
 
         //check internet connection
        boolean connectedToWifi= haveNetworkConnection();
@@ -456,22 +456,22 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-//         If Bluetooth is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the session
-        } else {
-            if (mService == null)
-                KeyListenerInit();//监听
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//
+////         If Bluetooth is not on, request that it be enabled.
+//        // setupChat() will then be called during onActivityResult
+//        if (!mBluetoothAdapter.isEnabled()) {
+//            Intent enableIntent = new Intent(
+//                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//            // Otherwise, setup the session
+//        } else {
+//            if (mService == null)
+//                KeyListenerInit();//监听
+//        }
+//    }
 
     String msgPrintFormat(){
         String msg=session.getshared("name");
@@ -794,7 +794,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 //as soon as item is added
      void getItemDetails(String details,final SellMenuItem SellItem){
-        final String[] options=details.split("\\|");
+//        final String[] options=details.split("\\|");
+         final String[] options=details.split("\\\\");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اختر تفاصيل القطعه");
 
@@ -899,7 +900,8 @@ boolean deleted=false;
 //change item details
     private void updateItemsDetails(String details, View view, int position) {
         if(!details.equalsIgnoreCase("null")) {
-            String[] options=details.split("\\|");
+//            String[] options=details.split("\\|");
+            String[] options=details.split("\\\\");
             PopupMenu menu = new PopupMenu(this, view);
             for(int i=0;i<options.length;i++) {
 
@@ -972,26 +974,28 @@ boolean deleted=false;
         barcode = session.getshared("Barcode");
 //        Toast.makeText(this,"/"+barcode,Toast.LENGTH_SHORT).show();
 
+
         String val=session.getshared("scanfor");
 
-        if(val.equals("1")){
-            //barcode is for menu
-            sellMenuId=barcode;
-            menuIdTextView=findViewById(R.id.textView_sellMenuId);
-            menuIdTextView.setText(barcode);
+        if(val !=null) {
+            if (val.equals("1")) {
+                //barcode is for menu
+                sellMenuId = barcode;
+                menuIdTextView = findViewById(R.id.textView_sellMenuId);
+                menuIdTextView.setText(barcode);
 
-            getSellMenuItemsArray();
-            session.setScanfor("0");
+                getSellMenuItemsArray();
+                session.setScanfor("0");
 
-        }
-        else if(val.equals("2")){
-            //barcode is for SellItem
-            itemCode=barcode;
+            } else if (val.equals("2")) {
+                //barcode is for SellItem
+                itemCode = barcode;
 //
-            getItemObj(getItemURL);
+                getItemObj(getItemURL);
 
-            session.setScanfor("0");
+                session.setScanfor("0");
 
+            }
         }
 
 
