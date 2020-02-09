@@ -409,11 +409,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // If the adapter is null, then Bluetooth is not supported
-//        if (mBluetoothAdapter == null) {
-//            Toast.makeText(this, "Bluetooth is not available",
-//                    Toast.LENGTH_LONG).show();
-//            finish();
-//        }
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available",
+                    Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         //check internet connection
        boolean connectedToWifi= haveNetworkConnection();
@@ -458,22 +458,22 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//
-////         If Bluetooth is not on, request that it be enabled.
-//        // setupChat() will then be called during onActivityResult
-//        if (!mBluetoothAdapter.isEnabled()) {
-//            Intent enableIntent = new Intent(
-//                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-//            // Otherwise, setup the session
-//        } else {
-//            if (mService == null)
-//                KeyListenerInit();//监听
-//        }
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+//         If Bluetooth is not on, request that it be enabled.
+        // setupChat() will then be called during onActivityResult
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // Otherwise, setup the session
+        } else {
+            if (mService == null)
+                KeyListenerInit();//监听
+        }
+    }
 
     String msgPrintFormat(){
         String msg=session.getshared("name");
