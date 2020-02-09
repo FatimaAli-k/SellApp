@@ -227,7 +227,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     MyRecyclerViewAdapter adapter;
     ArrayList<SellMenuItem> menuItems = new ArrayList<>();
     SellMenuItem SellItem =new SellMenuItem();
-    Item item=new Item();
+    Item iteminfo=new Item();
+    ArrayList<Item>itemArrayList = new ArrayList<>();
     ProgressDialog pDialog;
     SessionManager session;
     String code="";
@@ -301,6 +302,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             public void onClick(View view) {
 
 
+                sendToDB();
                 clearItemData();
 
             }
@@ -395,7 +397,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         RecyclerView recyclerView = findViewById(R.id.items_recycler_view);
         Layout =findViewById(R.id.liner_layout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter= new MyRecyclerViewAdapter( getApplicationContext(), menuItems);
+        adapter= new MyRecyclerViewAdapter( getApplicationContext(), menuItems,itemArrayList);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -407,11 +409,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // If the adapter is null, then Bluetooth is not supported
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available",
-                    Toast.LENGTH_LONG).show();
-            finish();
-        }
+//        if (mBluetoothAdapter == null) {
+//            Toast.makeText(this, "Bluetooth is not available",
+//                    Toast.LENGTH_LONG).show();
+//            finish();
+//        }
 
         //check internet connection
        boolean connectedToWifi= haveNetworkConnection();
@@ -456,22 +458,22 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-//         If Bluetooth is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the session
-        } else {
-            if (mService == null)
-                KeyListenerInit();//监听
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//
+////         If Bluetooth is not on, request that it be enabled.
+//        // setupChat() will then be called during onActivityResult
+//        if (!mBluetoothAdapter.isEnabled()) {
+//            Intent enableIntent = new Intent(
+//                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+//            // Otherwise, setup the session
+//        } else {
+//            if (mService == null)
+//                KeyListenerInit();//监听
+//        }
+//    }
 
     String msgPrintFormat(){
         String msg=session.getshared("name");
@@ -526,6 +528,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         TextView txtview=findViewById(R.id.textView_sellMenuId);
         txtview.setText("");
         menuItems.clear();
+        itemArrayList.clear();
+//        iteminfo=new Item();
+//        SellItem=new SellMenuItem();
         sellMenuId="";
         session.createBarcode("");
         adapter.notifyDataSetChanged();
@@ -681,8 +686,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                 String f4=jsonItem2.getString("f4");
 
 
+                                    iteminfo=new Item();
+                                    itemArrayList.add(iteminfo);
 
-                                SellItem =new SellMenuItem();
+
+                                    SellItem =new SellMenuItem();
                                  SellItem.setItem_count(count);
                                  SellItem.setId(id);
                                 SellItem.setItem_name(name);
@@ -750,7 +758,17 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     int price= jsonItem.getInt("price");
                     String details=jsonItem.getString("detail");
 
+                    int cost= jsonItem.getInt("cost");
+                    String place=jsonItem.getString("place");
+                    int store_id= jsonItem.getInt("store_id");
+                    int storageCount=jsonItem.getInt("count");
 
+                    iteminfo=new Item();
+                    iteminfo.setPlace(place);
+                    iteminfo.setStore_id(store_id);
+                    iteminfo.setCost(cost);
+                    iteminfo.setCount(storageCount);
+                    itemArrayList.add(iteminfo);
 
 
                     SellItem =new SellMenuItem();
@@ -759,7 +777,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     SellItem.setItem_price(price);
                     SellItem.setItem_id(id);
                     //detail
-                    if(!details.equalsIgnoreCase("null")){
+                    if((!details.equalsIgnoreCase("null"))&&(details != null)&&(!details.equals(""))){
                     SellItem.setF1(details);
                    getItemDetails(details,SellItem);
 
@@ -893,14 +911,31 @@ boolean deleted=false;
     @Override
     public void onItemClick(View view, int position) {
 //        Toast.makeText(getApplicationContext(), "You clicked row number " + position, Toast.LENGTH_SHORT).show();
-//        Toast.makeText(getApplicationContext(), "item id " +  menuItems.get(position).getItem_id()+" ,sellmenuitemid = "+menuItems.get(position).getId(), Toast.LENGTH_SHORT).show();
+        try {
 
-        String details=menuItems.get(position).getF1();
-        if(details!= null)
-        updateItemsDetails(details,view,position);
+            getItemInfo(view, position);
+
+        }catch (Exception e){
+
+        }
+//        String details=menuItems.get(position).getF1();
+//        if(details!= null)
+//        updateItemsDetails(details,view,position);
 
 
     }
+    void getItemInfo(View view, int position){
+
+
+        PopupMenu menu = new PopupMenu(this, view);
+
+        menu.getMenu().add(itemArrayList.get(position).getPlace()+" :المتجر ");
+        menu.getMenu().add(itemArrayList.get(position).getStore_id()+" :رقم المخزن ");
+        menu.getMenu().add(itemArrayList.get(position).getCount()+" :عدد القطع ");
+        menu.show();
+
+    }
+
 //change item details
     private void updateItemsDetails(String details, View view, int position) {
         if(!details.equalsIgnoreCase("null")) {
@@ -929,12 +964,7 @@ boolean deleted=false;
 
 
         }
-//        else if(menuItems.get(position).getF4() !=null) {
-//            if (!menuItems.get(position).getF4().equals("null")) {
-//                Toast.makeText(getApplicationContext(),
-//                        menuItems.get(position).getF2(), Toast.LENGTH_SHORT).show();
-//            }
-//        }
+//
 
     }
 

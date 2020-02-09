@@ -14,13 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import turathalanbiaa.app.myapplication.Model.Item;
 import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    private List<String> mData;
-    private List<SellMenuItem> itemList;
+    private List<Item> itemList;
+    private List<SellMenuItem> sellMenuItemList;
     private LayoutInflater mInflater;
 
     private ItemClickListener mClickListener;
@@ -32,10 +33,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 //        this.mInflater = LayoutInflater.from(context);
 //        this.mData = data;
 //    }
-    MyRecyclerViewAdapter(Context context, List<SellMenuItem> itemData) {
+    MyRecyclerViewAdapter(Context context, List<SellMenuItem> sellMenuItems, List<Item> itemList) {
 
         this.mInflater = LayoutInflater.from(context);
-        this.itemList = itemData;
+        this.sellMenuItemList = sellMenuItems;
+        this.itemList=itemList;
     }
 
     // inflates the row layout from xml when needed
@@ -56,19 +58,33 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 //    }
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-       SellMenuItem item=itemList.get(position);
+       SellMenuItem item= sellMenuItemList.get(position);
+
+       try {
+           if (itemList.size() != 0) {
+               Item itemInfo = itemList.get(position);
+               holder.itemPlace.setText(itemInfo.getPlace());
+               holder.itemStoreid.setText(itemInfo.getStore_id());
+               holder.itemStorageCount.setText(itemInfo.getCount());
+
+           }
+       }catch (Exception e){
+
+       }
 
 //        holder.itemId.setText(SellItem.getId());
         holder.itemName.setText(item.getItem_name());
         holder.itemPrice.setText( String.format("%,d", Long.parseLong(item.getItem_price().toString())));
         holder.itemQuantity.setText(item.getItem_count().toString());
-        if(item.getF4()!=null){
-            if(! item.getF4().equalsIgnoreCase("null")) {
+
+            if((item.getF4()!=null)&&(!item.getF4().equalsIgnoreCase("null"))&&(!item.getF4().equals(""))) {
                 holder.itemDetail.setText(item.getF4());
+                holder.itemDetail.setVisibility(View.VISIBLE);
             }
-        }
+
         else {
             holder.itemDetail.setText("");
+            holder.itemDetail.setVisibility(View.INVISIBLE);
 //        holder.textView.setText(SellItem.getItem_name());
         }
 
@@ -77,7 +93,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // total number of rows
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return sellMenuItemList.size();
     }
 
 
@@ -87,7 +103,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         Button increaseQuantity,decreaseQuantity;
         public RelativeLayout viewBackground, viewForeground;
 
-        TextView textView;
+        TextView itemPlace,itemStoreid,itemStorageCount;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -102,8 +118,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             decreaseQuantity=itemView.findViewById(R.id.decrease_quantity);
 
             itemDetail=itemView.findViewById(R.id.item_details);
-//
-//
+
+            itemStorageCount=itemView.findViewById(R.id.item_storage_count);
+            itemStoreid=itemView.findViewById(R.id.item_store_id);
+            itemPlace=itemView.findViewById(R.id.item_place);
+
             increaseQuantity.setOnClickListener(new View.OnClickListener() {
 //
 //            textView=itemView.findViewById(R.id.textView);
@@ -113,9 +132,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
                     try{
 
-                       int q= itemList.get(getAdapterPosition()).getItem_count();
+                       int q= sellMenuItemList.get(getAdapterPosition()).getItem_count();
                        q++;
-                       itemList.get(getAdapterPosition()).setItem_count(q);
+                       sellMenuItemList.get(getAdapterPosition()).setItem_count(q);
                         itemQuantity.setText(String.valueOf(q));
 
                     }
@@ -133,10 +152,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 public void onClick(View view) {
 //
 
-                    int q= itemList.get(getAdapterPosition()).getItem_count();
+                    int q= sellMenuItemList.get(getAdapterPosition()).getItem_count();
                     if(q>1)
                         q--;
-                    itemList.get(getAdapterPosition()).setItem_count(q);
+                    sellMenuItemList.get(getAdapterPosition()).setItem_count(q);
                     itemQuantity.setText(String.valueOf(q));
 
 
@@ -173,6 +192,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     public void removeItem(int position) {
+        sellMenuItemList.remove(position);
         itemList.remove(position);
         // notify the SellItem removed by position
         // to perform recycler view delete animations
@@ -181,7 +201,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     public void restoreItem(SellMenuItem item, int position) {
-        itemList.add(position, item);
+        sellMenuItemList.add(position, item);
+
         // notify SellItem added by position
         notifyItemInserted(position);
     }

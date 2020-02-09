@@ -4,12 +4,12 @@ import java.sql.Date;
 
 public class Item {
     private Integer id,type,cost,price,store_id,count;
-    private String barcode,name,f1,f2,f3,f4,place;
-    private Date detail,last_update;
+    private String barcode,name,f1,f2,f3,f4,place,detail;
+    private Date last_update;
 
     public Item(){};
     public Item(Integer id,String barcode,String name,Integer type,Integer cost,Integer price,String f1,String f2,
-                String f3,String f4,Date detail,Integer store_id,String place,Date last_update,Integer count){
+                String f3,String f4,String detail,Integer store_id,String place,Date last_update,Integer count){
         this.id=id;
         this.barcode=barcode;
         this.name=name;
@@ -28,7 +28,7 @@ public class Item {
 
     }
     public Item(Integer id,String barcode,String name,Integer type,Integer cost,Integer price,
-               Date detail,Integer store_id,String place,Date last_update){
+               String detail,Integer store_id,String place,Date last_update){
         this.id=id;
         this.barcode=barcode;
         this.name=name;
@@ -146,11 +146,11 @@ public class Item {
         this.place = place;
     }
 
-    public Date getDetail() {
+    public String getDetail() {
         return detail;
     }
 
-    public void setDetail(Date detail) {
+    public void setDetail(String detail) {
         this.detail = detail;
     }
 
