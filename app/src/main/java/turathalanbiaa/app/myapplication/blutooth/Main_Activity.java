@@ -302,7 +302,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             public void onClick(View view) {
 
 
-                sendToDB();
+
                 clearItemData();
 
             }
