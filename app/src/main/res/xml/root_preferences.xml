@@ -47,7 +47,7 @@
 
         <EditTextPreference
             app:key="server_path"
-            app:defaultValue="192.168.1.116"
+            app:defaultValue="0.0.0.0"
             app:title="Server Path"
             app:useSimpleSummaryProvider="true" />
 

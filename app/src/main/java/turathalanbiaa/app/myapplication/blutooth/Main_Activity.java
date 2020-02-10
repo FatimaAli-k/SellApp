@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -226,15 +228,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     LinearLayout Layout;
     MyRecyclerViewAdapter adapter;
     ArrayList<SellMenuItem> menuItems = new ArrayList<>();
-    SellMenuItem SellItem =new SellMenuItem();
-    Item iteminfo=new Item();
-    ArrayList<Item>itemArrayList = new ArrayList<>();
+    SellMenuItem SellItem = new SellMenuItem();
+    Item iteminfo = new Item();
+    ArrayList<Item> itemArrayList = new ArrayList<>();
     ProgressDialog pDialog;
     SessionManager session;
-    String code="";
-    String sellMenuId="";
+    String code = "";
+    String sellMenuId = "";
     //buttons
-    Button additem,logout,newCustomer,oldCustomer,clearData;
+    Button additem, logout, newCustomer, oldCustomer, clearData;
 
     TextView menuIdTextView;
 
@@ -245,7 +247,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String getOldMenuURL;
     String deleteItemURL;
     String getItemURL;
-
 
 
     @Override
@@ -276,7 +277,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         session.checkLogin();
 
 
-        if(session.isLoggedIn()) {
+        if (session.isLoggedIn()) {
             String name = session.getshared("name");
             Toast.makeText(getApplicationContext(),
                     "اهلا بك : " + name,
@@ -291,16 +292,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
         _declaration();
-          _click_listener();
-        menuIdTextView=findViewById(R.id.textView_sellMenuId);
+        _click_listener();
+        menuIdTextView = findViewById(R.id.textView_sellMenuId);
 
 
         //clear btn
-        clearData=findViewById(R.id.button_clear);
+        clearData = findViewById(R.id.button_clear);
         clearData.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
 
                 clearItemData();
@@ -309,24 +309,27 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         });
 
         //add SellItem
-        additem=findViewById(R.id.button_add_item);
+        additem = findViewById(R.id.button_add_item);
         additem.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 //
+                TextView txtsellMenuId = findViewById(R.id.textView_sellMenuId);
+                if (txtsellMenuId.getText().equals("0") || txtsellMenuId.getText().equals(""))
+                {
+                    Toast.makeText(getBaseContext() , "لا توجد قائمة",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Intent intent;
                 SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(getBaseContext() );
+                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String setting_barcode = sharedPreferences.getString("setting_barcode", "2");
 
-                if(setting_barcode.equals("1"))
-                {
+                if (setting_barcode.equals("1")) {
                     intent = new Intent(getBaseContext(), ScanActivity.class);
-                }else if (setting_barcode.equals("2"))
-                {
+                } else if (setting_barcode.equals("2")) {
                     intent = new Intent(getBaseContext(), ScanMainActivity.class);
-                }else
-                {
+                } else {
                     intent = new Intent(getBaseContext(), ZxingScan.class);
                 }
                 startActivity(intent);
@@ -335,7 +338,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         });
 
         //logout
-        logout=findViewById(R.id.button_logout);
+        logout = findViewById(R.id.button_logout);
         logout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -345,21 +348,21 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         });
 
         //new customer
-        newCustomer=findViewById(R.id.button_newCustomer);
+        newCustomer = findViewById(R.id.button_newCustomer);
         newCustomer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-               //send get request retreive sell menu id
+                //send get request retreive sell menu id
 //                sellMenuId="12345678";
                 clearItemData();
-               getSellMenuId();
+                getSellMenuId();
 
 
             }
         });
 
         //old customer
-        oldCustomer=findViewById(R.id.button_oldCustomer);
+        oldCustomer = findViewById(R.id.button_oldCustomer);
         oldCustomer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -369,21 +372,18 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                 Intent intent;
                 SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(getBaseContext() );
+                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String setting_barcode = sharedPreferences.getString("setting_barcode", "1");
 
-                if(setting_barcode.equals("1"))
-                {
+                if (setting_barcode.equals("1")) {
                     intent = new Intent(getBaseContext(), ScanActivity.class);
-                }else if (setting_barcode.equals("2"))
-                {
+                } else if (setting_barcode.equals("2")) {
                     intent = new Intent(getBaseContext(), ScanMainActivity.class);
-                }else
-                {
+                } else {
                     intent = new Intent(getBaseContext(), ZxingScan.class);
                 }
 
-                intent.putExtra("ScanFor",1);
+                intent.putExtra("ScanFor", 1);
                 startActivity(intent);
 
 
@@ -391,13 +391,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         });
 
 
-
-
 //
         RecyclerView recyclerView = findViewById(R.id.items_recycler_view);
-        Layout =findViewById(R.id.liner_layout);
+        Layout = findViewById(R.id.liner_layout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter= new MyRecyclerViewAdapter( getApplicationContext(), menuItems,itemArrayList);
+        adapter = new MyRecyclerViewAdapter(getApplicationContext(), menuItems, itemArrayList);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -416,8 +414,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }
 
         //check internet connection
-       boolean connectedToWifi= haveNetworkConnection();
-        if(!connectedToWifi){
+        boolean connectedToWifi = haveNetworkConnection();
+        if (!connectedToWifi) {
             Toast.makeText(this, "WiFi is not available",
                     Toast.LENGTH_LONG).show();
 
@@ -441,6 +439,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         btn_sitting = (Button) findViewById(R.id.btn_sitting);
 
     }
+
     private void _click_listener() {
         btn_sitting.setOnClickListener(new OnClickListener() {
             @Override
@@ -475,63 +474,72 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }
     }
 
-    String msgPrintFormat(){
-        String msg=session.getshared("name");
-        int len=menuItems.size();
-        for (int i=0;i<len;i++){
+    String msgPrintFormat() {
+
+        String msg = session.getshared("name");
+        String currentDate = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        msg+= "\n" + currentDate;
+        String color;
+        int len = menuItems.size();
+        for (int i = 0; i < len; i++) {
 //
+            color = "";
+
             String s;
             s = String.format("%,d", Long.parseLong(menuItems.get(i).getItem_price().toString()));
-            msg+="\n...............................\n"+menuItems.get(i).getItem_name()+" "+s+" "+" عدد "
-                    +menuItems.get(i).getItem_count();
+            if (menuItems.get(i).getF4() != null && menuItems.get(i).getF4() != "null" ) {
+                color = " | " + menuItems.get(i).getF4();
+            }
+            msg +=  "\n" +  "_____________________________";
+
+            msg += "\n"  + "   " + s + menuItems.get(i).getItem_name() + color;
 
 
         }
         return msg;
     }
 
-    void sendToDB(){
+    void sendToDB() {
         //add to sell SellItem
 //
-        for (int i=0;i<menuItems.size();i++){
+        for (int i = 0; i < menuItems.size(); i++) {
             Map<String, String> params = new HashMap<>();
             params.put("user_sell_it_id", session.getshared("id"));
             params.put("sell_menu_id", sellMenuId);
             params.put("item_name", menuItems.get(i).getItem_name());
             params.put("item_price", menuItems.get(i).getItem_price().toString());
-            params.put("item_count",  menuItems.get(i).getItem_count().toString());
-            params.put("item_id",  menuItems.get(i).getItem_id().toString());
-            params.put("f4",  menuItems.get(i).getF4());
+            params.put("item_count", menuItems.get(i).getItem_count().toString());
+            params.put("item_id", menuItems.get(i).getItem_id().toString());
+            params.put("f4", menuItems.get(i).getF4());
             params.put("item_cost", "0");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             String dt = sdf.format(new Date());
-            params.put("datetime",dt );
+            params.put("datetime", dt);
 
 //
-            if(menuItems.get(i).getId()==null){
-            sendItems(addSellMenuItemURL,params);}
-
-            else{
+            if (menuItems.get(i).getId() == null) {
+                sendItems(addSellMenuItemURL, params);
+            } else {
                 //updateitems using the id and count
                 Map<String, String> upParams = new HashMap<>();
-                upParams.put("id",  menuItems.get(i).getId().toString());
-                upParams.put("item_count",  menuItems.get(i).getItem_count().toString());
-                upParams.put("datetime",dt );
-               sendItems(updatURL,upParams);
+                upParams.put("id", menuItems.get(i).getId().toString());
+                upParams.put("item_count", menuItems.get(i).getItem_count().toString());
+                upParams.put("datetime", dt);
+                sendItems(updatURL, upParams);
             }
         }
 
 
     }
 
-    void clearItemData(){
-        TextView txtview=findViewById(R.id.textView_sellMenuId);
+    void clearItemData() {
+        TextView txtview = findViewById(R.id.textView_sellMenuId);
         txtview.setText("");
         menuItems.clear();
         itemArrayList.clear();
 //        iteminfo=new Item();
 //        SellItem=new SellMenuItem();
-        sellMenuId="";
+        sellMenuId = "";
         session.createBarcode("");
         adapter.notifyDataSetChanged();
 
@@ -549,10 +557,10 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     haveConnectedWifi = true;
 
         }
-        return haveConnectedWifi ;
+        return haveConnectedWifi;
     }
 
-    void sendItems(String url, Map<String, String> params){
+    void sendItems(String url, Map<String, String> params) {
 
 
         showpDialog();
@@ -594,7 +602,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     }
 
 
-   void getSellMenuId(){
+    void getSellMenuId() {
 
         showpDialog();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -610,8 +618,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     sellMenuId = response.getString("id");
 
                     menuIdTextView.setText(sellMenuId);
-
-
 
 
                 } catch (JSONException e) {
@@ -641,12 +647,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
     }
+
     private void getSellMenuItemsArray() {
 
 //
         showpDialog();
 
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST,getOldMenuURL,
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST, getOldMenuURL,
                 new Response.Listener<String>() {
 
 
@@ -659,15 +666,12 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                             JSONArray obj = new JSONArray(response);
 
 
-
-
-
                             for (int i = 0; i < obj.length(); i++) {
 
                                 JSONObject jsonItem = (JSONObject) obj
                                         .get(i);
 
-                                String t=jsonItem.getString("sell_menu_item");
+                                String t = jsonItem.getString("sell_menu_item");
 
                                 JSONArray obj2 = new JSONArray(t);
 
@@ -677,29 +681,29 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 //
 
-                                int id=jsonItem2.getInt("id");
-                                String name = jsonItem2.getString("item_name");
-                                int price= jsonItem2.getInt("item_price");
-                                int count= jsonItem2.getInt("item_count");
-                                int itemid=jsonItem2.getInt("item_id");
+                                    int id = jsonItem2.getInt("id");
+                                    String name = jsonItem2.getString("item_name");
+                                    int price = jsonItem2.getInt("item_price");
+                                    int count = jsonItem2.getInt("item_count");
+                                    int itemid = jsonItem2.getInt("item_id");
 
-                                String f4=jsonItem2.getString("f4");
+                                    String f4 = jsonItem2.getString("f4");
 
 
-                                    iteminfo=new Item();
+                                    iteminfo = new Item();
                                     itemArrayList.add(iteminfo);
 
 
-                                    SellItem =new SellMenuItem();
-                                 SellItem.setItem_count(count);
-                                 SellItem.setId(id);
-                                SellItem.setItem_name(name);
-                                SellItem.setItem_price(price);
-                                SellItem.setItem_id(itemid);
-                                //details
+                                    SellItem = new SellMenuItem();
+                                    SellItem.setItem_count(count);
+                                    SellItem.setId(id);
+                                    SellItem.setItem_name(name);
+                                    SellItem.setItem_price(price);
+                                    SellItem.setItem_id(itemid);
+                                    //details
 
-                                SellItem.setF4(f4);
-                                menuItems.add(SellItem);
+                                    SellItem.setF4(f4);
+                                    menuItems.add(SellItem);
                                 }
 
                             }
@@ -709,7 +713,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             Toast.makeText(getApplicationContext(),
-                                    " // "+e, Toast.LENGTH_LONG).show();
+                                    " // " + e, Toast.LENGTH_LONG).show();
                         }
                         hidepDialog();
                     }
@@ -735,10 +739,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     }
 
 
-
-
-
-    private void getItemObj(String url){
+    private void getItemObj(String url) {
         Map<String, String> params = new HashMap<>();
         params.put("barcode", itemCode);
 
@@ -752,18 +753,18 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 Log.d(TAG, response.toString());
 
                 try {
-                   JSONObject jsonItem = (JSONObject) response;
-                   int id=jsonItem.getInt("id");
+                    JSONObject jsonItem = (JSONObject) response;
+                    int id = jsonItem.getInt("id");
                     String name = jsonItem.getString("name");
-                    int price= jsonItem.getInt("price");
-                    String details=jsonItem.getString("detail");
+                    int price = jsonItem.getInt("price");
+                    String details = jsonItem.getString("detail");
 
-                    int cost= jsonItem.getInt("cost");
-                    String place=jsonItem.getString("place");
-                    int store_id= jsonItem.getInt("store_id");
-                    int storageCount=jsonItem.getInt("count");
+                    int cost = jsonItem.getInt("cost");
+                    String place = jsonItem.getString("place");
+                    int store_id = jsonItem.getInt("store_id");
+                    int storageCount = jsonItem.getInt("count");
 
-                    iteminfo=new Item();
+                    iteminfo = new Item();
                     iteminfo.setPlace(place);
                     iteminfo.setStore_id(store_id);
                     iteminfo.setCost(cost);
@@ -771,22 +772,21 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     itemArrayList.add(iteminfo);
 
 
-                    SellItem =new SellMenuItem();
+                    SellItem = new SellMenuItem();
                     SellItem.setItem_count(1);
                     SellItem.setItem_name(name);
                     SellItem.setItem_price(price);
                     SellItem.setItem_id(id);
                     //detail
-                    if((!details.equalsIgnoreCase("null"))&&(details != null)&&(!details.equals(""))){
-                    SellItem.setF1(details);
-                   getItemDetails(details,SellItem);
+                    if ((!details.equalsIgnoreCase("null")) && (details != null) && (!details.equals(""))) {
+                        SellItem.setF1(details);
+                        getItemDetails(details, SellItem);
 
-                    }
-                    else {menuItems.add(SellItem);
+                    } else {
+                        menuItems.add(SellItem);
 
                         adapter.notifyDataSetChanged();
                     }
-
 
 
                 } catch (JSONException e) {
@@ -814,10 +814,10 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     }
 
-//as soon as item is added
-     void getItemDetails(String details,final SellMenuItem SellItem){
+    //as soon as item is added
+    void getItemDetails(String details, final SellMenuItem SellItem) {
 //        final String[] options=details.split("\\|");
-         final String[] options=details.split("\\\\");
+        final String[] options = details.split("\\\\");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("اختر تفاصيل القطعه");
 
@@ -826,7 +826,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-              SellItem.setF4(options[which]);
+                SellItem.setF4(options[which]);
 
                 menuItems.add(SellItem);
 
@@ -840,13 +840,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     }
 
-boolean deleted=false;
-    void deleteSellMenuItem(int id){
+    boolean deleted = false;
+
+    void deleteSellMenuItem(int id) {
 
 
         Map<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(id));
-
 
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
@@ -859,12 +859,12 @@ boolean deleted=false;
                 try {
 
 
-                            Toast.makeText(getApplicationContext(),
-                                    " "+  response.getString("message"), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),
+                            " " + response.getString("message"), Toast.LENGTH_LONG).show();
 
 
-                            if(!response.getString("message").equalsIgnoreCase("DONE"))
-                                deleted=true;
+                    if (!response.getString("message").equalsIgnoreCase("DONE"))
+                        deleted = true;
 
 //
 
@@ -873,7 +873,7 @@ boolean deleted=false;
                     Toast.makeText(getApplicationContext(),
                             "Error: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
-                    deleted=true;
+                    deleted = true;
                 }
 
 
@@ -885,7 +885,7 @@ boolean deleted=false;
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
 
-                deleted=true;
+                deleted = true;
             }
 
         });
@@ -894,8 +894,6 @@ boolean deleted=false;
         AppController.getInstance().addToRequestQueue(req);
 
     }
-
-
 
 
     private void showpDialog() {
@@ -915,7 +913,7 @@ boolean deleted=false;
 
             getItemInfo(view, position);
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 //        String details=menuItems.get(position).getF1();
@@ -924,31 +922,32 @@ boolean deleted=false;
 
 
     }
-    void getItemInfo(View view, int position){
+
+    void getItemInfo(View view, int position) {
 
 
         PopupMenu menu = new PopupMenu(this, view);
 
-        menu.getMenu().add(itemArrayList.get(position).getPlace()+" :المتجر ");
-        menu.getMenu().add(itemArrayList.get(position).getStore_id()+" :رقم المخزن ");
-        menu.getMenu().add(itemArrayList.get(position).getCount()+" :عدد القطع ");
+        menu.getMenu().add(itemArrayList.get(position).getPlace() + " :المتجر ");
+        menu.getMenu().add(itemArrayList.get(position).getStore_id() + " :رقم المخزن ");
+        menu.getMenu().add(itemArrayList.get(position).getCount() + " :عدد القطع ");
         menu.show();
 
     }
 
-//change item details
+    //change item details
     private void updateItemsDetails(String details, View view, int position) {
-        if(!details.equalsIgnoreCase("null")) {
+        if (!details.equalsIgnoreCase("null")) {
 //            String[] options=details.split("\\|");
-            String[] options=details.split("\\\\");
+            String[] options = details.split("\\\\");
             PopupMenu menu = new PopupMenu(this, view);
-            for(int i=0;i<options.length;i++) {
+            for (int i = 0; i < options.length; i++) {
 
                 menu.getMenu().add(options[i]);
 
             }
 
-            final int pos=position;
+            final int pos = position;
             menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
                 @Override
@@ -975,13 +974,12 @@ boolean deleted=false;
             String name = menuItems.get(viewHolder.getAdapterPosition()).getItem_name();
 
             //delete selll menu item from db
-            boolean bool=menuItems.get(viewHolder.getAdapterPosition()).getId() != null;
-            if(bool){
+            boolean bool = menuItems.get(viewHolder.getAdapterPosition()).getId() != null;
+            if (bool) {
 
                 deleteSellMenuItem(menuItems.get(viewHolder.getAdapterPosition()).getId());
 
             }
-
 
 
             // backup of removed SellItem for undo purpose
@@ -992,20 +990,18 @@ boolean deleted=false;
             adapter.removeItem(viewHolder.getAdapterPosition());
 
             //delete selll menu item from db
-            if((bool)&&(deleted)) {
+            if ((bool) && (deleted)) {
                 adapter.restoreItem(deletedItem, deletedIndex);
-                deleted=false;
+                deleted = false;
             }
 
         }
     }
 
     private void setAddBtnVisibile() {
-        if(menuIdTextView.getText().toString().equals("0"))
-        {
+        if (menuIdTextView.getText().toString().equals("0")) {
             additem.setVisibility(View.INVISIBLE);
-        }else
-        {
+        } else {
             additem.setVisibility(View.VISIBLE);
         }
     }
@@ -1013,6 +1009,7 @@ boolean deleted=false;
     //
     String barcode;
     String itemCode;
+
     @Override
     public synchronized void onResume() {
         super.onResume();
@@ -1021,9 +1018,9 @@ boolean deleted=false;
 //        Toast.makeText(this,"/"+barcode,Toast.LENGTH_SHORT).show();
 
 
-        String val=session.getshared("scanfor");
+        String val = session.getshared("scanfor");
 
-        if(val !=null) {
+        if (val != null) {
             if (val.equals("1")) {
                 //barcode is for menu
                 sellMenuId = barcode;
@@ -1043,7 +1040,6 @@ boolean deleted=false;
 
             }
         }
-
 
 
         if (mService != null) {
@@ -1211,67 +1207,46 @@ boolean deleted=false;
                 break;
             }
             case R.id.Send_Button: {
-                if (hexBox.isChecked()) {
-                    //	String str = editText.getText().toString().trim();//去掉头尾空白
-                    String str = "karrar hasany";
-                    if (str.length() > 0) {
-                        str = Other.RemoveChar(str, ' ').toString();
-                        if (str.length() <= 0)
-                            return;
-                        if ((str.length() % 2) != 0) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.msg_state),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        byte[] buf = Other.HexStringToBytes(str);
-                        SendDataByte(buf);
-                    } else {
-                        Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    //String msg = editText.getText().toString();
-//                    String msg = "كرار حساني" +
-//                            "\n بنطلون قماش = 12.000 عدد 2 " +
-//                            "\n قميص = 15.000 عدد 1 " +
-//                            "\n حذاء تركي = 20.000 عدد 2 ";
 
-                    sendToDB();
+                if (btnScanButton.getText().equals("تم الاتصال"))
+                {
 
-                    String msg=msgPrintFormat();
+                }else
+                {
+                  Toast.makeText(getBaseContext(),"يرجى الاتصال بالطابعة",Toast.LENGTH_LONG).show();
+                    return;
+                }
+// printmenu
+                sendToDB();
+                String msg = msgPrintFormat();
+                if (msg.length() > 0) {
+                    SendDataByte(PrinterCommand.POS_Print_Text(" ", ARBIC, 22, 0, 0, 0));
+                    SendDataByte(Command.ESC_Align);
+                    byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 2, 2);
 
-                    if (msg.length() > 0) {
-                        if (thai.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text(msg, THAI, 255, 0, 0, 0));
-                            SendDataByte(Command.LF);
-                        } else if (big5.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text(msg, BIG5, 0, 0, 0, 0));
-                            SendDataByte(Command.LF);
-                        } else if (Korean.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text(msg, KOREAN, 0, 0, 0, 0));
-                            SendDataByte(Command.LF);
-                        } else if (Simplified.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text(" ", ARBIC, 22, 0, 0, 0));
-                            SendDataByte(Command.ESC_Align);
-//                            byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 168, 1, 2);
+                    //  byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 84, 1, 2);
+                    SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+                    SendDataByte(code);
+                    SendDataByte(Command.ESC_Align);
+                    SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
+                    SendDataByte(Command.ESC_Align);
+                    SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
 
-                            byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 84, 1, 2);
-                            SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                            SendDataByte(code);
-                            SendDataByte(Command.ESC_Align);
+                    SendDataByte(PrinterCommand.POS_Print_Text("----------", ARBIC, 22, 2, 2, 0));
+
+                    SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
+                    SendDataByte(Command.ESC_Align);
+
+                    byte[] code2 = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 1, 2);
+
+                    SendDataByte(code2);
+                    SendDataByte(Command.ESC_E);
+                    SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
+                    SendDataByte(Command.ESC_Align);
+                    SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
+                    SendDataByte(Command.ESC_Align);
 
 
-
-
-                            SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
-                            SendDataByte(Command.ESC_Align);
-                            SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
-                            SendDataByte(Command.ESC_Align);
-
-
-                        }
-                    } else {
-                        Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
-                    }
                 }
                 clearItemData();
                 break;
@@ -1380,7 +1355,7 @@ boolean deleted=false;
                         case BluetoothService.STATE_CONNECTED:
 //					mTitle.setText(R.string.title_connected_to);
 //					mTitle.append(mConnectedDeviceName);
-                            btnScanButton.setText(getText(R.string.Connecting));
+                            btnScanButton.setText("تم الاتصال");
                             btnScanButton.setBackground(null);
                             Print_Test();//
                             btnScanButton.setEnabled(false);
