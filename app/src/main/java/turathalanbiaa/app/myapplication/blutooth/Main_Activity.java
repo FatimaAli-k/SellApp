@@ -518,7 +518,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 //
             if (menuItems.get(i).getId() == null) {
-                sendItems(addSellMenuItemURL, params);
+
+                    sendItems(addSellMenuItemURL, params);
+
+
+
             } else {
                 //updateitems using the id and count
                 Map<String, String> upParams = new HashMap<>();
@@ -1222,11 +1226,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 if (msg.length() > 0) {
                     SendDataByte(PrinterCommand.POS_Print_Text(" ", ARBIC, 22, 0, 0, 0));
                     SendDataByte(Command.ESC_Align);
-                    byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 2, 2);
-
-                    //  byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 84, 1, 2);
-                    SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+                    byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 1, 2);
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
                     SendDataByte(code);
+
                     SendDataByte(Command.ESC_Align);
                     SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
                     SendDataByte(Command.ESC_Align);
@@ -1237,10 +1241,10 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
                     SendDataByte(Command.ESC_Align);
 
-                    byte[] code2 = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 1, 2);
-
-                    SendDataByte(code2);
-                    SendDataByte(Command.ESC_E);
+                    byte[] code3 = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 1, 2);
+                    Command.ESC_Align[2] = 0x01;
+                    SendDataByte(Command.ESC_Align);
+                    SendDataByte(code3);
                     SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
                     SendDataByte(Command.ESC_Align);
                     SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
