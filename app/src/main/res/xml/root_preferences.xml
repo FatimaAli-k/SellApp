@@ -28,6 +28,23 @@
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+    <PreferenceCategory app:title="عدد نسخ الوصل">
+
+
+        <ListPreference
+            app:defaultValue="2"
+            app:entries="@array/copy_entries"
+            app:entryValues="@array/copy_values"
+            app:key="copys"
+            app:title="طباعة"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="hello"
+            app:defaultValue="اهلا بك في مول 2 كنك"
+            app:title="عبارة تطبع في الوصل"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
 
 <!--    <PreferenceCategory app:title="@string/sync_header">-->
 
@@ -47,7 +64,7 @@
 
         <EditTextPreference
             app:key="server_path"
-            app:defaultValue="0.0.0.0"
+            app:defaultValue="192.168.0.125"
             app:title="Server Path"
             app:useSimpleSummaryProvider="true" />
 

@@ -315,9 +315,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             public void onClick(View view) {
 //
                 TextView txtsellMenuId = findViewById(R.id.textView_sellMenuId);
-                if (txtsellMenuId.getText().equals("0") || txtsellMenuId.getText().equals(""))
-                {
-                    Toast.makeText(getBaseContext() , "لا توجد قائمة",Toast.LENGTH_LONG).show();
+                if (txtsellMenuId.getText().equals("0") || txtsellMenuId.getText().equals("")) {
+                    Toast.makeText(getBaseContext(), "لا توجد قائمة", Toast.LENGTH_LONG).show();
                     return;
                 }
                 Intent intent;
@@ -477,8 +476,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String msgPrintFormat() {
 
         String msg = session.getshared("name");
-        String currentDate = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        msg+= "\n" + currentDate;
+        //final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        String currentDate = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd", Locale.ENGLISH).format(new Date());
+        msg += "\n" + currentDate;
         String color;
         int len = menuItems.size();
         for (int i = 0; i < len; i++) {
@@ -486,13 +486,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             color = "";
 
             String s;
-            s = String.format("%,d", Long.parseLong(menuItems.get(i).getItem_price().toString()));
-            if (menuItems.get(i).getF4() != null && menuItems.get(i).getF4() != "null" ) {
+            s = menuItems.get(i).getItem_price().toString();
+            if (menuItems.get(i).getF4() != null && menuItems.get(i).getF4() != "null") {
                 color = " | " + menuItems.get(i).getF4();
             }
-            msg +=  "\n" +  "_____________________________";
+            msg += "\n" + "_____________________________";
 
-            msg += "\n"  + "   " + s + menuItems.get(i).getItem_name() + color;
+            msg += "\n" + "   " + s + menuItems.get(i).getItem_name() + color;
 
 
         }
@@ -511,16 +511,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             params.put("item_count", menuItems.get(i).getItem_count().toString());
             params.put("item_id", menuItems.get(i).getItem_id().toString());
             params.put("f4", menuItems.get(i).getF4());
-            params.put("item_cost", "0");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            String dt = sdf.format(new Date());
-            params.put("datetime", dt);
+            //  params.put("item_cost",  String.valueOf(menuItems.get(i).getItem_cost());
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//            String dt = sdf.format(new Date());
+//            params.put("datetime", dt);
 
 //
             if (menuItems.get(i).getId() == null) {
 
-                    sendItems(addSellMenuItemURL, params);
-
+                sendItems(addSellMenuItemURL, params);
 
 
             } else {
@@ -528,7 +527,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 Map<String, String> upParams = new HashMap<>();
                 upParams.put("id", menuItems.get(i).getId().toString());
                 upParams.put("item_count", menuItems.get(i).getItem_count().toString());
-                upParams.put("datetime", dt);
+                //  upParams.put("datetime", dt);
                 sendItems(updatURL, upParams);
             }
         }
@@ -763,7 +762,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     int price = jsonItem.getInt("price");
                     String details = jsonItem.getString("detail");
 
-                    int cost = jsonItem.getInt("cost");
+                    //     int cost = jsonItem.getInt("cost");
                     String place = jsonItem.getString("place");
                     int store_id = jsonItem.getInt("store_id");
                     int storageCount = jsonItem.getInt("count");
@@ -771,7 +770,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     iteminfo = new Item();
                     iteminfo.setPlace(place);
                     iteminfo.setStore_id(store_id);
-                    iteminfo.setCost(cost);
+                    //   iteminfo.setCost(cost);
                     iteminfo.setCount(storageCount);
                     itemArrayList.add(iteminfo);
 
@@ -1211,44 +1210,64 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 break;
             }
             case R.id.Send_Button: {
+                if (menuIdTextView.getText().equals("") || menuIdTextView.getText() == null || menuIdTextView.getText().equals("0")) {
+                    Toast.makeText(getBaseContext(), "لاتوجد قائمة", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-                if (btnScanButton.getText().equals("تم الاتصال"))
-                {
+                if (btnScanButton.getText().equals("تم الاتصال")) {
 
-                }else
-                {
-                  Toast.makeText(getBaseContext(),"يرجى الاتصال بالطابعة",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getBaseContext(), "يرجى الاتصال بالطابعة", Toast.LENGTH_LONG).show();
                     return;
                 }
 // printmenu
                 sendToDB();
                 String msg = msgPrintFormat();
                 if (msg.length() > 0) {
-                    SendDataByte(PrinterCommand.POS_Print_Text(" ", ARBIC, 22, 0, 0, 0));
-                    SendDataByte(Command.ESC_Align);
-                    byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 1, 2);
-                    Command.ESC_Align[2] = 0x01;
-                    SendDataByte(Command.ESC_Align);
-                    SendDataByte(code);
+                    try {
+                        SharedPreferences sharedPreferences =
+                                PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                        String hello = sharedPreferences.getString("hello", "");
+                        SendDataByte(PrinterCommand.POS_Print_Text(" ", ARBIC, 22, 0, 0, 0));
+                        SendDataByte(Command.ESC_Align);
+                        byte[] code = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 1, 2);
+                        Command.ESC_Align[2] = 0x01;
+                        SendDataByte(Command.ESC_Align);
+                        SendDataByte(code);
 
-                    SendDataByte(Command.ESC_Align);
-                    SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
-                    SendDataByte(Command.ESC_Align);
-                    SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
+                        SendDataByte(PrinterCommand.POS_Print_Text(hello + "\n", ARBIC, 22, 0, 0, 0));
 
-                    SendDataByte(PrinterCommand.POS_Print_Text("----------", ARBIC, 22, 2, 2, 0));
+                        SendDataByte(Command.ESC_Align);
+                        SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
+                        SendDataByte(Command.ESC_Align);
 
-                    SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
-                    SendDataByte(Command.ESC_Align);
+                        SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
 
-                    byte[] code3 = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 1, 2);
-                    Command.ESC_Align[2] = 0x01;
-                    SendDataByte(Command.ESC_Align);
-                    SendDataByte(code3);
-                    SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
-                    SendDataByte(Command.ESC_Align);
-                    SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
-                    SendDataByte(Command.ESC_Align);
+
+                        String copys = sharedPreferences.getString("copys", "1");
+                        if (copys.equals("2")) {
+                            SendDataByte(PrinterCommand.POS_Print_Text("----------", ARBIC, 22, 2, 2, 0));
+
+                            SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
+                            SendDataByte(Command.ESC_Align);
+
+                            byte[] code3 = PrinterCommand.getCodeBarCommand(sellMenuId, 73, 3, 140, 1, 2);
+                            Command.ESC_Align[2] = 0x01;
+                            SendDataByte(Command.ESC_Align);
+                            SendDataByte(code3);
+                            SendDataByte(PrinterCommand.POS_Print_Text(hello + "\n", ARBIC, 22, 1, 1, 3));
+
+                            SendDataByte(Command.ESC_Align);
+                            SendDataByte(PrinterCommand.POS_Print_Text(msg, ARBIC, 22, 0, 0, 0));
+                            SendDataByte(Command.ESC_Align);
+                            SendDataByte(PrinterCommand.POS_Print_Text("\n\n\n\n\n", ARBIC, 22, 0, 0, 0));
+                            SendDataByte(Command.ESC_Align);
+                        }
+
+                    } catch (Exception ex) {
+
+                    }
 
 
                 }
