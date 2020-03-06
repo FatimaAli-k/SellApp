@@ -137,12 +137,14 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     /*********************************************************************************/
 //	private TextView mTitle;
     EditText editText;
+    TextView username;
     ImageView imageViewPicture;
     private static boolean is58mm = true;
     private RadioButton width_58mm, width_80;
     private RadioButton thai, big5, Simplified, Korean;
     private CheckBox hexBox;
     private Button sendButton = null;
+    private Button saveButton = null;
     private Button testButton = null;
     private Button printbmpButton = null;
     private Button btnScanButton = null;
@@ -236,7 +238,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String code = "";
     String sellMenuId = "";
     //buttons
-    Button additem, logout, newCustomer, oldCustomer, clearData;
+    Button additem, logout, newCustomer, oldCustomer, clearData ,cardCustomer;
 
     TextView menuIdTextView;
 
@@ -247,6 +249,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String getOldMenuURL;
     String deleteItemURL;
     String getItemURL;
+    String getCardURL;
 
 
     @Override
@@ -307,7 +310,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
             }
         });
+username = (TextView) findViewById(R.id.user_name);
 
+username.setText(session.getshared("name"));
         //add SellItem
         additem = findViewById(R.id.button_add_item);
         additem.setOnClickListener(new OnClickListener() {
@@ -324,12 +329,18 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                         PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String setting_barcode = sharedPreferences.getString("setting_barcode", "2");
 
+                session.setScanfor("2");  //for item
+
                 if (setting_barcode.equals("1")) {
+
                     intent = new Intent(getBaseContext(), ScanActivity.class);
+
                 } else if (setting_barcode.equals("2")) {
                     intent = new Intent(getBaseContext(), ScanMainActivity.class);
+
                 } else {
                     intent = new Intent(getBaseContext(), ZxingScan.class);
+
                 }
                 startActivity(intent);
 
@@ -360,6 +371,34 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             }
         });
 
+
+        cardCustomer = findViewById(R.id.button_card);
+        cardCustomer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //scan for sell menu
+                clearItemData();
+
+                Intent intent;
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String setting_barcode = sharedPreferences.getString("setting_barcode", "1");
+                session.setScanfor("3");  //for item
+
+                if (setting_barcode.equals("1")) {
+                    intent = new Intent(getBaseContext(), ScanActivity.class);
+                } else if (setting_barcode.equals("2")) {
+                    intent = new Intent(getBaseContext(), ScanMainActivity.class);
+                } else {
+                    intent = new Intent(getBaseContext(), ZxingScan.class);
+                }
+
+                startActivity(intent);
+
+
+            }
+        });
+
         //old customer
         oldCustomer = findViewById(R.id.button_oldCustomer);
         oldCustomer.setOnClickListener(new OnClickListener() {
@@ -373,6 +412,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String setting_barcode = sharedPreferences.getString("setting_barcode", "1");
+                session.setScanfor("1");  //for item
 
                 if (setting_barcode.equals("1")) {
                     intent = new Intent(getBaseContext(), ScanActivity.class);
@@ -382,7 +422,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     intent = new Intent(getBaseContext(), ZxingScan.class);
                 }
 
-                intent.putExtra("ScanFor", 1);
                 startActivity(intent);
 
 
@@ -431,6 +470,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         deleteItemURL = ServerInfo.getUrl("delete");
         getItemURL = ServerInfo.getUrl("item");
+        getCardURL = ServerInfo.getUrl("card");
 
     }
 
@@ -592,8 +632,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
                 hidepDialog();
             }
 
@@ -655,14 +693,14 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 //
         showpDialog();
-
+        Log.d("karrar" ,"start " );
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, getOldMenuURL,
                 new Response.Listener<String>() {
 
 
                     @Override
                     public void onResponse(String response) {
-
+                        Log.d("karrar" ,"responsed " );
                         try {
                             //converting response to json object
 
@@ -683,7 +721,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                                             .get(j);
 
 //
-
+                                    Log.d("karrar" ,jsonItem2.getString("item_name") );
                                     int id = jsonItem2.getInt("id");
                                     String name = jsonItem2.getString("item_name");
                                     int price = jsonItem2.getInt("item_price");
@@ -732,7 +770,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("id", sellMenuId);
+
                 params.put("user_sell_it_id", session.getshared("id"));
+
                 return params;
             }
         };
@@ -742,7 +782,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     }
 
 
-    private void getItemObj(String url) {
+    private void getItemObj(String url ) {
         Map<String, String> params = new HashMap<>();
         params.put("barcode", itemCode);
 
@@ -805,6 +845,52 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                hidepDialog();
+            }
+
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+
+    }
+
+
+    private void getMenuID_Card(String url,String customer_id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("customer_id", customer_id);
+
+        showpDialog();
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
+                url, new JSONObject(params), new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("karrar", response.toString());
+
+                try {
+                    JSONObject jsonMenu = (JSONObject) response;
+
+                    sellMenuId = jsonMenu.getString("id");
+                      menuIdTextView.setText(sellMenuId);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "لم يتم جلب البيانات : " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+                hidepDialog();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("karrar", "Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
                 hidepDialog();
@@ -1029,16 +1115,20 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 sellMenuId = barcode;
                 menuIdTextView = findViewById(R.id.textView_sellMenuId);
                 menuIdTextView.setText(barcode);
-
                 getSellMenuItemsArray();
                 session.setScanfor("0");
 
             } else if (val.equals("2")) {
                 //barcode is for SellItem
                 itemCode = barcode;
-//
                 getItemObj(getItemURL);
+                session.setScanfor("0");
 
+            } else if (val.equals("3")) {
+
+                String Customer_id = barcode;
+                getMenuID_Card(getCardURL , Customer_id);
+                Log.d("karrar", "getMenuID_Card func " + Customer_id);
                 session.setScanfor("0");
 
             }
@@ -1085,6 +1175,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         sendButton = (Button) findViewById(R.id.Send_Button);
         sendButton.setOnClickListener(this);
+
+        saveButton = (Button) findViewById(R.id.save_Button);
+        saveButton.setOnClickListener(this);
 
         testButton = (Button) findViewById(R.id.btn_test);
         testButton.setOnClickListener(this);
@@ -1151,6 +1244,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         width_80.setEnabled(false);
         hexBox.setEnabled(false);
         sendButton.setEnabled(false);
+
         testButton.setEnabled(false);
         printbmpButton.setEnabled(false);
         btnClose.setEnabled(false);
@@ -1186,6 +1280,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 width_80.setEnabled(false);
                 hexBox.setEnabled(false);
                 sendButton.setEnabled(false);
+
                 testButton.setEnabled(false);
                 printbmpButton.setEnabled(false);
                 btnClose.setEnabled(false);
@@ -1272,6 +1367,25 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                 }
                 clearItemData();
+                break;
+            }
+            case R.id.save_Button: {
+                if (menuIdTextView.getText().equals("") || menuIdTextView.getText() == null || menuIdTextView.getText().equals("0")) {
+                    Toast.makeText(getBaseContext(), "لاتوجد قائمة", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
+// printmenu
+                try{
+                    sendToDB();
+
+                    clearItemData();
+                }catch (Exception ex)
+                {
+                    Toast.makeText(getBaseContext(), "لم يتم الحفظ" + ex.getMessage() , Toast.LENGTH_LONG).show();
+                }
+
                 break;
             }
             case R.id.width_58mm:
@@ -1388,6 +1502,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                             width_80.setEnabled(true);
                             hexBox.setEnabled(true);
                             sendButton.setEnabled(true);
+
                             testButton.setEnabled(true);
                             printbmpButton.setEnabled(true);
                             btnClose.setEnabled(true);
@@ -1439,6 +1554,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                     width_80.setEnabled(false);
                     hexBox.setEnabled(false);
                     sendButton.setEnabled(false);
+
                     testButton.setEnabled(false);
                     printbmpButton.setEnabled(false);
                     btnClose.setEnabled(false);

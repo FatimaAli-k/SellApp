@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import turathalanbiaa.app.myapplication.R;
+import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 import turathalanbiaa.app.myapplication.mlkittext.utility.CameraSource;
 import turathalanbiaa.app.myapplication.mlkittext.utility.CameraSourcePreview;
 import turathalanbiaa.app.myapplication.mlkittext.utility.GraphicOverlay;
@@ -65,7 +66,12 @@ public class ScanMainActivity extends AppCompatActivity implements
             }
         });
 
-        scanFor=getIntent().getIntExtra("ScanFor",0);
+
+        SessionManager session;
+        session = new SessionManager(getApplicationContext());
+
+
+        scanFor = Integer.valueOf(session.getshared("scanfor"));
 
 
         if (allPermissionsGranted()) {

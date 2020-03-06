@@ -2,6 +2,7 @@ package turathalanbiaa.app.myapplication;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
 
@@ -32,11 +33,17 @@ public class ScanActivity extends AppCompatActivity implements BarcodeReader.Bar
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
         setContentView(R.layout.scan);
         barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcode_scanner);
-        scanFor=getIntent().getIntExtra("ScanFor",0);
+
+        SessionManager session;
+        session = new SessionManager(getApplicationContext());
+
+
+        scanFor = Integer.valueOf(session.getshared("scanfor"));
 
 
 
     }
+
     @Override
     public void onScanned(Barcode barcode) {
 //        // single barcode scanned
@@ -46,14 +53,12 @@ public class ScanActivity extends AppCompatActivity implements BarcodeReader.Bar
         SessionManager session = new SessionManager(getApplicationContext());
 
 
-
-            session.createBarcode(barcode.displayValue);
+        session.createBarcode(barcode.displayValue);
         //if scanning fo menu id
-        if(scanFor==1) {
-            session.setScanfor("1");}
-        //for item
-        else
-            session.setScanfor("2");
+        Log.d("karrar", "scaned func " + barcode.displayValue);
+
+        session.setScanfor(scanFor.toString());
+
 
 
         finish();

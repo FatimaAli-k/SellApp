@@ -52,6 +52,7 @@
     <string name="strLang">cn</string>
     <string name="camer">لا صور</string>
     <string name="msg_error">أخطاء الإدخال، يرجى مراجعة!</string>
+    <string name="AppName2">ادارة المول</string>
 
 
 </resources>

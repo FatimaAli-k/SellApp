@@ -22,7 +22,7 @@ public class ZxingScan extends Activity implements ZXingScannerView.ResultHandle
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
 
-        scanFor=getIntent().getIntExtra("ScanFor",0);
+        //scanFor=getIntent().getIntExtra("ScanFor",0);
 
     }
 
@@ -49,13 +49,8 @@ public class ZxingScan extends Activity implements ZXingScannerView.ResultHandle
 
 
         session.createBarcode(rawResult.getText());
-        //if scanning fo menu id
-        if(scanFor==1) {
-            session.setScanfor("1");}
-        //for item
-        else
-            session.setScanfor("2");
-
+        Log.d("karrar", "scaned func 1    " + rawResult.getText() );
+          //  session.setScanfor(scanFor.toString());  //for item
 
         finish();
 

@@ -7,102 +7,112 @@
     android:layout_gravity="center"
 
 
-
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
         android:background="@color/colorPrimaryDark"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
         <Button
             android:id="@+id/btn_sitting"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_margin="10dp"
+            android:layout_margin="6dp"
             android:background="@drawable/ic_settings_black_24dp"
             android:fontFamily="@font/myfont"
-            android:gravity="center"
-            />
+            android:gravity="center" />
+
         <Button
             android:id="@+id/button_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="#ffff"
+            android:layout_margin="5dp"
             android:background="@drawable/back_gradient"
             android:fontFamily="@font/myfont"
-            android:text="خروج" />
+            android:text="خروج"
+            android:textColor="#ffff" />
+
         <Button
             android:id="@+id/button_scan"
             android:layout_width="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
-            android:textColor="#ffff"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:background="@drawable/back_gradient"
             android:fontFamily="@font/myfont"
             android:gravity="center"
-            android:text="@string/connect" />
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/connect"
+            android:textColor="#ffff" />
 
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_style2"
+            android:fontFamily="@font/myfont"
+            android:gravity="center"
+            android:text="اسم المستخدم"
+            android:textColor="@color/colorPrimaryDark" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:orientation="horizontal">
-
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-android:layout_marginTop="15dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:orientation="horizontal">
+            android:paddingEnd="10dp">
+
             <Button
                 android:id="@+id/button_clear"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
 
                 android:background="@drawable/ic_delete_sweep_black_24dp"
-                android:fontFamily="@font/myfont"
-                />
+                android:fontFamily="@font/myfont" />
+
             <TextView
                 android:id="@+id/textView_sellMenuId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/myfont"
-                android:textStyle="bold"
-                android:textSize="26sp"
-                android:textColor="@color/colorPrimaryDark"
                 android:layout_gravity="center"
+                android:fontFamily="@font/myfont"
+                android:gravity="center"
                 android:text="0"
-                android:gravity="center" />
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textStyle="bold"
-                android:visibility="gone"
                 android:fontFamily="@font/myfont"
                 android:gravity="center"
-                android:text="0" />
-
+                android:text="0"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
 
         </LinearLayout>
-
-
-
 
 
     </LinearLayout>
@@ -117,20 +127,20 @@ android:layout_marginTop="15dp"
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:layout_height="match_parent"
             android:fillViewport="true"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
 
             >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/items_recycler_view"
                 android:layout_width="match_parent"
-                android:padding="20dp"
-android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/button_style"
-                android:layout_height="wrap_content" />
+                android:padding="20dp" />
         </androidx.core.widget.NestedScrollView>
 
 
@@ -139,49 +149,56 @@ android:layout_marginTop="10dp"
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-
-            android:padding="10dp"
-            android:gravity="center"
-
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/button_add_item"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:fontFamily="@font/myfont"
-                android:background="@drawable/ic_add_circle_black_24dp"
-                >
-
-            </Button>
-
-
-        </LinearLayout>
+        android:paddingEnd="10dp">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:padding="10dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/button_style"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+            <Button
+                android:id="@+id/save_Button"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+
+
+                android:background="@drawable/ic_save_black_24dp"
+                android:fontFamily="@font/myfont"
+
+                android:textColor="#ffff"
+                android:textSize="17sp">
+
+            </Button>
+
+            <Button
+                android:id="@+id/button_add_item"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/ic_add_circle_black_24dp"
+                android:fontFamily="@font/myfont">
+
+            </Button>
+
             <Button
                 android:id="@+id/Send_Button"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
 
 
                 android:background="@drawable/ic_print_black_24dp"
@@ -193,28 +210,55 @@ android:layout_marginTop="10dp"
             </Button>
 
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_style"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+            <Button
+                android:id="@+id/button_card"
+                android:layout_width="90dp"
+                android:layout_height="70dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/ic_card"
+                android:fontFamily="@font/myfont"
+                android:textStyle="bold"
+
+                android:text="بطاقة"
+                android:textColor="@color/colorPrimaryDark">
+
+            </Button>
+
             <Button
                 android:id="@+id/button_newCustomer"
 
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_width="110dp"
-                android:textColor="#ffff"
-                android:fontFamily="@font/myfont"
                 android:background="@drawable/back_gradient"
-                android:text="زبون جديد">
+                android:fontFamily="@font/myfont"
+                android:text="جديد"
+                android:textColor="#ffff">
 
             </Button>
 
             <Button
                 android:id="@+id/button_oldCustomer"
-                android:layout_width="110dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:layout_margin="10dp"
 
-                android:fontFamily="@font/myfont"
                 android:background="@drawable/button_style"
-                android:text="لديه قائمة">
+                android:fontFamily="@font/myfont"
+                android:text="قائمة">
 
             </Button>
         </LinearLayout>

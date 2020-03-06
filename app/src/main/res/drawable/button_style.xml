@@ -10,7 +10,7 @@
     <stroke android:width="0.5dp"
 
             android:color="@color/colorPrimary"/>
-    <corners android:radius="30dp" />
+    <corners android:radius="10dp" />
     <gradient
 
         android:angle="270"
