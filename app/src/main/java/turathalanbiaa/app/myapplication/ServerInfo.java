@@ -18,8 +18,8 @@ public class ServerInfo {
     public String getUrl(String route) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
-        this.path = sharedPreferences.getString("server_path", "192.168.1.116");
-        this.url = "http://" + this.path +":8000/api/"+ route;
+        this.path = sharedPreferences.getString("server_path", "192.168.0.125");
+        this.url = "http://" + this.path +"/api/"+ route;
         return url;
     }
 

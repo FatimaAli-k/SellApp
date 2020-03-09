@@ -39,6 +39,7 @@ import turathalanbiaa.app.myapplication.SettingsActivity;
 import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 
 
+import turathalanbiaa.app.myapplication.WebActivity;
 import turathalanbiaa.app.myapplication.ZxingScan;
 import turathalanbiaa.app.myapplication.command.Command;
 import turathalanbiaa.app.myapplication.command.PrintPicture;
@@ -241,6 +242,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     Button additem, logout, newCustomer, oldCustomer, clearData ,cardCustomer;
 
     TextView menuIdTextView;
+    TextView user_name;
 
     //urls
     String addSellMenuItemURL;
@@ -297,7 +299,17 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         _declaration();
         _click_listener();
         menuIdTextView = findViewById(R.id.textView_sellMenuId);
+        menuIdTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), WebActivity.class);
+                i.putExtra("type",2);
+                Integer menu_id = Integer.valueOf(menuIdTextView.getText().toString());
+                i.putExtra("menu_id",menu_id);
+                startActivity(i);
 
+            }
+        });
 
         //clear btn
         clearData = findViewById(R.id.button_clear);
@@ -476,6 +488,7 @@ username.setText(session.getshared("name"));
 
     private void _declaration() {
         btn_sitting = (Button) findViewById(R.id.btn_sitting);
+        user_name = (TextView) findViewById(R.id.user_name);
 
     }
 
@@ -485,6 +498,17 @@ username.setText(session.getshared("name"));
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), SettingsActivity.class);
                 startActivity(i);
+            }
+        });
+
+        user_name.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), WebActivity.class);
+                i.putExtra("type",1);
+                startActivity(i);
+
+
             }
         });
     }
