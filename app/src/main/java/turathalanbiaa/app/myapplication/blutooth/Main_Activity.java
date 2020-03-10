@@ -78,6 +78,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -118,7 +120,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     // Key names received from the BluetoothService Handler
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
-
+    private String path;
+    WebView web_view;
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
@@ -239,7 +242,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String code = "";
     String sellMenuId = "";
     //buttons
-    Button additem, logout, newCustomer, oldCustomer, clearData ,cardCustomer;
+    Button additem, logout, newCustomer, oldCustomer, clearData, cardCustomer;
 
     TextView menuIdTextView;
     TextView user_name;
@@ -298,15 +301,14 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         _declaration();
         _click_listener();
+       _webviewSetting();
         menuIdTextView = findViewById(R.id.textView_sellMenuId);
         menuIdTextView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getBaseContext(), WebActivity.class);
-                i.putExtra("type",2);
                 Integer menu_id = Integer.valueOf(menuIdTextView.getText().toString());
-                i.putExtra("menu_id",menu_id);
-                startActivity(i);
+                show_menu(menu_id);
+
 
             }
         });
@@ -322,15 +324,15 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
             }
         });
-username = (TextView) findViewById(R.id.user_name);
+        username = (TextView) findViewById(R.id.user_name);
 
-username.setText(session.getshared("name"));
+        username.setText(session.getshared("name"));
         //add SellItem
         additem = findViewById(R.id.button_add_item);
         additem.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//
+                set_view_for(1);
                 TextView txtsellMenuId = findViewById(R.id.textView_sellMenuId);
                 if (txtsellMenuId.getText().equals("0") || txtsellMenuId.getText().equals("")) {
                     Toast.makeText(getBaseContext(), "لا توجد قائمة", Toast.LENGTH_LONG).show();
@@ -377,6 +379,7 @@ username.setText(session.getshared("name"));
                 //send get request retreive sell menu id
 //                sellMenuId="12345678";
                 clearItemData();
+                set_view_for(1);
                 getSellMenuId();
 
 
@@ -390,7 +393,7 @@ username.setText(session.getshared("name"));
             public void onClick(View view) {
                 //scan for sell menu
                 clearItemData();
-
+                set_view_for(1);
                 Intent intent;
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -419,7 +422,7 @@ username.setText(session.getshared("name"));
 
                 //scan for sell menu
                 clearItemData();
-
+                set_view_for(1);
                 Intent intent;
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -473,6 +476,90 @@ username.setText(session.getshared("name"));
 
     }
 
+    private void _webviewSetting() {
+
+        web_view = findViewById(R.id.web1);
+        web_view.requestFocus();
+        web_view.getSettings().setLightTouchEnabled(true);
+        web_view.getSettings().setJavaScriptEnabled(true);
+        web_view.getSettings().setGeolocationEnabled(true);
+        web_view.setSoundEffectsEnabled(true);
+       web_view.getSettings().setAppCacheEnabled(true);
+
+
+    }
+
+    private void show_menu(Integer menu_id) {
+
+
+
+        Intent i = getIntent();
+        String user_name;
+        String user_id;
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        path = sharedPreferences.getString("server_path", "192.168.0.125");
+        SessionManager session;
+        session = new SessionManager(getApplicationContext());
+        user_name = session.getshared("name");
+        user_id = session.getshared("id");
+
+
+//for replace
+//        Intent i2 = new Intent(getBaseContext(), WebActivity.class);
+//        i2.putExtra("type", 2);
+//        i2.putExtra("menu_id", menu_id);
+//        startActivity(i2);
+//
+
+
+        String url;
+        url = "http://" + path + "/user-edit-menu/" + menu_id + "/" + user_id + "/" + user_name;
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("انتظر قليلا...");
+        progressDialog.setCancelable(false);
+
+        web_view.loadUrl(url);
+        web_view.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                progressDialog.show();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                progressDialog.hide();
+            }
+
+        });
+        set_view_for(2);
+
+    }
+
+    private void set_view_for(int i) {
+
+        LinearLayout li_1 = (LinearLayout) findViewById(R.id.li_1);
+        LinearLayout li_2 = (LinearLayout) findViewById(R.id.li_2);
+        LinearLayout li_3 = (LinearLayout) findViewById(R.id.li_3);
+        if (i == 1) {
+            li_1.setVisibility(View.VISIBLE);
+            li_3.setVisibility(View.VISIBLE);
+            li_2.setVisibility(View.GONE);
+
+        } else {
+            li_1.setVisibility(View.GONE);
+            li_3.setVisibility(View.GONE);
+            li_2.setVisibility(View.VISIBLE);
+
+        }
+
+    }
+
+
     private void get_URLs() {
         turathalanbiaa.app.myapplication.ServerInfo ServerInfo = new ServerInfo(this);
         addSellMenuItemURL = ServerInfo.getUrl("sellmenuitem");
@@ -505,7 +592,7 @@ username.setText(session.getshared("name"));
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), WebActivity.class);
-                i.putExtra("type",1);
+                i.putExtra("type", 1);
                 startActivity(i);
 
 
@@ -594,6 +681,8 @@ username.setText(session.getshared("name"));
                 //  upParams.put("datetime", dt);
                 sendItems(updatURL, upParams);
             }
+            show_menu(Integer.valueOf(sellMenuId));
+
         }
 
 
@@ -717,14 +806,14 @@ username.setText(session.getshared("name"));
 
 //
         showpDialog();
-        Log.d("karrar" ,"start " );
+        Log.d("karrar", "start ");
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, getOldMenuURL,
                 new Response.Listener<String>() {
 
 
                     @Override
                     public void onResponse(String response) {
-                        Log.d("karrar" ,"responsed " );
+                        Log.d("karrar", "responsed ");
                         try {
                             //converting response to json object
 
@@ -745,7 +834,7 @@ username.setText(session.getshared("name"));
                                             .get(j);
 
 //
-                                    Log.d("karrar" ,jsonItem2.getString("item_name") );
+                                    Log.d("karrar", jsonItem2.getString("item_name"));
                                     int id = jsonItem2.getInt("id");
                                     String name = jsonItem2.getString("item_name");
                                     int price = jsonItem2.getInt("item_price");
@@ -806,7 +895,7 @@ username.setText(session.getshared("name"));
     }
 
 
-    private void getItemObj(String url ) {
+    private void getItemObj(String url) {
         Map<String, String> params = new HashMap<>();
         params.put("barcode", itemCode);
 
@@ -882,7 +971,7 @@ username.setText(session.getshared("name"));
     }
 
 
-    private void getMenuID_Card(String url,String customer_id) {
+    private void getMenuID_Card(String url, String customer_id) {
         Map<String, String> params = new HashMap<>();
         params.put("customer_id", customer_id);
 
@@ -899,7 +988,7 @@ username.setText(session.getshared("name"));
                     JSONObject jsonMenu = (JSONObject) response;
 
                     sellMenuId = jsonMenu.getString("id");
-                      menuIdTextView.setText(sellMenuId);
+                    menuIdTextView.setText(sellMenuId);
 
 
                 } catch (JSONException e) {
@@ -1151,7 +1240,7 @@ username.setText(session.getshared("name"));
             } else if (val.equals("3")) {
 
                 String Customer_id = barcode;
-                getMenuID_Card(getCardURL , Customer_id);
+                getMenuID_Card(getCardURL, Customer_id);
                 Log.d("karrar", "getMenuID_Card func " + Customer_id);
                 session.setScanfor("0");
 
@@ -1401,13 +1490,12 @@ username.setText(session.getshared("name"));
 
 
 // printmenu
-                try{
+                try {
                     sendToDB();
 
                     clearItemData();
-                }catch (Exception ex)
-                {
-                    Toast.makeText(getBaseContext(), "لم يتم الحفظ" + ex.getMessage() , Toast.LENGTH_LONG).show();
+                } catch (Exception ex) {
+                    Toast.makeText(getBaseContext(), "لم يتم الحفظ" + ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
                 break;
