@@ -29,22 +29,10 @@ public class WebActivity extends AppCompatActivity {
 
 
         web_view = findViewById(R.id.web1);
-        web_view.requestFocus();
+
         web_view.getSettings().setLightTouchEnabled(true);
         web_view.getSettings().setJavaScriptEnabled(true);
-        web_view.getSettings().setGeolocationEnabled(true);
-        web_view.setSoundEffectsEnabled(true);
         web_view.getSettings().setAppCacheEnabled(true);
-
-
-        show_menu();
-
-
-
-
-    }
-
-    private void show_menu() {
         Intent i = getIntent();
         Integer type = i.getIntExtra("type",1);
         String user_name ;
@@ -75,21 +63,29 @@ public class WebActivity extends AppCompatActivity {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("انتظر قليلا...");
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.show();
 
         web_view.loadUrl(url);
         web_view.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                progressDialog.hide();
+                progressDialog.dismiss();
 
                 super.onPageFinished(view, url);
 
             }
 
         });
+
+//        show_menu();
+
+
+
+
     }
 
+    private void show_menu() {
+          }
 
 }

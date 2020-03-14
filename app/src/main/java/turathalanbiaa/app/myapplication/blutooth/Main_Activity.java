@@ -101,6 +101,8 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+import static java.lang.Thread.sleep;
+
 
 public class Main_Activity extends Activity implements OnClickListener, MyRecyclerViewAdapter.ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     /******************************************************************************************************/
@@ -268,17 +270,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         // Set up the window layout
         //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.main_activity);
-        //	getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-        //		R.layout.custom_title);
-//
-
-//        loadFragment(new test());
-        //
-
-        // Set up the custom title
-        //	mTitle = (TextView) findViewById(R.id.title_left_text);
-//		mTitle.setText(R.string.app_title);
-        //	mTitle = (TextView) findViewById(R.id.title_right_text);
 
         //session
         session = new SessionManager(getApplicationContext());
@@ -371,8 +362,16 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             }
         });
 
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String new_customer = sharedPreferences.getString("new_customer", "2");
+
         //new customer
         newCustomer = findViewById(R.id.button_newCustomer);
+        if(new_customer.equals("2"))
+        {
+            newCustomer.setVisibility(View.GONE);
+        }
         newCustomer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -505,38 +504,38 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         user_id = session.getshared("id");
 
 
-//for replace
-//        Intent i2 = new Intent(getBaseContext(), WebActivity.class);
-//        i2.putExtra("type", 2);
-//        i2.putExtra("menu_id", menu_id);
-//        startActivity(i2);
+ ////for replace
+        Intent ac = new Intent(getBaseContext(), WebActivity.class);
+        ac.putExtra("type", 2);
+        ac.putExtra("menu_id", menu_id);
+        startActivity(ac);
+
 //
-
-
-        String url;
-        url = "http://" + path + "/user-edit-menu/" + menu_id + "/" + user_id + "/" + user_name;
-
-
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("انتظر قليلا...");
-        progressDialog.setCancelable(false);
-
-        web_view.loadUrl(url);
-        web_view.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                progressDialog.show();
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                progressDialog.hide();
-            }
-
-        });
-        set_view_for(2);
+//
+//        String url;
+//        url = "http://" + path + "/user-edit-menu/" + menu_id + "/" + user_id + "/" + user_name;
+//
+//
+//        final ProgressDialog progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage("انتظر قليلا...");
+//        progressDialog.setCancelable(false);
+//
+//        web_view.loadUrl(url);
+//        web_view.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//                super.onPageStarted(view, url, favicon);
+//                progressDialog.show();
+//            }
+//
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view, url);
+//                progressDialog.hide();
+//            }
+//
+//        });
+//        set_view_for(2);
 
     }
 
@@ -672,7 +671,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
                 sendItems(addSellMenuItemURL, params);
 
-
             } else {
                 //updateitems using the id and count
                 Map<String, String> upParams = new HashMap<>();
@@ -681,9 +679,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 //  upParams.put("datetime", dt);
                 sendItems(updatURL, upParams);
             }
-            show_menu(Integer.valueOf(sellMenuId));
+
+
 
         }
+
+
+            show_menu(Integer.valueOf(sellMenuId));
 
 
     }
@@ -735,7 +737,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
+                            "لاتوجد بيانات لهذا الباركود   " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -744,7 +746,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.d(TAG, "لاتوجد بيانات لهذا الباركود   " + error.getMessage());
                 hidepDialog();
             }
 
@@ -777,7 +779,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
+                            "لاتوجد استجابة   "+ e.getMessage(),
                             Toast.LENGTH_LONG).show();
                 }
                 hidepDialog();
@@ -787,7 +789,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.d(TAG, "لاتوجد استجابة   " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
                 // hide the progress dialog
@@ -948,7 +950,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
+                            "لم يتم الكشف عن باركود",
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -957,9 +959,9 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+//                VolleyLog.d(TAG, "لم يتم الكشف عن باركود" + error.getMessage());
                 Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                        "لم يتم الكشف عن باركود", Toast.LENGTH_SHORT).show();
                 hidepDialog();
             }
 
@@ -1003,7 +1005,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("karrar", "Error: " + error.getMessage());
+                Log.d("karrar", "لاتوجد استجابة  3 " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
                 hidepDialog();
@@ -1073,7 +1075,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
+                            "لاتوجد استجابة 4  " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
                     deleted = true;
                 }
@@ -1083,7 +1085,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.d(TAG,"لاتوجد استجابة  5 " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
 

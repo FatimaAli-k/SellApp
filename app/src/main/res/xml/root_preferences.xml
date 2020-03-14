@@ -28,6 +28,18 @@
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+    <PreferenceCategory app:title="زبون جديد">
+
+
+        <ListPreference
+            app:defaultValue="2"
+            app:entries="@array/new_entries"
+            app:entryValues="@array/new_values"
+            app:key="new_customer"
+            app:title="امكانية انشاء زبون جديد"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
     <PreferenceCategory app:title="عدد نسخ الوصل">
 
 

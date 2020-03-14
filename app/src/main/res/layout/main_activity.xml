@@ -244,12 +244,13 @@
                 android:id="@+id/button_card"
                 android:layout_width="90dp"
                 android:layout_height="70dp"
-                android:layout_margin="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/ic_card"
                 android:fontFamily="@font/myfont"
                 android:textStyle="bold"
 
-                android:text="بطاقة"
+                android:text="من بطاقة"
                 android:textColor="@color/colorPrimaryDark">
 
             </Button>
@@ -271,11 +272,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_margin="10dp"
-
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/button_style"
                 android:fontFamily="@font/myfont"
-                android:text="قائمة">
+                android:text="من قائمة">
 
             </Button>
         </LinearLayout>
