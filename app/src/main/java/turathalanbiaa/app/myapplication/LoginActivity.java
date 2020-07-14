@@ -3,7 +3,9 @@ package turathalanbiaa.app.myapplication;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +62,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         _decleration();
+//        copyAssets();
 
 
         // Session Manager
@@ -115,7 +123,44 @@ public class LoginActivity extends Activity {
             }
         });
     }
+    private void copyAssets() {
+        AssetManager assetManager = getAssets();
+        String[] files = null;
+        try {
+            files = assetManager.list("");
+        } catch (IOException e) {
+            Log.e("tag", "Failed to get asset file list.", e);
+        }
+        for(String filename : files) {
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+                in = assetManager.open(filename);
 
+                String outDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" ;
+
+                File outFile = new File(outDir, filename);
+
+                out = new FileOutputStream(outFile);
+                copyFile(in, out);
+                in.close();
+                in = null;
+                out.flush();
+                out.close();
+                out = null;
+                Toast.makeText(this,"ok",Toast.LENGTH_LONG).show();
+            } catch(IOException e) {
+                Log.e("tag", "Failed to copy asset file: " + filename, e);
+            }
+        }
+    }
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
+    }
     @Override
     public void onBackPressed() {
 

@@ -74,6 +74,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -244,7 +245,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String code = "";
     String sellMenuId = "";
     //buttons
-    Button additem, logout, newCustomer, oldCustomer, clearData, cardCustomer;
+    Button additem, logout, newCustomer, oldCustomer, clearData, cardCustomer ,btn_card_number;
 
     TextView menuIdTextView;
     TextView user_name;
@@ -286,7 +287,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 //
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Please wait...");
+        pDialog.setMessage("انتظر قليلا...");
         pDialog.setCancelable(false);
 
 
@@ -387,6 +388,13 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
         cardCustomer = findViewById(R.id.button_card);
+        cardCustomer. setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                show_input();
+                return true;
+            }
+        });
         cardCustomer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -413,9 +421,25 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             }
         });
 
+//        btn_card_number = findViewById(R.id.btn_card_number);
+//        btn_card_number.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//            }
+//        });
         //old customer
         oldCustomer = findViewById(R.id.button_oldCustomer);
+        oldCustomer. setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                show_input2();
+                return true;
+            }
+        });
         oldCustomer.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
@@ -473,6 +497,87 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         }
 
+    }
+
+    private void show_input2() {
+        clear();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ادخل رقم القائمة");
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("تم", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sellMenuId = input.getText().toString();;
+                menuIdTextView = findViewById(R.id.textView_sellMenuId);
+                menuIdTextView.setText(sellMenuId);
+                getSellMenuItemsArray();
+                session.setScanfor("0");
+
+
+            }
+        });
+//        builder.setNegativeButton("الغاء", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
+
+        builder.show();
+    }
+    public void clear() {
+        int size = menuItems.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                menuItems.remove(0);
+            }
+
+
+        }
+    }
+    private void show_input() {
+//        RecyclerView recyclerView = findViewById(R.id.items_recycler_view);
+//        recyclerView.setAdapter(null);
+//        recyclerView.setAdapter(adapter);
+        clear();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("ادخل رقم البطاقة");
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("تم", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String Customer_id = input.getText().toString();
+                getMenuID_Card(getCardURL, Customer_id);
+                Log.d("karrar", "getMenuID_Card func " + Customer_id);
+                session.setScanfor("0");
+
+            }
+        });
+//        builder.setNegativeButton("الغاء", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
+
+        builder.show();
     }
 
     private void _webviewSetting() {

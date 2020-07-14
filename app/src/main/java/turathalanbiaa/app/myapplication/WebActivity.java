@@ -62,7 +62,7 @@ public class WebActivity extends AppCompatActivity {
         }
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("انتظر قليلا...");
+        progressDialog.setMessage("انتظر قليلا - ريثما يتم التحميل...");
         progressDialog.setCancelable(true);
         progressDialog.show();
 

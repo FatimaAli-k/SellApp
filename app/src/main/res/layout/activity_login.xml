@@ -22,7 +22,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
-
+        android:layout_marginTop="50dp"
+android:background="@drawable/button_style"
         android:orientation="vertical"
 
 
@@ -66,16 +67,6 @@
 
     </LinearLayout>
     <!-- Email Label -->
-    <TextView
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-
-        android:fontFamily="@font/myfont"
-        android:gravity="center"
-        android:text="Version 5.1"
-
-        android:textColor="#909C90" />
 </LinearLayout>
 
