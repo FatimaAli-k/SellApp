@@ -46,82 +46,92 @@
       <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:visibility="gone"
+
+
           android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
 
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
           <Button
-              android:id="@+id/decrease_quantity"
-              android:layout_width="42dp"
-              android:layout_height="35dp"
+              android:id="@+id/increase_quantity"
+              android:layout_width="55dp"
+              android:layout_height="44dp"
               android:layout_weight="1"
-              android:background="@drawable/ic_arrow_drop_down_black_24dp" />
+              android:background="@drawable/ic_arrow_drop_up_black_24dp" />
+
 
           <TextView
               android:id="@+id/item_quantity"
               android:layout_width="40dp"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
-              android:layout_weight="1"
-              android:padding="5dp"
+
               android:text="1X"
               android:textAlignment="center"
+              android:textSize="18sp"
               android:textStyle="bold" />
 
           <Button
-              android:id="@+id/increase_quantity"
-              android:layout_width="42dp"
-              android:layout_height="35dp"
+              android:id="@+id/decrease_quantity"
+              android:layout_width="55dp"
+              android:layout_height="44dp"
               android:layout_weight="1"
-              android:background="@drawable/ic_arrow_drop_up_black_24dp" />
+              android:background="@drawable/ic_arrow_drop_down_black_24dp" />
+
 
         </LinearLayout>
 
 
+      </LinearLayout>
+
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_price"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_gradient"
+            android:padding="10dp"
+            android:text="15,000 IQD"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/item_details"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_style2"
+            android:gravity="center"
+            android:text="0"
+            android:visibility="invisible" />
 
       </LinearLayout>
-      <TextView
-          android:id="@+id/item_price"
-          android:layout_width="80dp"
-          android:layout_height="wrap_content"
-          android:padding="10dp"
-          android:text="15,000 IQD"
-          android:textColor="@color/white"
-          android:background="@drawable/back_gradient"
-          android:textAlignment="center"
-          android:textStyle="bold" />
 
-      <TextView
-          android:id="@+id/item_details"
-          android:layout_width="70dp"
-          android:layout_height="wrap_content"
-          android:layout_gravity="end|center"
-          android:layout_margin="5dp"
-          android:background="@drawable/button_style2"
-          android:gravity="center"
-          android:visibility="invisible" />
 
       <TextView
           android:id="@+id/item_name"
           android:layout_width="match_parent"
           android:layout_height="70dp"
+          android:layout_gravity="center"
+          android:gravity="center"
           android:padding="5dp"
           android:text="قميص  xxxL قطن "
           android:textAlignment="center"
           android:textAllCaps="true"
-          android:layout_gravity="center"
-          android:gravity="center"
-          android:textSize="20dp"
-          android:textStyle="bold"
           android:textColor="#000000"
-          />
+          android:textSize="20dp"
+          android:textStyle="bold" />
 
       <TextView
           android:id="@+id/item_id"

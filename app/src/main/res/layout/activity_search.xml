@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".Search_activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/button_style3"
+        tools:layout_editor_absoluteX="1dp"
+
+        tools:layout_editor_absoluteY="1dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+
+            android:layout_marginBottom="80dp"
+            android:background="@color/colorPrimaryDark"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp">
+
+
+<!--            <androidx.core.widget.NestedScrollView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:fillViewport="true"-->
+<!--                android:paddingStart="10dp"-->
+<!--                android:paddingEnd="10dp"-->
+
+<!--                >-->
+
+                <ListView
+                    android:id="@+id/customers_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:clickable="true"
+                    tools:listitem="@layout/activity_customer_item_for_listview"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_style"
+                   />
+<!--                 </androidx.core.widget.NestedScrollView>-->
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="-80dp"
+
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp">
+            <Button
+                android:id="@+id/btn_sell"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+
+
+                android:background="@drawable/ic_arrow_drop_up_black_24dp"
+                android:fontFamily="@font/myfont"
+
+                android:textColor="@color/colorPrimary"
+                android:textSize="17sp">
+
+            </Button>
+            <Button
+                android:id="@+id/btn_waiting"
+                android:layout_width="99dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="الغير متمم"
+
+                android:background="@drawable/button_style"
+                android:fontFamily="@font/myfont"
+
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="17sp">
+
+            </Button>
+
+            <EditText
+                android:id="@+id/txt_search"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="5dp"
+                android:inputType="text"
+                android:layout_marginBottom="-1dp"
+                android:background="@drawable/button_style"
+                android:textAlignment="center">
+
+            </EditText>
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

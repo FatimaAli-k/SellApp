@@ -53,7 +53,7 @@
         <TextView
             android:id="@+id/user_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:background="@drawable/button_style2"
             android:fontFamily="@font/myfont"
@@ -62,7 +62,40 @@
             android:textColor="@color/colorPrimaryDark" />
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/li_web2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        android:orientation="vertical"
+        >
 
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+
+            android:orientation="vertical">
+                <WebView
+                    android:layout_width="match_parent"
+
+                    android:id="@+id/web2"
+                    android:layout_height="match_parent">
+
+                </WebView>
+            <Button
+                android:id="@+id/hide_web2_button"
+                android:layout_marginTop="-80dp"
+                android:layout_width="60dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/button_style"
+                android:layout_height="60dp"
+                android:text="البيع" />
+        </LinearLayout>
+
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -73,7 +106,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
+
             android:orientation="horizontal"
             android:paddingStart="10dp"
             android:paddingEnd="10dp">
@@ -154,7 +187,7 @@
                 android:id="@+id/items_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+
                 android:background="@drawable/button_style"
                 android:padding="20dp" />
         </androidx.core.widget.NestedScrollView>
@@ -169,131 +202,181 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp">
 
+<HorizontalScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
-        <LinearLayout
-            android:id="@+id/li_3"
+    <LinearLayout
+        android:id="@+id/li_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button_style"
+        android:gravity="center"
+        android:orientation="horizontal"
+       >
+
+
+        <Button
+            android:id="@+id/save_Button"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+
+
+            android:background="@drawable/ic_save_black_24dp"
+            android:fontFamily="@font/myfont"
+
+            android:textColor="#ffff"
+            android:textSize="17sp">
+
+        </Button>
+
+        <Button
+            android:id="@+id/button_add_item"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/ic_add_circle_black_24dp"
+            android:fontFamily="@font/myfont">
+
+        </Button>
+
+        <Button
+            android:id="@+id/Send_Button"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+
+
+            android:background="@drawable/ic_print_black_24dp"
+            android:fontFamily="@font/myfont"
+
+            android:textColor="#ffff"
+            android:textSize="17sp">
+
+        </Button>
+
+        <Button
+            android:id="@+id/customer_Button"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="الزبائن"
+
+            android:background="@drawable/button_style"
+            android:fontFamily="@font/myfont"
+
+            android:textColor="@color/colorPrimary"
+            android:textSize="17sp">
+
+        </Button>
+
+
+    </LinearLayout>
+
+
+</HorizontalScrollView>
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/button_style"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            >
 
 
-            <Button
-                android:id="@+id/save_Button"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-
-
-                android:background="@drawable/ic_save_black_24dp"
-                android:fontFamily="@font/myfont"
-
-                android:textColor="#ffff"
-                android:textSize="17sp">
-
-            </Button>
-
-            <Button
-                android:id="@+id/button_add_item"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/ic_add_circle_black_24dp"
-                android:fontFamily="@font/myfont">
-
-            </Button>
-
-            <Button
-                android:id="@+id/Send_Button"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-
-
-                android:background="@drawable/ic_print_black_24dp"
-                android:fontFamily="@font/myfont"
-
-                android:textColor="#ffff"
-                android:textSize="17sp">
-
-            </Button>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/button_style"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-
-            <Button
-                android:id="@+id/button_card"
-                android:layout_width="90dp"
-                android:layout_height="70dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/ic_card"
-                android:fontFamily="@font/myfont"
-                android:textStyle="bold"
-
-                android:text="من بطاقة"
-                android:textColor="@color/colorPrimaryDark">
-
-            </Button>
-
-            <Button
-                android:id="@+id/button_newCustomer"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/back_gradient"
-                android:fontFamily="@font/myfont"
-                android:text="جديد"
-                android:textColor="#ffff">
-
-            </Button>
-
-            <Button
-                android:id="@+id/btn_card_number"
-android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_card"
-                android:fontFamily="@font/myfont"
-                android:text="رقم بطاقة"
-
-                android:textColor="#C91D2521">
-
-            </Button>
-
-            <Button
-                android:id="@+id/button_oldCustomer"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/button_style"
-                android:fontFamily="@font/myfont"
-                android:text="من قائمة">
+                android:gravity="center"
+                android:orientation="horizontal"
+                >
 
-            </Button>
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/button_card"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/ic_card"
+                    android:fontFamily="@font/myfont"
+                    android:textStyle="bold"
+
+                    android:text="بطاقة"
+                    android:textColor="@color/colorPrimaryDark">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/button_newCustomer"
+
+                    android:layout_width="70dp"
+
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back_gradient"
+                    android:fontFamily="@font/myfont"
+                    android:text="جديد"
+                    android:textColor="#ffff">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_card_number"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_card"
+                    android:fontFamily="@font/myfont"
+                    android:text="رقم بطاقة"
+
+                    android:textColor="#C91D2521">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/button_oldCustomer"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/button_style"
+                    android:fontFamily="@font/myfont"
+                    android:text="قائمة">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_search_Customer"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/button_style3"
+                    android:fontFamily="@font/myfont"
+                    android:text="زبائن">
+
+                </Button>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+
+
+
         <TextView
 
             android:layout_width="wrap_content"
@@ -302,7 +385,7 @@ android:visibility="gone"
 
             android:fontFamily="@font/myfont"
             android:gravity="center"
-            android:text="الاصدار 7.1"
+            android:text="9"
 
             android:textColor="#909C90" />
     </LinearLayout>

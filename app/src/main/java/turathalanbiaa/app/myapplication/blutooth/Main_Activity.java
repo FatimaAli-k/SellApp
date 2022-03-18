@@ -34,6 +34,7 @@ import turathalanbiaa.app.myapplication.Model.SellMenuItem;
 import turathalanbiaa.app.myapplication.R;
 import turathalanbiaa.app.myapplication.RecyclerItemTouchHelper;
 import turathalanbiaa.app.myapplication.ScanActivity;
+import turathalanbiaa.app.myapplication.Search_activity;
 import turathalanbiaa.app.myapplication.ServerInfo;
 import turathalanbiaa.app.myapplication.SettingsActivity;
 import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
@@ -125,6 +126,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     public static final String TOAST = "toast";
     private String path;
     WebView web_view;
+    WebView web_view2;
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
@@ -278,10 +280,10 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
         if (session.isLoggedIn()) {
-            String name = session.getshared("name");
-            Toast.makeText(getApplicationContext(),
-                    "اهلا بك : " + name,
-                    Toast.LENGTH_LONG).show();
+//            String name = session.getshared("name");
+//            Toast.makeText(getApplicationContext(),
+//                    "اهلا بك : " + name,
+//                    Toast.LENGTH_LONG).show();
             session.createBarcode("");
         }
 
@@ -294,6 +296,11 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         _declaration();
         _click_listener();
        _webviewSetting();
+
+
+       _load_customer_webview();
+
+
         menuIdTextView = findViewById(R.id.textView_sellMenuId);
         menuIdTextView.setOnClickListener(new OnClickListener() {
             @Override
@@ -353,6 +360,16 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
             }
         });
 
+       Button btn_search = (Button) findViewById(R.id.btn_search_Customer);
+        btn_search.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                open_search();
+
+            }
+        });
+
+
         //logout
         logout = findViewById(R.id.button_logout);
         logout.setOnClickListener(new OnClickListener() {
@@ -365,6 +382,21 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String print_btn = sharedPreferences.getString("print_btn", "2");
+
+        sendButton = findViewById(R.id.Send_Button);
+        if(print_btn.equals("2"))
+        {
+            sendButton.setVisibility(View.GONE);
+
+
+        }else
+        {
+            sendButton.setVisibility(View.VISIBLE);
+
+        }
+
+
         String new_customer = sharedPreferences.getString("new_customer", "2");
 
         //new customer
@@ -395,6 +427,28 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 return true;
             }
         });
+
+
+        Button customer_Button = (Button) findViewById(R.id.customer_Button);
+        Button hide_web2_button = (Button) findViewById(R.id.hide_web2_button);
+
+        customer_Button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_web2(true);
+
+
+            }
+        });
+        hide_web2_button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_web2(false);
+
+
+            }
+        });
+
         cardCustomer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -499,6 +553,65 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
     }
 
+    private void open_search() {
+        Intent i = new Intent(this , Search_activity.class);
+        startActivity(i);
+    }
+
+    private void show_web2(Boolean value) {
+        LinearLayout li_web2 = (LinearLayout) findViewById(R.id.li_web2);
+        if(value )
+        {
+
+            li_web2.setVisibility(View.VISIBLE);
+
+        }else
+        {
+            li_web2.setVisibility(View.GONE);
+
+        }
+
+    }
+
+    private void _load_customer_webview() {
+
+
+
+        web_view2 = findViewById(R.id.web2);
+
+        web_view2.getSettings().setLightTouchEnabled(true);
+        web_view2.getSettings().setJavaScriptEnabled(true);
+        web_view2.getSettings().setAppCacheEnabled(true);
+        Intent i = getIntent();
+        Integer type = i.getIntExtra("type",1);
+        String user_name ;
+        String user_id;
+        Integer menu_id;
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        path = sharedPreferences.getString("server_path", "192.168.0.125");
+        SessionManager session;
+        session = new SessionManager(getApplicationContext());
+        String url;
+        url  ="http://" + path + "/customers/" ;
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("انتظر قليلا");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+        web_view2.loadUrl(url);
+        web_view2.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressDialog.dismiss();
+
+                super.onPageFinished(view, url);
+
+            }
+
+        });
+
+    }
+
     private void show_input2() {
         clear();
 
@@ -588,7 +701,16 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         web_view.getSettings().setJavaScriptEnabled(true);
         web_view.getSettings().setGeolocationEnabled(true);
         web_view.setSoundEffectsEnabled(true);
-       web_view.getSettings().setAppCacheEnabled(true);
+        web_view.getSettings().setAppCacheEnabled(true);
+
+
+        web_view2 = findViewById(R.id.web2);
+        web_view2.requestFocus();
+        web_view2.getSettings().setLightTouchEnabled(true);
+        web_view2.getSettings().setJavaScriptEnabled(true);
+        web_view2.getSettings().setGeolocationEnabled(true);
+        web_view2.setSoundEffectsEnabled(true);
+        web_view2.getSettings().setAppCacheEnabled(true);
 
 
     }
@@ -864,6 +986,51 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
     void getSellMenuId() {
+
+        showpDialog();
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                createNewMenuURL, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    // Parsing json object response
+                    // response will be a json object
+                    sellMenuId = response.getString("id");
+
+                    menuIdTextView.setText(sellMenuId);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "لاتوجد استجابة   "+ e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+                hidepDialog();
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "لاتوجد استجابة   " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                // hide the progress dialog
+                hidepDialog();
+
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
+
+
+    }
+    void getCustomer() {
 
         showpDialog();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -1323,9 +1490,20 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     public synchronized void onResume() {
         super.onResume();
 
+
+
         barcode = session.getshared("Barcode");
 //        Toast.makeText(this,"/"+barcode,Toast.LENGTH_SHORT).show();
+        Intent i = getIntent() ;
+        Integer menu_id = i.getIntExtra("menu_id",0);
+        if(menu_id != 0)
+        {
 
+            barcode = menu_id.toString();
+            i.putExtra("menu_id",0);
+            session.setScanfor("1");
+
+        }
 
         String val = session.getshared("scanfor");
 
@@ -1352,6 +1530,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 session.setScanfor("0");
 
             }
+
+
         }
 
 
@@ -1362,6 +1542,8 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
                 mService.start();
             }
         }
+
+
     }
 
     @Override
@@ -2580,5 +2762,26 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         return image;
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

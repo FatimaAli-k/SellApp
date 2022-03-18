@@ -40,6 +40,18 @@
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+    <PreferenceCategory app:title="امكانية الطباعه">
+
+
+        <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/print_entries"
+            app:entryValues="@array/print_values"
+            app:key="print_btn"
+            app:title="امكانية طباعة القائمة بواسطة الطابعة البلوتوث'"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
     <PreferenceCategory app:title="عدد نسخ الوصل">
 
 

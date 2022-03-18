@@ -20,10 +20,23 @@
 
     </string-array>
 
+
+
     <string-array name="new_values">
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <string-array name="print_entries">
+        <item>تفعيل زر الطباعة</item>
+        <item>اخفاء زر الطباعة</item>
+    </string-array>
+    <string-array name="print_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+
 
     <string-array name="copy_entries">
         <item>نسخة واحدة</item>
