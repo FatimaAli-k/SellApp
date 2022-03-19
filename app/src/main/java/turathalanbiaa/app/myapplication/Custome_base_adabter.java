@@ -14,16 +14,18 @@ import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
 
+import java.util.ArrayList;
+
 import turathalanbiaa.app.myapplication.SharedPrefrencesSession.SessionManager;
 
 public class Custome_base_adabter extends BaseAdapter {
 
     Context context;
-    String names[] ;
-    Integer  ids[];
+    ArrayList names ; ;
+    ArrayList  ids;
     LayoutInflater inflater ;
 
-    public Custome_base_adabter(Context ctx ,String [] names,Integer [] ids)
+    public Custome_base_adabter(Context ctx ,ArrayList names,ArrayList ids)
     {
         this.context = ctx;
         this.ids= ids ;
@@ -34,7 +36,7 @@ public class Custome_base_adabter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        return names.length;
+        return names.size();
     }
 
     @Override
@@ -60,7 +62,7 @@ public class Custome_base_adabter extends BaseAdapter {
         btn_new.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("btn in listview already works!!" + ids[position]);
+                System.out.println("btn in listview already works!!" + ids.get(position));
             }
         });
         Button btn_menus= (Button)  convertView.findViewById(R.id.btn_menus);
@@ -72,15 +74,15 @@ public class Custome_base_adabter extends BaseAdapter {
                 Intent i = new Intent(context,WebActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("type", 2);
-                i.putExtra("menu_id", ids[position]);
+                i.putExtra("menu_id",Integer.valueOf((Integer) ids.get(position)));
                 v.getContext().startActivity(i);
 
             }
         });
 
 
-        name.setText(names[position]);
-        id.setText(ids[position].toString());
+        name.setText(names.get(position).toString());
+        id.setText(ids.get(position).toString());
 
         return convertView;
     }

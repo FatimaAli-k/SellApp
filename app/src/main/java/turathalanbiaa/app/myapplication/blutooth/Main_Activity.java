@@ -257,6 +257,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String updatURL;
     String createNewMenuURL;
     String getOldMenuURL;
+    String getwaitingURL;
     String deleteItemURL;
     String getItemURL;
     String getCardURL;
@@ -792,6 +793,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         updatURL = ServerInfo.getUrl("update");
         createNewMenuURL = ServerInfo.getUrl("newsellmenu");
         getOldMenuURL = ServerInfo.getUrl("oldmenu");
+        getwaitingURL = ServerInfo.getUrl("waiting_menu");
 
         deleteItemURL = ServerInfo.getUrl("delete");
         getItemURL = ServerInfo.getUrl("item");
