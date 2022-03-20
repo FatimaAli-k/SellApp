@@ -256,6 +256,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
     String addSellMenuItemURL;
     String updatURL;
     String createNewMenuURL;
+
     String getOldMenuURL;
     String getwaitingURL;
     String deleteItemURL;
@@ -792,6 +793,7 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
         addSellMenuItemURL = ServerInfo.getUrl("sellmenuitem");
         updatURL = ServerInfo.getUrl("update");
         createNewMenuURL = ServerInfo.getUrl("newsellmenu");
+
         getOldMenuURL = ServerInfo.getUrl("oldmenu");
         getwaitingURL = ServerInfo.getUrl("waiting_menu");
 
@@ -988,51 +990,6 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
 
     void getSellMenuId() {
-
-        showpDialog();
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                createNewMenuURL, null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d(TAG, response.toString());
-
-                try {
-                    // Parsing json object response
-                    // response will be a json object
-                    sellMenuId = response.getString("id");
-
-                    menuIdTextView.setText(sellMenuId);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "لاتوجد استجابة   "+ e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
-                hidepDialog();
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "لاتوجد استجابة   " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-                // hide the progress dialog
-                hidepDialog();
-
-            }
-        });
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
-
-
-    }
-    void getCustomer() {
 
         showpDialog();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -1533,8 +1490,18 @@ public class Main_Activity extends Activity implements OnClickListener, MyRecycl
 
             }
 
+            Integer new_menu_id = i.getIntExtra("new_menu_id",0);
+                if(new_menu_id != 0 )
+                {
 
-        }
+                    sellMenuId = new_menu_id.toString();
+                    menuIdTextView = findViewById(R.id.textView_sellMenuId);
+                    menuIdTextView.setText(sellMenuId);
+                    getSellMenuItemsArray();
+                    session.setScanfor("0");
+                }
+
+       }
 
 
         if (mService != null) {

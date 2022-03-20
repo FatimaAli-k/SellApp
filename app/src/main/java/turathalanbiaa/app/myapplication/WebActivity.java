@@ -35,6 +35,7 @@ public class WebActivity extends AppCompatActivity {
         web_view.getSettings().setAppCacheEnabled(true);
         Intent i = getIntent();
         Integer type = i.getIntExtra("type",1);
+        Integer customer_id = i.getIntExtra("customer_id",0);
         String user_name ;
         String user_id;
         Integer menu_id;
@@ -48,11 +49,14 @@ public class WebActivity extends AppCompatActivity {
 
         String url;
 
-        if (type == 1)
-        {
-            url  ="http://" + path + "/user/" + user_id +"/"+user_name;
+        if (type == 1) {
+            url = "http://" + path + "/user/" + user_id + "/" + user_name;
 
-        }else
+        }if (type == 4)
+         {
+                url  ="http://" + path + "/menus/" + customer_id ;
+
+         }else
         {
 
             menu_id = i.getIntExtra("menu_id",1);
